@@ -1,0 +1,23 @@
+[user]
+	name = Martin Meyer
+	email = elreydetodo@gmail.com
+	signingkey = 43F86CD1
+[color]
+	ui = auto
+[commit]
+	gpgsign = true
+[core]
+	pager = less -SM -x4 -+X -+F
+	whitespace = blank-at-eol,space-before-tab,tab-in-indent,tabwidth=4
+	untrackedCache = true
+[fetch]
+	prune = true
+	pruneTags = true
+[pager]
+	branch = cat
+	status = cat
+	tag = cat
+[pull]
+	ff = only
+[push]
+	default = simple
