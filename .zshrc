@@ -74,6 +74,13 @@ plugins=(
 )
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+
+# Injection spot for system-specific config before ZSH loads.
+if [[ -e ~/.zsh-local-extras-early.sh ]]; then
+    source ~/.zsh-local-extras-early.sh
+fi
+
 source $ZSH/oh-my-zsh.sh
 
 unsetopt SHARE_HISTORY
@@ -96,13 +103,14 @@ bindkey '^W' backward-kill-word-whitespace
 
 source ~/src/shell-scripts/exports-aliases.sh
 source ~/src/shell-scripts/exports-manpaths.sh
-source ~/src/shell-scripts/exports-path.sh
-
-if [[ -e ~/.zsh-local-extras.sh ]]; then
-    source ~/.zsh-local-extras.sh
-fi
+source ~/src/shell-scripts/exports-paths.sh
 
 export EDITOR=vim
+
+# Injection spot for system-specific config after ZSH loads.
+if [[ -e ~/.zsh-local-extras-late.sh ]]; then
+    source ~/.zsh-local-extras-late.sh
+fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
