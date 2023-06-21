@@ -5,20 +5,15 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# This need to be here before oh my zsh to ensure color everywhere.
+# Setup GNU-style colors before OMZ loads.
 eval "$(gdircolors)"
 
-# Path to your oh-my-zsh installation.
-export ZSH="/Users/$(whoami)/.oh-my-zsh"
-
 ZSH_THEME="powerlevel10k/powerlevel10k"
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 HIST_STAMPS="yyyy-mm-dd"
 
 zstyle :omz:plugins:ssh-agent agent-forwarding on
 zstyle :omz:plugins:ssh-agent quiet yes
 zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain
-
 
 disabled_plugins=(
     brew
@@ -58,6 +53,7 @@ disabled_plugins=(
 plugins=(
     colored-man-pages
     common-aliases
+    fzf
     git
     gnu-utils
     gpg-agent
@@ -73,23 +69,19 @@ plugins=(
     zsh-interactive-cd
 )
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-
 # Injection spot for system-specific config before ZSH loads.
 if [[ -e ~/.zsh-local-extras-early.sh ]]; then
     source ~/.zsh-local-extras-early.sh
 fi
 
-source $ZSH/oh-my-zsh.sh
+source /Users/$(whoami)/.oh-my-zsh/oh-my-zsh.sh
 
-unsetopt SHARE_HISTORY
-setopt APPEND_HISTORY
-setopt EXTENDED_HISTORY
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_REDUCE_BLANKS
+# Override some OMZ history options.
+unsetopt share_history
+setopt append_history
+setopt hist_reduce_blanks
 
+# This macro is part of a fix for alt+backspace support on macOS.
 backward-kill-word-whitespace() {
     select-word-style whitespace
     zle backward-kill-word
@@ -101,9 +93,14 @@ autoload backward-kill-word-whitespace
 zle -N backward-kill-word-whitespace
 bindkey '^W' backward-kill-word-whitespace
 
-source ~/src/shell-scripts/exports-aliases.sh
-source ~/src/shell-scripts/exports-manpaths.sh
-source ~/src/shell-scripts/exports-paths.sh
+BASEDIR=$(grealpath -P ~/.zshrc | xargs dirname)
+
+source ${BASEDIR}/exports-aliases.sh
+source ${BASEDIR}/exports-manpaths.sh
+source ${BASEDIR}/exports-paths.sh
+source ${BASEDIR}/.p10k.zsh
+
+unset BASEDIR
 
 export EDITOR=vim
 
@@ -111,6 +108,3 @@ export EDITOR=vim
 if [[ -e ~/.zsh-local-extras-late.sh ]]; then
     source ~/.zsh-local-extras-late.sh
 fi
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
