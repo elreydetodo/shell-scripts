@@ -1,5 +1,6 @@
-export PATH="/opt/homebrew/opt/python@3.11/bin:$PATH"
+export PATH="/opt/homebrew/opt/gawk/libexec/gnubin:$PATH"
 export PATH="/opt/homebrew/opt/libxslt/bin:$PATH"
+export PATH="/opt/homebrew/opt/python@3.11/bin:$PATH"
 export PATH="/opt/homebrew/opt/sbin:$PATH"
 export PATH="/opt/homebrew/opt/bin:$PATH"
 export PATH="$HOME/.bin:$PATH"
