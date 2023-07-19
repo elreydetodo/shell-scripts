@@ -60,6 +60,7 @@ plugins=(
     jenv
     jsontools
     last-working-dir
+    nvm
     python
     rsync
     ssh-agent
