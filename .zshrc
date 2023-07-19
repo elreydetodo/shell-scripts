@@ -11,6 +11,8 @@ eval "$(gdircolors)"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 HIST_STAMPS="yyyy-mm-dd"
 
+zstyle :omz:plugins:nvm lazy yes
+zstyle :omz:plugins:nvm lazy-cmd eslint prettier npm node typescript
 zstyle :omz:plugins:ssh-agent agent-forwarding on
 zstyle :omz:plugins:ssh-agent quiet yes
 zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain
