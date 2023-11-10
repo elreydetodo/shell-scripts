@@ -37,6 +37,7 @@ disabled_plugins=(
     magic-enter
     man
     mvn
+    nvm
     osx
     pep8
     perl
@@ -53,16 +54,17 @@ disabled_plugins=(
 )
 
 plugins=(
+    asdf
     colored-man-pages
     common-aliases
     fzf
     git
     gnu-utils
     gpg-agent
+    gradle
     jenv
     jsontools
     last-working-dir
-    nvm
     python
     rsync
     ssh-agent
