@@ -18,6 +18,7 @@ zstyle :omz:plugins:ssh-agent quiet yes
 zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain
 
 disabled_plugins=(
+    asdf
     brew
     colorize                    # needed to use aliases but didn't
     command-not-found
@@ -32,13 +33,11 @@ disabled_plugins=(
     history
     history-substring-search    # breaks ctrl+w functionality
     iterm2
-    jenv
     keychain
     lol
     magic-enter
     man
     mvn
-    nvm
     osx
     pep8
     perl
@@ -55,7 +54,6 @@ disabled_plugins=(
 )
 
 plugins=(
-    asdf
     colored-man-pages
     common-aliases
     fzf
@@ -63,8 +61,10 @@ plugins=(
     gnu-utils
     gpg-agent
     gradle
+    jenv
     jsontools
     last-working-dir
+    nvm
     python
     rsync
     ssh-agent
