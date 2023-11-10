@@ -32,6 +32,7 @@ disabled_plugins=(
     history
     history-substring-search    # breaks ctrl+w functionality
     iterm2
+    jenv
     keychain
     lol
     magic-enter
@@ -62,7 +63,6 @@ plugins=(
     gnu-utils
     gpg-agent
     gradle
-    jenv
     jsontools
     last-working-dir
     python
