@@ -37,6 +37,7 @@ disabled_plugins=(
     magic-enter
     man
     mvn
+    nvm
     osx
     pep8
     perl
@@ -64,7 +65,6 @@ plugins=(
     jenv
     jsontools
     last-working-dir
-    nvm
     python
     rsync
     ssh-agent
