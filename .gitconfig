@@ -7,7 +7,6 @@
 [commit]
 	gpgsign = true
 [core]
-	pager = less -SM -x4 -+X -+F
 	whitespace = blank-at-eol,space-before-tab,tab-in-indent,tabwidth=4
 	untrackedCache = true
 [fetch]
