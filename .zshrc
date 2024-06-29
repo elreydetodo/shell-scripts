@@ -100,10 +100,10 @@ bindkey '^W' backward-kill-word-whitespace
 
 BASEDIR=$(grealpath -P ~/.zshrc | xargs dirname)
 
-source ${BASEDIR}/exports-aliases.sh
-source ${BASEDIR}/exports-manpaths.sh
-source ${BASEDIR}/exports-paths.sh
-source ${BASEDIR}/.p10k.zsh
+source "${BASEDIR}/exports-aliases.sh"
+source "${BASEDIR}/exports-manpaths.sh"
+source "${BASEDIR}/exports-paths.sh"
+source "${BASEDIR}/.p10k.zsh"
 
 unset BASEDIR
 
