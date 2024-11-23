@@ -6,7 +6,11 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # Setup GNU-style colors before OMZ loads.
-eval "$(gdircolors)"
+if [ ! -z "$(command -v gdircolors)" ]; then
+    eval "$(gdircolors)"
+elif [ ! -z "$(command -v dircolors)" ]; then
+    eval "$(dircolors)"
+fi
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
 HIST_STAMPS="yyyy-mm-dd"
@@ -79,7 +83,7 @@ if [[ -e ~/.zsh-local-extras-early.sh ]]; then
     source ~/.zsh-local-extras-early.sh
 fi
 
-source /Users/$(whoami)/.oh-my-zsh/oh-my-zsh.sh
+source ~/.oh-my-zsh/oh-my-zsh.sh
 
 # Override some OMZ history options.
 unsetopt share_history
@@ -98,7 +102,7 @@ autoload backward-kill-word-whitespace
 zle -N backward-kill-word-whitespace
 bindkey '^W' backward-kill-word-whitespace
 
-BASEDIR=$(grealpath -P ~/.zshrc | xargs dirname)
+BASEDIR=$(realpath ~/.zshrc | xargs dirname)
 
 source "${BASEDIR}/exports-aliases.sh"
 source "${BASEDIR}/exports-manpaths.sh"
