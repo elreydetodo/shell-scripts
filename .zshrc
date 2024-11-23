@@ -49,10 +49,13 @@ disabled_plugins=(
     pipenv
     pyenv
     pylint
+    python
+    rsync
     shrink_path
     singlechar
     sudo
     themes
+    urltools
     vi-mode
     zsh-navigation-tools        # Suspected performance problem
 )
@@ -69,12 +72,9 @@ plugins=(
     jenv
     jsontools
     last-working-dir
-    python
-    rsync
     ssh-agent
     sublime
     tmux
-    urltools
     zsh-interactive-cd
 )
 
