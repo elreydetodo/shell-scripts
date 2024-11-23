@@ -107,7 +107,8 @@ source "${BASEDIR}/.p10k.zsh"
 
 unset BASEDIR
 
-export EDITOR=vim
+export BAT_THEME="Nord"
+export EDITOR="vim"
 export LESS="MRScix4"
 
 # Injection spot for system-specific config after ZSH loads.
