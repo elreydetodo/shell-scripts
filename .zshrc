@@ -1,10 +1,3 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # Setup GNU-style colors before OMZ loads.
 if [ ! -z "$(command -v gdircolors)" ]; then
     eval "$(gdircolors)"
@@ -12,7 +5,7 @@ elif [ ! -z "$(command -v dircolors)" ]; then
     eval "$(dircolors)"
 fi
 
-ZSH_THEME="powerlevel10k/powerlevel10k"
+eval "$(starship init zsh)"
 HIST_STAMPS="yyyy-mm-dd"
 
 zstyle :omz:plugins:nvm lazy yes
@@ -41,7 +34,6 @@ disabled_plugins=(
     magic-enter
     man
     mvn
-    nvm
     osx
     pep8
     perl
@@ -72,6 +64,7 @@ plugins=(
     jenv
     jsontools
     last-working-dir
+    nvm
     ssh-agent
     sublime
     tmux
@@ -107,7 +100,6 @@ BASEDIR=$(realpath ~/.zshrc | xargs dirname)
 source "${BASEDIR}/exports-aliases.sh"
 source "${BASEDIR}/exports-manpaths.sh"
 source "${BASEDIR}/exports-paths.sh"
-source "${BASEDIR}/.p10k.zsh"
 
 unset BASEDIR
 
