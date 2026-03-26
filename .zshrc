@@ -112,7 +112,7 @@ source "${BASEDIR}/.p10k.zsh"
 
 unset BASEDIR
 
-export BAT_THEME="Nord"
+export BAT_THEME="base16-256"
 export EDITOR="vim"
 export LESS="MRScix4"
 
