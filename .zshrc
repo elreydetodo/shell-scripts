@@ -16,9 +16,9 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # Setup GNU-style colors before OMZ loads.
-if [ ! -z "$(command -v gdircolors)" ]; then
+if (( $+commands[gdircolors] )); then
     eval "$(gdircolors)"
-elif [ ! -z "$(command -v dircolors)" ]; then
+elif (( $+commands[dircolors] )); then
     eval "$(dircolors)"
 fi
 
@@ -112,13 +112,13 @@ autoload backward-kill-word-whitespace
 zle -N backward-kill-word-whitespace
 bindkey '^W' backward-kill-word-whitespace
 
-BASEDIR=$(realpath ~/.zshrc | xargs dirname)
-
-source "${BASEDIR}/exports-aliases.sh"
-source "${BASEDIR}/exports-manpaths.sh"
-source "${BASEDIR}/exports-paths.sh"
-source "${BASEDIR}/.p10k.zsh"
-
+# %x is the current file, :A makes it an absolute path, :h gets the 'head' (dirname)
+BASEDIR=${${(%):-%x}:A:h}
+local scripts=(exports-aliases.sh exports-manpaths.sh exports-paths.sh .p10k.zsh)
+for f in $scripts; do
+    # (:A) resolves to absolute path, (-r) checks readability
+    [[ -r "$BASEDIR/$f" ]] && source "$BASEDIR/$f"
+done
 unset BASEDIR
 
 # Injection spot for system-specific config after ZSH loads.
