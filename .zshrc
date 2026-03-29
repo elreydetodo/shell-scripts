@@ -123,6 +123,15 @@ for f in $scripts; do
 done
 unset BASEDIR
 
+# Load Homebrew-installed plugins
+local local_zsh_plugins=(
+    "${HOMEBREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    "${HOMEBREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+)
+for plugin in "${local_zsh_plugins[@]}"; do
+    [[ -r "${plugin}" ]] && source "${plugin}"
+done
+
 # Injection spot for system-specific config after ZSH loads.
 if [[ -e ~/.zsh-local-extras-late.sh ]]; then
     source ~/.zsh-local-extras-late.sh
