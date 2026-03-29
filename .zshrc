@@ -27,6 +27,7 @@ fi
 zstyle :omz:plugins:nvm lazy yes
 zstyle :omz:plugins:nvm lazy-cmd eslint prettier npm node typescript
 #zstyle :omz:plugins:ssh-agent agent-forwarding on
+zstyle :omz:plugins:ssh-agent lazy yes
 zstyle :omz:plugins:ssh-agent quiet yes
 zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain
 
