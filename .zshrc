@@ -1,3 +1,11 @@
+export BAT_THEME="base16-256"
+export EDITOR="vim"
+export LESS="MRScix4"
+
+# Shell-only variables (No export needed)
+HIST_STAMPS="yyyy-mm-dd"
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -13,8 +21,6 @@ elif [ ! -z "$(command -v dircolors)" ]; then
 fi
 
 #eval "$(starship init zsh)"
-ZSH_THEME="powerlevel10k/powerlevel10k"
-HIST_STAMPS="yyyy-mm-dd"
 
 zstyle :omz:plugins:nvm lazy yes
 zstyle :omz:plugins:nvm lazy-cmd eslint prettier npm node typescript
@@ -111,10 +117,6 @@ source "${BASEDIR}/exports-paths.sh"
 source "${BASEDIR}/.p10k.zsh"
 
 unset BASEDIR
-
-export BAT_THEME="base16-256"
-export EDITOR="vim"
-export LESS="MRScix4"
 
 # Injection spot for system-specific config after ZSH loads.
 if [[ -e ~/.zsh-local-extras-late.sh ]]; then
