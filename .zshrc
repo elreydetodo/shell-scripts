@@ -37,6 +37,7 @@ disabled_plugins=(
     cp
     dirhistory
     dotenv
+    fzf
     git-auto-fetch
     git-escape-magic
     git-extras
@@ -73,7 +74,6 @@ plugins=(
     brew
     colored-man-pages
     common-aliases
-    fzf
     git
     gnu-utils
     gpg-agent
