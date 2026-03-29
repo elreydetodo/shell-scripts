@@ -1,6 +1,8 @@
 export BAT_THEME="base16-256"
 export EDITOR="vim"
-export LESS="MRScix4"
+export LESS="-FMRSiq4 --mouse"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export PAGER="bat"
 
 # Shell-only variables (No export needed)
 HIST_STAMPS="yyyy-mm-dd"
