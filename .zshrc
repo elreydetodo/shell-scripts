@@ -46,6 +46,7 @@ disabled_plugins=(
     history
     history-substring-search    # breaks ctrl+w functionality
     iterm2
+    jsontools
     keychain
     lol
     magic-enter
@@ -79,7 +80,6 @@ plugins=(
     gpg-agent
     gradle
     jenv
-    jsontools
     last-working-dir
     nvm
     ssh-agent
