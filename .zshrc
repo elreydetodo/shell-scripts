@@ -96,8 +96,10 @@ fi
 source ~/.oh-my-zsh/oh-my-zsh.sh
 
 # Override some OMZ history options.
-unsetopt share_history
-setopt append_history
+#unsetopt share_history
+#setopt append_history
+setopt NO_share_history
+setopt inc_append_history
 setopt hist_reduce_blanks
 
 # This macro is part of a fix for alt+backspace support on macOS.
