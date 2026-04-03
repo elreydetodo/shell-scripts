@@ -1,6 +1,6 @@
 export BAT_THEME="base16-256"
 export EDITOR="vim"
-export LESS="-FMRSiq4 --mouse"
+export LESS="-FMRSiq4"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export PAGER="bat"
 
