@@ -51,6 +51,7 @@ disabled_plugins=(
     magic-enter
     man
     mvn
+    nvm
     osx
     pep8
     perl
@@ -74,6 +75,7 @@ plugins=(
     brew
     colored-man-pages
     common-aliases
+    fnm
     fzf
     git
     gnu-utils
@@ -81,7 +83,6 @@ plugins=(
     gradle
     jenv
     last-working-dir
-    nvm
     ssh-agent
     sublime
     tmux

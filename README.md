@@ -43,11 +43,25 @@ manager and theme. I use [oh my zsh](https://ohmyz.sh/) and
 [powerlevel10k](https://github.com/romkatv/powerlevel10k).
 
 ```
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
+# Symlink rc files
 ln -Fis .zshrc ~
 ln -Fis .p10k.sh ~
 
+# Install OMZ
+sh -c \
+    "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
+    "" \
+    --keep-zshrc \
+    --unattended
+
+# Install powerlevel10k
+git clone \
+    --depth=1 \
+    https://github.com/romkatv/powerlevel10k.git \
+    "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+
+# Restart ZSH
+exec zsh -l
 ```
 
 # Setup other bits of environment
