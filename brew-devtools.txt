@@ -1,0 +1,12 @@
+datamash
+dos2unix
+ffmpeg
+fnm
+git
+jenv
+jq
+libxslt
+maven
+openjdk
+shellcheck
+yamllint

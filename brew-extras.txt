@@ -1,0 +1,6 @@
+bat
+duf
+fd
+mdless
+ripgrep
+the_silver_searcher

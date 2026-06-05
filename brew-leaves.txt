@@ -1,0 +1,16 @@
+coreutils
+findutils
+fzf
+gawk
+git
+gnu-sed
+gnupg
+grep
+less
+rsync
+tmux
+vim
+wget
+zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
