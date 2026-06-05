@@ -116,7 +116,13 @@ bindkey '^W' backward-kill-word-whitespace
 
 # %x is the current file, :A makes it an absolute path, :h gets the 'head' (dirname)
 BASEDIR=${${(%):-%x}:A:h}
-local scripts=(exports-aliases.sh exports-manpaths.sh exports-paths.sh .p10k.zsh)
+local scripts=(
+    .p10k.zsh
+    exports-aliases.sh
+    exports-manpaths.sh
+    exports-paths.sh
+    rotate-ssh-functions.sh
+)
 for f in $scripts; do
     # (:A) resolves to absolute path, (-r) checks readability
     [[ -r "$BASEDIR/$f" ]] && source "$BASEDIR/$f"
