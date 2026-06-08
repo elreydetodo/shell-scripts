@@ -2,7 +2,6 @@ coreutils
 findutils
 fzf
 gawk
-git
 gnu-sed
 gnupg
 grep
