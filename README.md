@@ -44,8 +44,8 @@ manager and theme. I use [oh my zsh](https://ohmyz.sh/) and
 
 ```
 # Symlink rc files
-ln -Fis .zshrc ~
-ln -Fis .p10k.sh ~
+ln -Fis $(pwd)/.zshrc ~
+ln -Fis $(pwd)/.p10k.zsh ~
 
 # Install OMZ
 sh -c \
@@ -73,12 +73,12 @@ as needed.
 
 ```
 # Important tools
-ln -Fis .tmux.conf ~/.tmux.conf
-ln -Fis .vimrc ~/.vimrc
+ln -Fis $(pwd)/.tmux.conf ~
+ln -Fis $(pwd)/.vimrc ~
 
 # Karabiner Elements
 mkdir - ~/.config/karabiner/assets/complex_modifications/
-ln -Fis karabiner-config.json ~/.config/karabiner/assets/complex_modifications/
+ln -Fis $(pwd)/karabiner-config.json ~/.config/karabiner/assets/complex_modifications/
 
 # Sublime Text
 mkdir -p ~/Library/Application\ Support/Sublime\ Text/Packages/User/
