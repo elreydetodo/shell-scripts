@@ -3,6 +3,7 @@ dos2unix
 ffmpeg
 fnm
 git
+git-delta
 jenv
 jq
 libxslt
