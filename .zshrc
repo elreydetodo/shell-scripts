@@ -1,4 +1,5 @@
 export BAT_THEME="base16-256"
+export DELTA_PAGER="less"
 export EDITOR="vim"
 export LESS="-FMRSiqx4"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"

@@ -2,22 +2,36 @@
     name = Martin Meyer
     email = elreydetodo@gmail.com
     signingkey = 43F86CD1
+
 [color]
     ui = auto
+
 [commit]
     gpgsign = true
+
 [core]
-    pager = diff-so-fancy | less
+    pager = delta | less
     whitespace = blank-at-eol,space-before-tab,tab-in-indent,tabwidth=4
     untrackedCache = true
+
+[delta]
+#    hyperlinks = true
+    line-numbers = true
+    navigate = true  # use n and N to move between diff sections
+    syntax-theme = Catppuccin Mocha
+
 [fetch]
     prune = true
 #    pruneTags = true
+
 [interactive]
-    diffFilter = diff-so-fancy --patch
+    diffFilter = delta --color-only
+
 [pull]
     ff = only
+
 [push]
     default = simple
+
 [url "git@github.com:"]
     insteadOf = https://github.com/
