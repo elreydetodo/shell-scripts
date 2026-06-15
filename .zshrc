@@ -25,6 +25,7 @@ fi
 
 #eval "$(starship init zsh)"
 
+zstyle ':omz:plugins:fnm' autostart yes
 zstyle :omz:plugins:nvm lazy yes
 zstyle :omz:plugins:nvm lazy-cmd eslint prettier npm node typescript
 #zstyle :omz:plugins:ssh-agent agent-forwarding on
