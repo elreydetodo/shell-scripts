@@ -7,16 +7,17 @@
 [commit]
     gpgsign = true
 [core]
+    pager = diff-so-fancy | less
     whitespace = blank-at-eol,space-before-tab,tab-in-indent,tabwidth=4
     untrackedCache = true
 [fetch]
     prune = true
 #    pruneTags = true
-[pager]
-    branch = cat
-    status = cat
-    tag = cat
+[interactive]
+    diffFilter = diff-so-fancy --patch
 [pull]
     ff = only
 [push]
     default = simple
+[url "git@github.com:"]
+    insteadOf = https://github.com/
