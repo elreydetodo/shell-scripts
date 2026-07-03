@@ -4,22 +4,22 @@ alias gnpg="git --no-pager grep -n"
 export LESS="-FMRSiqx4"
 
 # Configure `bat`, if installed.
-if command -v bat &> /dev/null; then
+if (( $+commands[bat] )); then
     export BAT_THEME="base16-256"
     export MANPAGER="sh -c 'col -bx | bat -l man -p'"
     export PAGER="bat"
 fi
 
 # Configure `delta`, if installed.
-if command -v delta &> /dev/null; then
+if (( $+commands[delta] )); then
     export DELTA_PAGER="less"
 fi
 
 # Configure `vim`, if installed.
-if command -v nvim &> /dev/null; then
+if (( $+commands[nvim] )); then
     export EDITOR="nvim"
     alias vim="nvim"
-elif command -v vim &> /dev/null; then
+elif (( $+commands[vim] )); then
     export EDITOR="vim"
 fi
 

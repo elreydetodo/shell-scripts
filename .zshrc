@@ -1,3 +1,42 @@
+# ==============================================================================
+# 1. Initialize some critical environment & path stuff.
+# ==============================================================================
+# Bootstrap Homebrew natively right away to capture $HOMEBREW_PREFIX
+if [[ -x /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# ${0:A:h} natively resolves the current file ($0), gets its absolute path (:A),
+# and grabs the directory name (:h) without needing the prompt-expansion
+# framework ((%)).
+basedir=${0:A:h}
+
+# Load paths first so your machine knows exactly what tools are available
+[[ -r "$basedir/exports-paths.sh" ]] && source "$basedir/exports-paths.sh"
+[[ -r "$basedir/exports-manpaths.sh" ]] && source "$basedir/exports-manpaths.sh"
+
+
+# ==============================================================================
+# 2. Decide which theme to use before OMZ loads.
+# ==============================================================================
+if (( ! $+commands[oh-my-posh] )); then
+    if [ -d ~/.oh-my-zsh/custom/themes/powerlevel10k ]; then
+        ZSH_THEME="powerlevel10k/powerlevel10k"
+
+        # P10K Instant Prompt
+        if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+            source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+        fi
+        source "$basedir/.p10k.zsh"
+    else
+        ZSH_THEME="agnoster"
+    fi
+fi
+
+
+# ==============================================================================
+# 3. Configure and start OMZ.
+# ==============================================================================
 disabled_plugins=(
     colorize                    # needed to use aliases but didn't
     command-not-found
@@ -54,7 +93,6 @@ plugins=(
     zsh-interactive-cd
 )
 
-# Preconfigure oh my zsh!
 HIST_STAMPS="yyyy-mm-dd"
 zstyle ':omz:plugins:fnm' autostart yes
 #zstyle :omz:plugins:ssh-agent agent-forwarding on
@@ -62,43 +100,20 @@ zstyle ':omz:plugins:fnm' autostart yes
 zstyle :omz:plugins:ssh-agent quiet yes
 zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain --apple-load-keychain
 
-# ${0:A:h} natively resolves the current file ($0), gets its absolute path (:A),
-# and grabs the directory name (:h) without needing the prompt-expansion
-# framework ((%)).
-basedir=${0:A:h}
-
-# If oh-my-posh is not installed then setup powerlevel10k.
-if ! command -v oh-my-posh &> /dev/null; then
-    if [ -d ~/.oh-my-zsh/custom/themes/powerlevel10k ]; then
-        ZSH_THEME="powerlevel10k/powerlevel10k"
-        # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-        # Initialization code that may require console input (password prompts, [y/n]
-        # confirmations, etc.) must go above this block; everything else may go below.
-        if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-            source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-        fi
-        source "${basedir}"/.p10k.zsh
-    else
-        ZSH_THEME="agnoster"
-    fi
-fi
-
 # Setup GNU-style colors before OMZ loads.
-if command -v gdircolors &> /dev/null; then
+if (( $+commands[gdircolors] )); then
     eval "$(gdircolors)"
-elif command -v dircolors &> /dev/null; then
+elif (( $+commands[dircolors] )); then
     eval "$(dircolors)"
 fi
 
-# Injection spot for system-specific config before ZSH loads.
-if [[ -e ~/.zsh-local-extras-early.sh ]]; then
-    source ~/.zsh-local-extras-early.sh
-fi
+[[ -e ~/.zsh-local-extras-early.sh ]] && source ~/.zsh-local-extras-early.sh
+[[ -e ~/.oh-my-zsh/oh-my-zsh.sh ]] && source ~/.oh-my-zsh/oh-my-zsh.sh
 
-if [[ -e ~/.oh-my-zsh/oh-my-zsh.sh ]]; then
-    source ~/.oh-my-zsh/oh-my-zsh.sh
-fi
 
+# ==============================================================================
+# 4. POST-LAUNCH CONFIGURATION: Tools, Aliases, & Extras
+# ==============================================================================
 # Override some OMZ history options.
 setopt NO_share_history
 setopt inc_append_history
@@ -117,24 +132,13 @@ zle -N backward-kill-word-whitespace
 bindkey '^W' backward-kill-word-whitespace
 
 # If oh-my-posh is installed, execute that now.
-if command -v oh-my-posh &> /dev/null; then
+if (( $+commands[oh-my-posh] )); then
     eval "$(oh-my-posh init zsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/powerlevel10k_lean.omp.json')"
 fi
 
-scripts=(
-    exports-configuration.sh
-    exports-manpaths.sh
-    exports-paths.sh
-    rotate-ssh-functions.sh
-)
-for f in "${scripts[@]}"; do
-    # (:A) resolves to absolute path, (-r) checks readability
-    [[ -r "$basedir/$f" ]] && source "$basedir/$f"
-done
-unset scripts
-
-# Clear $basedir, no longer needed.
-unset basedir
+# Load remaining configuration.
+[[ -r "$basedir/exports-configuration.sh" ]] && source "$basedir/exports-configuration.sh"
+[[ -r "$basedir/rotate-ssh-functions.sh" ]] && source "$basedir/rotate-ssh-functions.sh"
 
 # Load Homebrew-installed plugins
 if [[ ! -z "$HOMEBREW_PREFIX" ]]; then
@@ -148,7 +152,6 @@ if [[ ! -z "$HOMEBREW_PREFIX" ]]; then
     unset local_zsh_plugins
 fi
 
-# Injection spot for system-specific config after ZSH loads.
-if [[ -e ~/.zsh-local-extras-late.sh ]]; then
-    source ~/.zsh-local-extras-late.sh
-fi
+[[ -e ~/.zsh-local-extras-late.sh ]] && source ~/.zsh-local-extras-late.sh
+
+unset basedir
