@@ -123,13 +123,16 @@ unset scripts
 unset BASEDIR
 
 # Load Homebrew-installed plugins
-local local_zsh_plugins=(
-    "${HOMEBREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-    "${HOMEBREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-)
-for plugin in "${local_zsh_plugins[@]}"; do
-    [[ -r "${plugin}" ]] && source "${plugin}"
-done
+if [[ ! -z "$HOMEBREW_PREFIX" ]]; then
+    local_zsh_plugins=(
+        "${HOMEBREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+        "${HOMEBREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    )
+    for plugin in "${local_zsh_plugins[@]}"; do
+        [[ -r "${plugin}" ]] && source "${plugin}"
+    done
+    unset local_zsh_plugins
+fi
 
 # Injection spot for system-specific config after ZSH loads.
 if [[ -e ~/.zsh-local-extras-late.sh ]]; then
