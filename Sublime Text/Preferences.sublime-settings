@@ -1,4 +1,10 @@
 {
+    "added_words":
+    [
+        "Homebrew",
+        "symlink",
+        "xargs"
+    ],
     "auto_complete_commit_on_tab": true,
     "auto_complete_cycle": true,
     "auto_find_in_selection": true,
@@ -6,6 +12,7 @@
     [
         "all_mixed",
         "all_tabs",
+        "isolated",
         "selection",
         "trailing"
     ],
@@ -23,11 +30,5 @@
     "show_line_endings": true,
     "spell_check": true,
     "translate_tabs_to_spaces": true,
-    "trim_trailing_white_space_on_save": "all",
-    "added_words":
-    [
-		"Homebrew",
-        "symlink",
-        "xargs",
-    ],
+    "trim_trailing_white_space_on_save": "all"
 }

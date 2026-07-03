@@ -86,8 +86,6 @@ for FILE in "$(pwd)/Sublime Text"/*; do
     [ -e "${FILE}" ] || continue
     ln -Fis "${FILE}" ~/Library/Application\ Support/Sublime\ Text/Packages/User/
 done
-
-
 ```
 
 Here are other applications you may want to install:
