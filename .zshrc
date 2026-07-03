@@ -85,7 +85,9 @@ if [[ -e ~/.zsh-local-extras-early.sh ]]; then
     source ~/.zsh-local-extras-early.sh
 fi
 
-source ~/.oh-my-zsh/oh-my-zsh.sh
+if [[ -e ~/.oh-my-zsh/oh-my-zsh.sh ]]; then
+    source ~/.oh-my-zsh/oh-my-zsh.sh
+fi
 
 # Override some OMZ history options.
 #unsetopt share_history
