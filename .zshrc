@@ -56,17 +56,6 @@ plugins=(
 
 # Preconfigure oh my zsh!
 HIST_STAMPS="yyyy-mm-dd"
-ZSH_THEME="powerlevel10k/powerlevel10k"
-
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-#eval "$(starship init zsh)"
-
 zstyle ':omz:plugins:fnm' autostart yes
 #zstyle :omz:plugins:ssh-agent agent-forwarding on
 #zstyle :omz:plugins:ssh-agent lazy yes
@@ -77,6 +66,22 @@ zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain --apple-load-key
 # and grabs the directory name (:h) without needing the prompt-expansion
 # framework ((%)).
 basedir=${0:A:h}
+
+# If oh-my-posh is not installed then setup powerlevel10k.
+if ! command -v oh-my-posh &> /dev/null; then
+    if [ -d ~/.oh-my-zsh/custom/themes/powerlevel10k ]; then
+        ZSH_THEME="powerlevel10k/powerlevel10k"
+        # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+        # Initialization code that may require console input (password prompts, [y/n]
+        # confirmations, etc.) must go above this block; everything else may go below.
+        if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+            source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+        fi
+        source "${basedir}"/.p10k.zsh
+    else
+        ZSH_THEME="agnoster"
+    fi
+fi
 
 # Setup GNU-style colors before OMZ loads.
 if command -v gdircolors &> /dev/null; then
@@ -111,8 +116,12 @@ autoload backward-kill-word-whitespace
 zle -N backward-kill-word-whitespace
 bindkey '^W' backward-kill-word-whitespace
 
+# If oh-my-posh is installed, execute that now.
+if command -v oh-my-posh &> /dev/null; then
+    eval "$(oh-my-posh init zsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/powerlevel10k_lean.omp.json')"
+fi
+
 scripts=(
-    .p10k.zsh
     exports-configuration.sh
     exports-manpaths.sh
     exports-paths.sh

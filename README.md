@@ -45,7 +45,6 @@ manager and theme. I use [oh my zsh](https://ohmyz.sh/) and
 ```
 # Symlink rc files
 ln -Fis $(pwd)/.zshrc ~
-ln -Fis $(pwd)/.p10k.zsh ~
 
 # Install OMZ
 sh -c \
