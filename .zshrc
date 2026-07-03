@@ -1,22 +1,3 @@
-# Shell-only variables (No export needed)
-HIST_STAMPS="yyyy-mm-dd"
-ZSH_THEME="powerlevel10k/powerlevel10k"
-
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-#eval "$(starship init zsh)"
-
-zstyle ':omz:plugins:fnm' autostart yes
-#zstyle :omz:plugins:ssh-agent agent-forwarding on
-#zstyle :omz:plugins:ssh-agent lazy yes
-zstyle :omz:plugins:ssh-agent quiet yes
-zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain --apple-load-keychain
-
 disabled_plugins=(
     colorize                    # needed to use aliases but didn't
     command-not-found
@@ -72,6 +53,25 @@ plugins=(
     tmux
     zsh-interactive-cd
 )
+
+# Preconfigure oh my zsh!
+HIST_STAMPS="yyyy-mm-dd"
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+#eval "$(starship init zsh)"
+
+zstyle ':omz:plugins:fnm' autostart yes
+#zstyle :omz:plugins:ssh-agent agent-forwarding on
+#zstyle :omz:plugins:ssh-agent lazy yes
+zstyle :omz:plugins:ssh-agent quiet yes
+zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain --apple-load-keychain
 
 # Setup GNU-style colors before OMZ loads.
 if command -v gdircolors &> /dev/null; then
