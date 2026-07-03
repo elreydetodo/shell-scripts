@@ -1,10 +1,3 @@
-export BAT_THEME="base16-256"
-export DELTA_PAGER="less"
-export EDITOR="vim"
-export LESS="-FMRSiqx4"
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-export PAGER="bat"
-
 # Shell-only variables (No export needed)
 HIST_STAMPS="yyyy-mm-dd"
 ZSH_THEME="powerlevel10k/powerlevel10k"
@@ -121,7 +114,7 @@ bindkey '^W' backward-kill-word-whitespace
 BASEDIR=${${(%):-%x}:A:h}
 scripts=(
     .p10k.zsh
-    exports-aliases.sh
+    exports-configuration.sh
     exports-manpaths.sh
     exports-paths.sh
     rotate-ssh-functions.sh
