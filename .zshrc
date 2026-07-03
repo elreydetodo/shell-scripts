@@ -34,6 +34,7 @@ zstyle :omz:plugins:ssh-agent quiet yes
 zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain --apple-load-keychain
 
 disabled_plugins=(
+    asdf
     colorize                    # needed to use aliases but didn't
     command-not-found
     cp
@@ -73,7 +74,6 @@ disabled_plugins=(
 )
 
 plugins=(
-    asdf
     brew
     colored-man-pages
     common-aliases
