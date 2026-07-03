@@ -9,13 +9,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Setup GNU-style colors before OMZ loads.
-if (( $+commands[gdircolors] )); then
-    eval "$(gdircolors)"
-elif (( $+commands[dircolors] )); then
-    eval "$(dircolors)"
-fi
-
 #eval "$(starship init zsh)"
 
 zstyle ':omz:plugins:fnm' autostart yes
@@ -79,6 +72,13 @@ plugins=(
     tmux
     zsh-interactive-cd
 )
+
+# Setup GNU-style colors before OMZ loads.
+if command -v gdircolors &> /dev/null; then
+    eval "$(gdircolors)"
+elif command -v dircolors &> /dev/null; then
+    eval "$(dircolors)"
+fi
 
 # Injection spot for system-specific config before ZSH loads.
 if [[ -e ~/.zsh-local-extras-early.sh ]]; then
