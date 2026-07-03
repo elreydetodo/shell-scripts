@@ -19,15 +19,12 @@ fi
 #eval "$(starship init zsh)"
 
 zstyle ':omz:plugins:fnm' autostart yes
-zstyle :omz:plugins:nvm lazy yes
-zstyle :omz:plugins:nvm lazy-cmd eslint prettier npm node typescript
 #zstyle :omz:plugins:ssh-agent agent-forwarding on
 #zstyle :omz:plugins:ssh-agent lazy yes
 zstyle :omz:plugins:ssh-agent quiet yes
 zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain --apple-load-keychain
 
 disabled_plugins=(
-    asdf
     colorize                    # needed to use aliases but didn't
     command-not-found
     cp
@@ -47,7 +44,6 @@ disabled_plugins=(
     magic-enter
     man
     mvn
-    nvm
     osx
     pep8
     perl
