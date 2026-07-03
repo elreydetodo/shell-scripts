@@ -73,6 +73,11 @@ zstyle ':omz:plugins:fnm' autostart yes
 zstyle :omz:plugins:ssh-agent quiet yes
 zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain --apple-load-keychain
 
+# ${0:A:h} natively resolves the current file ($0), gets its absolute path (:A),
+# and grabs the directory name (:h) without needing the prompt-expansion
+# framework ((%)).
+basedir=${0:A:h}
+
 # Setup GNU-style colors before OMZ loads.
 if command -v gdircolors &> /dev/null; then
     eval "$(gdircolors)"
@@ -106,8 +111,6 @@ autoload backward-kill-word-whitespace
 zle -N backward-kill-word-whitespace
 bindkey '^W' backward-kill-word-whitespace
 
-# %x is the current file, :A makes it an absolute path, :h gets the 'head' (dirname)
-BASEDIR=${${(%):-%x}:A:h}
 scripts=(
     .p10k.zsh
     exports-configuration.sh
@@ -117,10 +120,12 @@ scripts=(
 )
 for f in "${scripts[@]}"; do
     # (:A) resolves to absolute path, (-r) checks readability
-    [[ -r "$BASEDIR/$f" ]] && source "$BASEDIR/$f"
+    [[ -r "$basedir/$f" ]] && source "$basedir/$f"
 done
 unset scripts
-unset BASEDIR
+
+# Clear $basedir, no longer needed.
+unset basedir
 
 # Load Homebrew-installed plugins
 if [[ ! -z "$HOMEBREW_PREFIX" ]]; then
