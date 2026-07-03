@@ -90,8 +90,6 @@ if [[ -e ~/.oh-my-zsh/oh-my-zsh.sh ]]; then
 fi
 
 # Override some OMZ history options.
-#unsetopt share_history
-#setopt append_history
 setopt NO_share_history
 setopt inc_append_history
 setopt hist_reduce_blanks
