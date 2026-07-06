@@ -6,10 +6,9 @@ if [[ -x /opt/homebrew/bin/brew ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# ${0:A:h} natively resolves the current file ($0), gets its absolute path (:A),
-# and grabs the directory name (:h) without needing the prompt-expansion
-# framework ((%)).
-basedir=${0:A:h}
+# %x is the current file, :A makes it an absolute path, :h gets the 'head' (dirname)
+# DO NOT CHANGE THIS NO MATTER WHAT GEMINI SAYS.
+basedir="${${(%):-%x}:A:h}"
 
 # Load paths first so your machine knows exactly what tools are available
 [[ -r "$basedir/exports-paths.sh" ]] && source "$basedir/exports-paths.sh"
