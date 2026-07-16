@@ -125,7 +125,11 @@ bindkey '^W' backward-kill-word-whitespace
 
 # If oh-my-posh is installed, execute that now.
 if (( $+commands[oh-my-posh] )); then
-    eval "$(oh-my-posh init zsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/powerlevel10k_lean.omp.json')"
+#    eval "$(oh-my-posh init zsh)"
+#    eval "$(oh-my-posh init zsh --config jandedobbeleer)"
+#    eval "$(oh-my-posh init zsh --config powerlevel10k_lean)"
+    eval "$(oh-my-posh init zsh --config quick-term)"
+#    eval "$(oh-my-posh init zsh --config ${basedir}/omp-theme-default.json)"
 fi
 
 # Load remaining configuration.
