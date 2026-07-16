@@ -99,13 +99,6 @@ zstyle ':omz:plugins:fnm' autostart yes
 zstyle :omz:plugins:ssh-agent quiet yes
 zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain --apple-load-keychain
 
-# Setup GNU-style colors before OMZ loads.
-if (( $+commands[gdircolors] )); then
-    eval "$(gdircolors)"
-elif (( $+commands[dircolors] )); then
-    eval "$(dircolors)"
-fi
-
 [[ -e ~/.zsh-local-extras-early.sh ]] && source ~/.zsh-local-extras-early.sh
 [[ -e ~/.oh-my-zsh/oh-my-zsh.sh ]] && source ~/.oh-my-zsh/oh-my-zsh.sh
 
