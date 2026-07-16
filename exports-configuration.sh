@@ -5,7 +5,7 @@ export LESS="-FMRSiqx4"
 
 # Configure `bat`, if installed.
 if (( $+commands[bat] )); then
-    export BAT_THEME="base16-256"
+    export BAT_THEME="Catppuccin Mocha"
     export MANPAGER="sh -c 'col -bx | bat -l man -p'"
     export PAGER="bat"
 fi
