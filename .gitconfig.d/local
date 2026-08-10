@@ -1,0 +1,18 @@
+; Identity used by the main .gitconfig. Change these values to your own if you
+; are not Martin -- this file is tracked, so edit it locally and leave it
+; uncommitted, or commit it on your own fork. It is the only file here carrying
+; a name, address or key.
+;
+; signingkey is optional: omit it and git asks gpg to pick a key matching the
+; email above. Setting it is clearer, and the trailing "!" pins gpg to exactly
+; that subkey rather than letting it choose. To see what you have:
+;
+;     gpg --list-secret-keys --keyid-format=long --with-subkey-fingerprint
+;
+; See "Setup GPG" in the README to create a key, or add
+; commit.gpgsign = false below to skip signing entirely.
+
+[user]
+    name = Martin Meyer
+    email = elreydetodo@gmail.com
+    signingkey = 9C3F38CAF64A25CE!

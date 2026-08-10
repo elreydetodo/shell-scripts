@@ -1,7 +1,18 @@
-[user]
-    name = Martin Meyer
-    email = elreydetodo@gmail.com
-    signingkey = 43F86CD1
+; Primary git configuration entry point, used on every machine.
+;
+; This file is deliberately generic: it holds no name, no email, no key. Those
+; live in .gitconfig.d/local, which is tracked but meant to be edited in place
+; -- see the instructions at the top of that file, including how to create a
+; GPG key if you do not have one.
+;
+; Install by symlinking both this file and the directory beside it:
+;     ln -Fis $(pwd)/.gitconfig ~
+;     ln -Fis $(pwd)/.gitconfig.d ~
+;
+; Note for anyone editing the includes at the bottom: paths must be ~/-rooted,
+; never relative. Git resolves a relative include.path against the directory of
+; the file containing it, and because ~/.gitconfig is a symlink that directory
+; is ~/, not this repo. A relative include here fails silently.
 
 [color]
     ui = auto
@@ -35,3 +46,18 @@
 
 [url "git@github.com:"]
     insteadOf = https://github.com/
+
+; --- layered overrides, lowest priority first -------------------------------
+; Git ignores a missing include target without complaint, so both lines below
+; are safe on a machine where the file does not exist.
+
+; 1. Who you are. Tracked, but edit it in place for your own identity.
+[include]
+    path = ~/.gitconfig.d/local
+
+; 2. Employer overlay. Gitignored, and on work machines it is a symlink into a
+;    private work repo -- so that repo can live anywhere and no path to it is
+;    hardcoded here. On personal machines the file is absent and this does
+;    nothing.
+[include]
+    path = ~/.gitconfig.d/work
