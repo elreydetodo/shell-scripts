@@ -1,6 +1,7 @@
 {
 	"installed_packages":
 	[
+		"EditorConfig",
 		"Formatter",
 		"HTML-CSS-JS Prettify",
 		"Indent XML",

@@ -179,8 +179,13 @@ as needed.
 
 ```
 # Important tools
+ln -s $(pwd)/.editorconfig ~/.editorconfig
 ln -Fis $(pwd)/.tmux.conf ~
 ln -Fis $(pwd)/.vimrc ~
+
+# Neovim
+mkdir -p ~/.config/nvim/
+ln -s $(pwd)/init.lua ~/.config/nvim/init.lua
 
 # Karabiner Elements
 mkdir - ~/.config/karabiner/assets/complex_modifications/
@@ -193,6 +198,33 @@ for FILE in "$(pwd)/Sublime Text"/*; do
     ln -Fis "${FILE}" ~/Library/Application\ Support/Sublime\ Text/Packages/User/
 done
 ```
+
+# Editor defaults
+
+[EditorConfig](https://editorconfig.org/) owns indentation, line width and
+whitespace. Every editor reads the same file, so there is nothing to set up per
+editor. Neovim has supported it natively since 0.9. Sublime Text needs a
+package, so `EditorConfig` is listed in `Package Control.sublime-settings`.
+
+The defaults are four spaces, an 80 column line, and a trailing newline.
+Markdown wraps at 100 and keeps its trailing whitespace, because two trailing
+spaces is a hard line break in Markdown. JSON and YAML have no line limit. The
+web languages that settled on two spaces get two.
+
+Two file types MUST use tabs. A Makefile recipe indented with spaces is a syntax
+error. `gofmt` uses tabs and has no flag to change it, because `-tabs` and
+`-tabwidth` were removed in
+[golang/go#7101](https://github.com/golang/go/issues/7101). The Go block sets
+`tab_width = 4` so they display four columns wide.
+
+`root = true` stops the search at your home directory. A repository with its own
+`root = true` ignores this file, which is the point.
+
+`init.lua` sets only the three indent behaviours EditorConfig has no property
+for. Do not add `expandtab`, `shiftwidth`, `softtabstop` or `tabstop` back to
+it. EditorConfig applies per buffer, and only where it finds a `.editorconfig`
+above the file. Editing outside your home directory falls back to the Neovim
+defaults of tabs at eight columns.
 
 Here are other applications you may want to install:
 - [iTerm2](https://iterm2.com/)
