@@ -188,7 +188,7 @@ mkdir -p ~/.config/nvim/
 ln -s $(pwd)/init.lua ~/.config/nvim/init.lua
 
 # Karabiner Elements
-mkdir - ~/.config/karabiner/assets/complex_modifications/
+mkdir -p ~/.config/karabiner/assets/complex_modifications/
 ln -Fis $(pwd)/karabiner-config.json ~/.config/karabiner/assets/complex_modifications/
 
 # Sublime Text
