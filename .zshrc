@@ -103,6 +103,15 @@ if [[ "$OSTYPE" == darwin* ]]; then
     zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain
 fi
 
+# Load the newest key of each "<prefix>_<moniker>_<yyyy-mm-dd>" family in ~/.ssh.
+# A glob sorts by name, so a later date replaces an earlier one of the same family.
+typeset -A latest_ssh_keys
+for ssh_key in ~/.ssh/*_*_20??-??-??(N:t); do
+    latest_ssh_keys[${ssh_key%_*}]=$ssh_key
+done
+zstyle :omz:plugins:ssh-agent identities ${(ov)latest_ssh_keys}
+unset latest_ssh_keys ssh_key
+
 [[ -e ~/.zsh-local-extras-early.sh ]] && source ~/.zsh-local-extras-early.sh
 [[ -e ~/.oh-my-zsh/oh-my-zsh.sh ]] && source ~/.oh-my-zsh/oh-my-zsh.sh
 
