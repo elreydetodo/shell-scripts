@@ -14,7 +14,7 @@ function ssh_agent_add() {
         echo "SSH key moniker is required."
         return
     fi
-    latest=$(gfind ~/.ssh -name "${prefix}_${moniker}_*" | grep -v -e .pub -e latest | sort -r | head -n 1 | xargs basename)
+    latest=$(find ~/.ssh -name "${prefix}_${moniker}_*" | grep -v -e .pub -e latest | sort -r | head -n 1 | xargs basename)
     if [ -z "$latest" ]; then
         echo "No matching SSH key found for ${prefix}_${moniker}_*"
         return
@@ -42,7 +42,7 @@ function ssh_agent_cleanup() {
         echo "SSH key moniker is required."
         return
     fi
-    latest=$(gfind ~/.ssh -name "${prefix}_${moniker}_*" | grep -v -e .pub -e latest | sort -r | head -n 1 | xargs basename)
+    latest=$(find ~/.ssh -name "${prefix}_${moniker}_*" | grep -v -e .pub -e latest | sort -r | head -n 1 | xargs basename)
     if [ -z "$latest" ]; then
         latest="foo" # we just need something to prevent bad input to grep below
     fi
@@ -92,7 +92,7 @@ function ssh_link_latest() {
         echo "SSH key moniker is required."
         return
     fi
-    filename=$(gfind ~/.ssh -name "${prefix}_${moniker}_*" | grep -v -e .pub -e latest | sort -r | head -n 1)
+    filename=$(find ~/.ssh -name "${prefix}_${moniker}_*" | grep -v -e .pub -e latest | sort -r | head -n 1)
     if [ -z "$filename" ]; then
         echo "No matching SSH key found for ${prefix}_${moniker}_*"
         return
@@ -116,7 +116,7 @@ ssh_print_fingerprint() {
         echo "SSH key moniker is required."
         return
     fi
-    filename=$(gfind ~/.ssh/ -name "${prefix}_${moniker}_*" | grep -v -e .pub -e latest | sort -r | head -n 1 | xargs basename)
+    filename=$(find ~/.ssh/ -name "${prefix}_${moniker}_*" | grep -v -e .pub -e latest | sort -r | head -n 1 | xargs basename)
     if [ -z "$filename" ]; then
         echo "No matching SSH key found for ${prefix}_${moniker}_*"
         return
