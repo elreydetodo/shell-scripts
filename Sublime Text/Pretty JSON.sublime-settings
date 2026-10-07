@@ -1,5 +1,8 @@
 {
-    "pretty_on_save": true,
+    "brace_newline": false,
+    "bracket_newline": false,
+    "indent": 4,
+    "pretty_on_save": false,
     "sort_keys": true,
     "validate_on_save": true
 }

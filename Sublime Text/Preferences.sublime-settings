@@ -1,15 +1,19 @@
 {
-    "added_words":
-    [
+    "added_words": [
+        "Akamai",
+        "akamai",
+        "Artifactory",
+        "Etherpad",
         "Homebrew",
+        "https",
+        "iptables",
         "symlink",
         "xargs"
     ],
     "auto_complete_commit_on_tab": true,
     "auto_complete_cycle": true,
     "auto_find_in_selection": true,
-    "draw_white_space":
-    [
+    "draw_white_space": [
         "all_mixed",
         "all_tabs",
         "isolated",
@@ -20,19 +24,18 @@
     "fallback_encoding": "UTF-8",
     "font_size": 16,
     "highlight_line": true,
+    "ignored_packages": [
+        "Vintage"
+    ],
     "index_files": true,
-    "rulers":
-    [
+    "rulers": [
         80,
-        160
+        100,
+        120
     ],
     "shift_tab_unindent": true,
     "show_line_endings": true,
     "spell_check": true,
     "translate_tabs_to_spaces": true,
-    "trim_trailing_white_space_on_save": "all",
-    "ignored_packages":
-    [
-        "Vintage",
-    ],
+    "trim_trailing_white_space_on_save": "all"
 }
