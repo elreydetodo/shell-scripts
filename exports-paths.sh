@@ -27,7 +27,8 @@ typeset -U path
 # N: sets NULL_GLOB (ignores the entry if it doesn't exist)
 # -: follows symbolic links
 # /: matches only directories
-path=( "${HOMEBREW_PATHS[@]}"(N-/) $path )
+# ^: applies the qualifiers to every element of the array, not only the last
+path=( ${^HOMEBREW_PATHS}(N-/) $path )
 
 # 4. Evaluate any system-specific paths.
 if [ -e ~/.zsh-local-exports.sh ]; then
