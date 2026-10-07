@@ -1,15 +1,20 @@
 #!/bin/bash
 
 # 1. Define your desired paths in a standard array
-local HOMEBREW_PATHS=(
-    "${HOMEBREW_PREFIX}/opt/gawk/libexec/gnubin"
-    "${HOMEBREW_PREFIX}/opt/libxslt/bin"
-    "${HOMEBREW_PREFIX}/opt/mariadb-connector-c/bin"
-    "${HOMEBREW_PREFIX}/opt/mysql-client@8.4/bin"
-    "${HOMEBREW_PREFIX}/sbin"
-    "${HOMEBREW_PREFIX}/bin"
-    "${HOME}/.bin"
-)
+# The Homebrew entries are added only where Homebrew is installed. With an empty prefix
+# they would name system directories such as /bin.
+local HOMEBREW_PATHS=()
+if [[ -n "${HOMEBREW_PREFIX}" ]]; then
+    HOMEBREW_PATHS+=(
+        "${HOMEBREW_PREFIX}/opt/gawk/libexec/gnubin"
+        "${HOMEBREW_PREFIX}/opt/libxslt/bin"
+        "${HOMEBREW_PREFIX}/opt/mariadb-connector-c/bin"
+        "${HOMEBREW_PREFIX}/opt/mysql-client@8.4/bin"
+        "${HOMEBREW_PREFIX}/sbin"
+        "${HOMEBREW_PREFIX}/bin"
+    )
+fi
+HOMEBREW_PATHS+=("${HOME}/.bin")
 
 # 2. Ensure 'path' stays unique
 # `typeset -U` makes sure ${path} only allows unique elements.
