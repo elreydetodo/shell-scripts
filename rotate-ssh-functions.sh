@@ -20,7 +20,12 @@ function ssh_agent_add() {
         return
     fi
     echo "Latest SSH identity file is: ${latest}"
-    ssh-add --apple-use-keychain ~/.ssh/"${latest}"
+    # The keychain flag is specific to the ssh-add that ships with macOS.
+    if [[ "$OSTYPE" == darwin* ]]; then
+        ssh-add --apple-use-keychain ~/.ssh/"${latest}"
+    else
+        ssh-add ~/.ssh/"${latest}"
+    fi
 }
 
 function ssh_agent_cleanup() {
