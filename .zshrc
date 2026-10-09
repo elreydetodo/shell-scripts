@@ -1,5 +1,5 @@
 # ==============================================================================
-# 1. Initialize some critical environment & path stuff.
+# 1: Initialize some critical environment & path stuff.
 # ==============================================================================
 # Bootstrap Homebrew natively right away to capture $HOMEBREW_PREFIX
 if [[ -x /opt/homebrew/bin/brew ]]; then
@@ -16,7 +16,7 @@ basedir="${${(%):-%x}:A:h}"
 
 
 # ==============================================================================
-# 2. Decide which theme to use before OMZ loads.
+# 2: Decide which theme to use before OMZ loads.
 # ==============================================================================
 if (( ! $+commands[oh-my-posh] )); then
     if [ -d ~/.oh-my-zsh/custom/themes/powerlevel10k ]; then
@@ -34,7 +34,7 @@ fi
 
 
 # ==============================================================================
-# 3. Configure and start OMZ.
+# 3: Configure and start OMZ.
 # ==============================================================================
 disabled_plugins=(
     colored-man-pages           # MANPAGER takes precedence over the PAGER it sets
@@ -120,7 +120,7 @@ unset latest_ssh_keys ssh_key
 
 
 # ==============================================================================
-# 4. POST-LAUNCH CONFIGURATION: Tools, Aliases, & Extras
+# 4: POST-LAUNCH CONFIGURATION: Tools, Aliases, & Extras
 # ==============================================================================
 # Override some OMZ history options.
 setopt NO_share_history
