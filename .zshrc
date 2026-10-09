@@ -37,6 +37,7 @@ fi
 # 3: Configure and start OMZ.
 # ==============================================================================
 disabled_plugins=(
+    brew                        # brew shellenv does its setup, leaving only aliases
     colored-man-pages           # MANPAGER takes precedence over the PAGER it sets
     colorize                    # needed to use aliases but didn't
     command-not-found
@@ -79,7 +80,6 @@ disabled_plugins=(
 
 plugins=(
     aliases
-    brew
     fnm
     fzf
     git
