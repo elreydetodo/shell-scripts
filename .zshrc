@@ -40,6 +40,7 @@ disabled_plugins=(
     colored-man-pages           # MANPAGER takes precedence over the PAGER it sets
     colorize                    # needed to use aliases but didn't
     command-not-found
+    common-aliases              # aliases rm, cp and mv to their -i forms
     cp
     dirhistory
     dotenv
@@ -77,7 +78,6 @@ disabled_plugins=(
 
 plugins=(
     brew
-    common-aliases
     fnm
     fzf
     git
