@@ -97,13 +97,12 @@ plugins=(
 
 HIST_STAMPS="yyyy-mm-dd"
 zstyle ':omz:plugins:fnm' autostart yes
-#zstyle :omz:plugins:ssh-agent agent-forwarding on
-zstyle :omz:plugins:ssh-agent honor-existing yes
-#zstyle :omz:plugins:ssh-agent lazy yes
-zstyle :omz:plugins:ssh-agent quiet yes
+zstyle ':omz:plugins:gpg-agent' ssh-support no
+zstyle ':omz:plugins:ssh-agent' honor-existing yes
+zstyle ':omz:plugins:ssh-agent' quiet yes
 # The keychain flag is specific to the ssh-add that ships with macOS.
 if [[ "$OSTYPE" == darwin* ]]; then
-    zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain
+    zstyle ':omz:plugins:ssh-agent' ssh-add-args --apple-use-keychain
 fi
 
 # Load the newest key of each "<prefix>_<moniker>_<yyyy-mm-dd>" family in ~/.ssh.
@@ -112,7 +111,7 @@ typeset -A latest_ssh_keys
 for ssh_key in ~/.ssh/*_*_20??-??-??(N:t); do
     latest_ssh_keys[${ssh_key%_*}]=$ssh_key
 done
-zstyle :omz:plugins:ssh-agent identities ${(ov)latest_ssh_keys}
+zstyle ':omz:plugins:ssh-agent' identities ${(ov)latest_ssh_keys}
 unset latest_ssh_keys ssh_key
 
 [[ -e ~/.zsh-local-extras-early.sh ]] && source ~/.zsh-local-extras-early.sh
