@@ -9,10 +9,7 @@ if [[ -n "${HOMEBREW_PREFIX}" ]]; then
         "${HOMEBREW_PREFIX}/share/man"
     )
 fi
-MAN_DIRS+=(
-    "${HOME}/.local/share/man"
-    "/usr/local/share/man"
-)
+MAN_DIRS+=("${HOME}/.local/share/man")
 
 # 2. Ensure 'manpath' stays unique
 # $manpath is a ZSH built-in array representation of ${MANPATH}.
