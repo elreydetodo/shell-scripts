@@ -77,6 +77,7 @@ disabled_plugins=(
 )
 
 plugins=(
+    aliases
     brew
     fnm
     fzf
