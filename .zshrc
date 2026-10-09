@@ -52,6 +52,7 @@ disabled_plugins=(
     history
     history-substring-search    # breaks ctrl+w functionality
     iterm2
+    jenv                        # adds about a second to shell startup
     jsontools
     keychain
     lol
@@ -85,7 +86,6 @@ plugins=(
     gnu-utils
     gpg-agent
     gradle
-    jenv
     last-working-dir
     ssh-agent
     sublime
