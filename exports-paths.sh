@@ -14,7 +14,10 @@ if [[ -n "${HOMEBREW_PREFIX}" ]]; then
         "${HOMEBREW_PREFIX}/bin"
     )
 fi
-HOMEBREW_PATHS+=("${HOME}/.bin")
+HOMEBREW_PATHS+=(
+    "${HOME}/.bin"
+    "${HOME}/.jenv/shims"
+)
 
 # 2. Ensure 'path' stays unique
 # `typeset -U` makes sure ${path} only allows unique elements.
