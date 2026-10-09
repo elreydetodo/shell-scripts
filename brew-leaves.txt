@@ -11,5 +11,3 @@ tmux
 vim
 wget
 zsh
-zsh-autosuggestions
-zsh-syntax-highlighting

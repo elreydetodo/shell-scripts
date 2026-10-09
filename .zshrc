@@ -90,7 +90,9 @@ plugins=(
     ssh-agent
     sublime
     tmux
+    zsh-autosuggestions
     zsh-interactive-cd
+    zsh-syntax-highlighting
 )
 
 HIST_STAMPS="yyyy-mm-dd"
@@ -149,18 +151,6 @@ fi
 # Load remaining configuration.
 [[ -r "$basedir/exports-configuration.sh" ]] && source "$basedir/exports-configuration.sh"
 [[ -r "$basedir/rotate-ssh-functions.sh" ]] && source "$basedir/rotate-ssh-functions.sh"
-
-# Load Homebrew-installed plugins
-if [[ ! -z "$HOMEBREW_PREFIX" ]]; then
-    local_zsh_plugins=(
-        "${HOMEBREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-        "${HOMEBREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-    )
-    for plugin in "${local_zsh_plugins[@]}"; do
-        [[ -r "${plugin}" ]] && source "${plugin}"
-    done
-    unset local_zsh_plugins
-fi
 
 [[ -e ~/.zsh-local-extras-late.sh ]] && source ~/.zsh-local-extras-late.sh
 
