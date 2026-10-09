@@ -37,6 +37,7 @@ fi
 # 3. Configure and start OMZ.
 # ==============================================================================
 disabled_plugins=(
+    colored-man-pages           # MANPAGER takes precedence over the PAGER it sets
     colorize                    # needed to use aliases but didn't
     command-not-found
     cp
@@ -76,7 +77,6 @@ disabled_plugins=(
 
 plugins=(
     brew
-    colored-man-pages
     common-aliases
     fnm
     fzf
