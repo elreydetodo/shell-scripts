@@ -1,11 +1,11 @@
 # Start with some simple aliases and configuration.
 alias gg="git grep -n"
 alias gnpg="git --no-pager grep -n"
-alias l="ls -Fahl"
+alias l="ls -Fhl"
 alias l1="ls -1A"
-alias la="ls -lFha"
-alias ll="ls -la"
-alias lS="ls -1FSsh"
+alias lS="ls -1FShs"
+alias la="ls -Fahl"
+alias ll="ls -al"
 export LESS="-FMRSiqx4"
 
 # Configure `bat`, if installed.
