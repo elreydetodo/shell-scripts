@@ -4,4 +4,3 @@ fd
 mdless
 neovim
 ripgrep
-the_silver_searcher

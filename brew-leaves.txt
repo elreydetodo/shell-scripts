@@ -8,6 +8,5 @@ grep
 less
 rsync
 tmux
-vim
 wget
 zsh
