@@ -143,8 +143,9 @@ if (( $+commands[oh-my-posh] )); then
 #    eval "$(oh-my-posh init zsh)"
 #    eval "$(oh-my-posh init zsh --config jandedobbeleer)"
 #    eval "$(oh-my-posh init zsh --config powerlevel10k_lean)"
-    eval "$(oh-my-posh init zsh --config quick-term)"
-#    eval "$(oh-my-posh init zsh --config ${basedir}/omp-theme-default.json)"
+#    eval "$(oh-my-posh init zsh --config quick-term)"
+    # Variants a through f are described in docs/oh-my-posh-theme.md.
+    eval "$(oh-my-posh init zsh --config ${basedir}/oh-my-posh/elreydetodo-a.yml)"
 fi
 
 # Load remaining configuration.
