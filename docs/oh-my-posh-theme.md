@@ -6,6 +6,71 @@
 | Author | Martin Meyer. Drafted with Claude |
 | Date | 2026-11-03 |
 
+## Introduction
+
+`elreydetodo` is a two-line zsh prompt for Oh My Posh. The first line reports how the previous
+command went and the state of git, with tool versions on the right. The second line is the path
+and the place to type. When Enter is pressed, both lines are rewritten into plain text that copies
+cleanly out of scrollback.
+
+The theme comes in 35 variants, named `elreydetodo-<edge>-<gaps>-<color>`. The edge is `round`,
+`angle`, or `none`. The gaps are `gaps` for separate pieces or `nogaps` for one joined bar. The
+color is one of seven color sets. `.zshrc` loads one variant, and another is tried by editing that
+line.
+
+The screenshots below show each variant twice. The first two lines are the live prompt after a
+command failed, in a repository with staged and unstaged changes. The next two are the live prompt
+after a command succeeded, in a clean repository.
+
+### Rounded edges
+
+![The round-gaps and round-nogaps variants in every color](images/oh-my-posh/round.png)
+
+### Angular edges
+
+![The angle-gaps and angle-nogaps variants in every color](images/oh-my-posh/angle.png)
+
+### No backgrounds
+
+![The none-gaps variants in every color](images/oh-my-posh/none.png)
+
+### Committed prompts
+
+The committed prompt is the same for every shape of one color. Each color is shown after the
+failure and the success, with `git status` typed as the next command.
+
+![The committed prompt in every color](images/oh-my-posh/committed.png)
+
+### Regenerating the screenshots
+
+The screenshots SHOULD be regenerated whenever a variant, a shape, or a color set changes. Run this
+from the root of the repository:
+
+```zsh
+oh-my-posh/screenshots/render-screenshots.zsh
+```
+
+It writes the four images into `docs/images/oh-my-posh` in about 20 seconds. It needs `oh-my-posh`,
+`git`, `swiftc` from the Xcode Command Line Tools, and the font. It does not touch the running
+shell, its configuration, or Oh My Posh's real cache.
+
+- The script builds two demo repositories and stand-in `java`, `node`, and `python` commands in a
+  new temporary folder. The screenshots therefore never show this machine's own files or tools.
+- It renders every variant's live prompt with `oh-my-posh print primary`, waits four seconds, and
+  renders each color's committed prompt with `oh-my-posh print transient`. The idle times and
+  timestamps in the images are real.
+- `oh-my-posh/screenshots/ansi-to-png.swift` draws the captured escape codes on a grid of
+  character cells, as a terminal does. Each background fills its whole cell, and the Powerline
+  shapes are drawn to fill their cells exactly, as iTerm2 does with "Draw Powerline Glyphs" on.
+- The font, size, and colors match the iTerm2 profile in use when the screenshots were made:
+  `MesloLGSDZNFM-Regular` at 14 points, `#BBBBBB` text on `#000000`. The environment variables
+  `ELREYDETODO_FONT`, `ELREYDETODO_FONT_SIZE`, `ELREYDETODO_FOREGROUND`, and
+  `ELREYDETODO_BACKGROUND` override them.
+- The temporary folder is left in place for inspection, and the script prints its path. macOS
+  clears old files from the temporary folder on its own.
+
+The rest of this document will discuss the design of the theme and how its files fit together.
+
 ## Purpose
 
 This theme replaces the stock `quick-term` theme in `.zshrc`. It has two goals. The first is to
@@ -29,6 +94,8 @@ Two terms are used throughout:
   and picks a color set with `var: { color: <name> }`. Nothing else is in them.
 - `.zshrc` loads `${basedir}/oh-my-posh/elreydetodo-round-gaps-pastel.yml`. The other variants are
   tried by editing that line.
+- `oh-my-posh/screenshots` holds the script that renders the screenshots, and
+  `docs/images/oh-my-posh` holds the screenshots.
 
 The files are YAML so that any segment or option can be commented out. Every segment we might
 plausibly want is present in the file, with the unused ones commented out.
@@ -38,14 +105,14 @@ plausibly want is present in the file, with the unused ones commented out.
 The theme MUST be rendered in a Meslo Nerd Font. The live prompt uses Nerd Font icons and rounded
 pill ends, and other fonts draw them as empty boxes or misalign them. Homebrew installs the
 family with `brew install --cask font-meslo-lg-nerd-font`. The terminal's font is then set to
-`MesloLGLDZ Nerd Font Mono` or another member of the family.
+`MesloLGSDZ Nerd Font Mono` or another member of the family.
 
 ## Live prompt
 
 The live prompt is two lines.
 
 ```
- ⬑ 3.2s ✔ 0 2026-11-03T14:03:07-05:00    shell-scripts  main ?1 ~2         [java 21 │ py 3.12 .venv]
+ ⬑ 3.245s ✔ 0 2026-11-03T14:03:07-05:00    shell-scripts  main ?1 ~2       [java 21 │ py 3.12 .venv]
 ~/src/shell-scripts ❯ ▌
 ```
 
@@ -74,7 +141,7 @@ so.
 Pressing Enter rewrites both lines into two new ones:
 
 ```
-# ⬑ ran 3.2s · exit 0 · ended 2026-11-03T14:03:07-05:00 │ idle 41s · next command at 2026-11-03T14:03:48-05:00 ↴
+# ⬑ ran 3.245s · exit 0 · ended 2026-11-03T14:03:07-05:00 │ idle 41s · next command at 2026-11-03T14:03:48-05:00 ↴
 ~/src/shell-scripts ❯ git status
 ```
 
@@ -258,8 +325,8 @@ designing it, so that none of it has to be rediscovered.
 
 - Copying scrollback into messages is the top priority. Anything that would paste as junk is
   rejected, including padding, Nerd Font characters on committed lines, and continuation markers.
-- The owner uses iTerm2 with the `MesloLGLDZ Nerd Font` family. Glyph alignment matters. Check
-  that a glyph is in the font before using it:
+- The owner uses iTerm2 with `MesloLGSDZ Nerd Font Mono` at 14 points. Glyph alignment matters.
+  Check that a glyph is in the font before using it:
   `fc-list ":charset=2b11" family | grep -ci meslo` prints 0 when the font lacks U+2B11.
 - `⬑` U+2B11 is the intended shape for "about the line above". Meslo lacks the whole U+2B0E to
   U+2B11 group, so iTerm2 draws it from a fallback font, slightly small and high. The owner
