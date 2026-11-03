@@ -29,12 +29,8 @@ foreground=${ELREYDETODO_FOREGROUND:-#BBBBBB}
 columns=120
 # The variant shown in overview.png. Its live and committed prompts are shown together.
 overview=round-gaps-mocha
-colors=(pastel dark mocha rosepine nord tokyonight gruvbox)
-typeset -A edges=(
-  round "round-gaps round-nogaps"
-  angle "angle-gaps angle-nogaps"
-  none  "none-gaps"
-)
+# One image is drawn per edge style. It shows every variant of that edge, sorted by name.
+edges=(angle none round)
 # Each scenario is a name, the repository it runs in, its exit status, and its duration.
 scenarios=("failure acme-web 2 12345" "success acme-service 0 3245")
 
@@ -92,7 +88,7 @@ done
 # 5: Wait, then render the committed prompts. They are the same for every shape of one color, so
 # only the round-gaps variants and the overview's variant are used.
 sleep 4
-for variant in ${(u)${colors/#/elreydetodo-round-gaps-}} elreydetodo-$overview; do
+for variant in $themes/elreydetodo-round-gaps-*.yml(on:t:r) elreydetodo-$overview; do
   [[ -e $work/capture/$variant-${scenarios[1]%% *}-committed.ansi ]] && continue
   for scenario in $scenarios; do
     read name repo code ms <<< $scenario
@@ -102,50 +98,48 @@ for variant in ${(u)${colors/#/elreydetodo-round-gaps-}} elreydetodo-$overview; 
   done
 done
 
-# 6: Assemble one page per image. Each variant gets a dim label line, the live prompt after a
-# failure, and the live prompt after a success. Each color's committed prompts are followed by a
-# typed command, as they would appear in scrollback. The overview shows one variant both ways.
+# 6: Assemble one page per image, with the variants sorted by name. Each variant gets a dim label
+# line with its full name, the live prompt after a failure, and the live prompt after a success.
+# Each committed prompt is followed by a typed command, as it would appear in scrollback. The
+# overview shows one variant both ways.
 label() { print -rn -- $'\e[38;2;127;132;156m'"$1"$'\e[0m\n' }
-for edge in ${(k)edges}; do
+for edge in $edges; do
   page=$work/$edge.ansi
   : > $page
-  for shape in ${=edges[$edge]}; do
-    for color in $colors; do
-      variant=elreydetodo-$shape-$color
-      label $variant >> $page
-      for scenario in $scenarios; do
-        cat $work/capture/$variant-${scenario%% *}-live.ansi >> $page
-        print >> $page
-      done
+  for variant in $themes/elreydetodo-$edge-*.yml(on:t:r); do
+    label $variant >> $page
+    for scenario in $scenarios; do
+      cat $work/capture/$variant-${scenario%% *}-live.ansi >> $page
       print >> $page
     done
+    print >> $page
   done
 done
 page=$work/committed.ansi
 : > $page
-for color in $colors; do
-  label $color >> $page
+for variant in $themes/elreydetodo-round-gaps-*.yml(on:t:r); do
+  label $variant >> $page
   for scenario in $scenarios; do
-    cat $work/capture/elreydetodo-round-gaps-$color-${scenario%% *}-committed.ansi >> $page
+    cat $work/capture/$variant-${scenario%% *}-committed.ansi >> $page
     print -- "git status" >> $page
   done
   print >> $page
 done
 page=$work/overview.ansi
-label "While typing" > $page
+label "elreydetodo-$overview, while typing" > $page
 for scenario in $scenarios; do
   cat $work/capture/elreydetodo-$overview-${scenario%% *}-live.ansi >> $page
   print >> $page
 done
 print >> $page
-label "After Enter" >> $page
+label "elreydetodo-$overview, after Enter" >> $page
 for scenario in $scenarios; do
   cat $work/capture/elreydetodo-$overview-${scenario%% *}-committed.ansi >> $page
   print -- "git status" >> $page
 done
 
 # 7: Draw the pages.
-for name in ${(k)edges} committed overview; do
+for name in $edges committed overview; do
   $work/ansi-to-png $work/$name.ansi $out/$name.png $font $size $columns $background $foreground
 done
-print -- "Wrote $out/{${(kj:,:)edges},committed,overview}.png from $work"
+print -- "Wrote $out/{${(j:,:)edges},committed,overview}.png from $work"

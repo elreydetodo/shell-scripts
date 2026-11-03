@@ -24,8 +24,8 @@ designing it, so that none of it has to be rediscovered.
 
 - A new shape is a file in `parts` that extends `base.yml`, plus one variant file per color.
 - A new color set is an entry of `palettes.list` in `parts/base.yml`, plus one variant file per
-  shape. It also goes into `colors` in `screenshots/render-screenshots.zsh` and into the color
-  table of `README.md`.
+  shape. It also goes into the color table of `README.md`. The screenshot script finds variant
+  files by name, so it needs no change.
 - A color set whose pills are too dark to read as text MUST also override the `ink-*` keys, or the
   `none-gaps` variant is unreadable.
 - Every variant file has the same form: a header comment naming it and describing it, `extends`,

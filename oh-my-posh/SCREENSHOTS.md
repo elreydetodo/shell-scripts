@@ -2,8 +2,8 @@
 
 The screenshots below show each variant twice. The first two lines are the live prompt after a
 command failed, in a repository with staged and unstaged changes. The next two are the live prompt
-after a command succeeded, in a clean repository. [README.md](README.md) explains the variant
-names.
+after a command succeeded, in a clean repository. The variants are sorted by name, and each one is
+labeled with its full name. [README.md](README.md) explains the names.
 
 ## Rounded edges
 
@@ -19,8 +19,9 @@ names.
 
 ## Committed prompts
 
-The committed prompt is the same for every shape of one color. Each color is shown after the
-failure and the success, with `git status` typed as the next command.
+The committed prompt is the same for every shape of one color, so each color is shown once, from
+its `round-gaps` variant. Each one appears after the failure and the success, with `git status`
+typed as the next command.
 
 ![The committed prompt in every color](screenshots/committed.png)
 
