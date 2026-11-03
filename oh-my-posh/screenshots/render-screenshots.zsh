@@ -3,12 +3,12 @@
 #
 # Usage: render-screenshots.zsh, from any folder
 #
-# The script builds two demo repositories and stand-in java, node, and python commands in a new
+# The script builds a demo repository and stand-in java, node, and python commands in a new
 # temporary folder, so the screenshots never show this machine's own files or tools. It renders
-# every variant's live prompt after a failed command and after a successful one, waits a few
-# seconds, and renders each color's committed prompt, so the idle times are real. Then
-# ansi-to-png.swift draws the captured output as one image per edge style, plus one image of the
-# committed prompts, and one overview of a single variant for the README.
+# every variant's live prompt after a successful command and after a failed one, waits a few
+# seconds, and renders the committed prompt of each, so the idle times are real. Then
+# ansi-to-png.swift draws the captured output as one image per edge style, and one overview of a
+# single variant for the README.
 #
 # It needs oh-my-posh, git, swiftc from the Xcode Command Line Tools, and the font. The font,
 # size, and colors default to the iTerm2 profile in use when the screenshots were made. The
@@ -27,12 +27,14 @@ size=${ELREYDETODO_FONT_SIZE:-14}
 background=${ELREYDETODO_BACKGROUND:-#000000}
 foreground=${ELREYDETODO_FOREGROUND:-#BBBBBB}
 columns=120
-# The variant shown in overview.png. Its live and committed prompts are shown together.
+# The variant shown in overview.png.
 overview=round-gaps-mocha
 # One image is drawn per edge style. It shows every variant of that edge, sorted by name.
 edges=(angle none round)
-# Each scenario is a name, the repository it runs in, its exit status, and its duration.
-scenarios=("failure acme-web 2 12345" "success acme-service 0 3245")
+# Each scenario is a name, the exit status and duration of the command before the prompt, and the
+# command typed at the prompt. Each one's typed command leads into the next scenario.
+scenarios=("success 0 3245 this-command-fails" "failure 2 12345 this-command-succeeds")
+repo=acme-service
 
 work=$(mktemp -d -t elreydetodo-screenshots)
 mkdir -p $out $work/bin $work/home $work/capture
@@ -50,25 +52,19 @@ print '#!/bin/sh\necho "Python 3.12.7"' > $work/bin/python3
 cp $work/bin/python3 $work/bin/python
 chmod u+x $work/bin/*
 
-# 3: Build the demo repositories. acme-service is clean and level with its upstream. acme-web has
-# both staged and unstaged changes. Main.java marks each as a Java project, because a pom.xml would
-# also run Maven.
+# 3: Build the demo repository, clean and level with its upstream. Main.java marks it as a Java
+# project, because a pom.xml would also run Maven.
 git=(git -c user.name=Demo -c user.email=demo@example.com -c init.defaultBranch=main
   -c commit.gpgsign=false)
-for repo in acme-service acme-web; do
-  $git init -q --bare $work/$repo.git
-  $git init -q $HOME/$repo
-  print "class Main {}" > $HOME/$repo/Main.java
-  print '{"name": "'$repo'"}' > $HOME/$repo/package.json
-  print 'print("hello")' > $HOME/$repo/main.py
-  $git -C $HOME/$repo add .
-  $git -C $HOME/$repo commit -q -m "Initial commit"
-  $git -C $HOME/$repo remote add origin $work/$repo.git
-  $git -C $HOME/$repo push -q -u origin main
-done
-print 'print("goodbye")' > $HOME/acme-web/main.py
-print '# Notes' > $HOME/acme-web/NOTES.md
-$git -C $HOME/acme-web add NOTES.md
+$git init -q --bare $work/$repo.git
+$git init -q $HOME/$repo
+print "class Main {}" > $HOME/$repo/Main.java
+print '{"name": "'$repo'"}' > $HOME/$repo/package.json
+print 'print("hello")' > $HOME/$repo/main.py
+$git -C $HOME/$repo add .
+$git -C $HOME/$repo commit -q -m "Initial commit"
+$git -C $HOME/$repo remote add origin $work/$repo.git
+$git -C $HOME/$repo push -q -u origin main
 
 # 4: Render each live prompt after a throwaway one, so it is not the session's first prompt. The
 # primary prompt saves the cache that the committed prompt reads later.
@@ -76,7 +72,7 @@ typeset -A sessions
 for theme in $themes/elreydetodo-*.yml; do
   variant=${${theme:t}:r}
   for scenario in $scenarios; do
-    read name repo code ms <<< $scenario
+    read name code ms typed <<< $scenario
     session=screenshot-$variant-$name
     sessions[$variant-$name]=$session
     common=(--config $theme --shell zsh --pwd $HOME/$repo --terminal-width $columns)
@@ -86,61 +82,47 @@ for theme in $themes/elreydetodo-*.yml; do
   done
 done
 
-# 5: Wait, then render the committed prompts. They are the same for every shape of one color, so
-# only the round-gaps variants and the overview's variant are used.
+# 5: Wait, then render every committed prompt from the cache its live prompt saved.
 sleep 4
-for variant in $themes/elreydetodo-round-gaps-*.yml(on:t:r) elreydetodo-$overview; do
-  [[ -e $work/capture/$variant-${scenarios[1]%% *}-committed.ansi ]] && continue
+for theme in $themes/elreydetodo-*.yml; do
+  variant=${${theme:t}:r}
   for scenario in $scenarios; do
-    read name repo code ms <<< $scenario
+    read name code ms typed <<< $scenario
     POSH_SESSION_ID=$sessions[$variant-$name] oh-my-posh print transient \
-      --config $themes/$variant.yml --shell zsh --pwd $HOME/$repo --terminal-width $columns \
+      --config $theme --shell zsh --pwd $HOME/$repo --terminal-width $columns \
       --status $code --execution-time $ms > $work/capture/$variant-$name-committed.ansi
   done
 done
 
 # 6: Assemble one page per image, with the variants sorted by name. Each variant gets a dim label
-# line with its full name, the live prompt after a failure, and the live prompt after a success.
-# Each committed prompt is followed by a typed command, as it would appear in scrollback. The
-# overview shows one variant both ways.
+# line with its full name. Then each scenario's prompt appears twice, both times with its command
+# typed: first live, as it looks while the command is typed, then committed, as it looks after
+# Enter. The overview is the same block for one variant.
 label() { print -rn -- $'\e[38;2;127;132;156m'"$1"$'\e[0m\n' }
+block() {
+  local variant=$1 scenario name code ms typed kind
+  for scenario in $scenarios; do
+    read name code ms typed <<< $scenario
+    for kind in live committed; do
+      cat $work/capture/$variant-$name-$kind.ansi
+      print -- $typed
+    done
+  done
+}
 for edge in $edges; do
   page=$work/$edge.ansi
   : > $page
   for variant in $themes/elreydetodo-$edge-*.yml(on:t:r); do
     label $variant >> $page
-    for scenario in $scenarios; do
-      cat $work/capture/$variant-${scenario%% *}-live.ansi >> $page
-      print >> $page
-    done
+    block $variant >> $page
     print >> $page
   done
 done
-page=$work/committed.ansi
-: > $page
-for variant in $themes/elreydetodo-round-gaps-*.yml(on:t:r); do
-  label $variant >> $page
-  for scenario in $scenarios; do
-    cat $work/capture/$variant-${scenario%% *}-committed.ansi >> $page
-    print -- "git status" >> $page
-  done
-  print >> $page
-done
-page=$work/overview.ansi
-label "elreydetodo-$overview, while typing" > $page
-for scenario in $scenarios; do
-  cat $work/capture/elreydetodo-$overview-${scenario%% *}-live.ansi >> $page
-  print >> $page
-done
-print >> $page
-label "elreydetodo-$overview, after Enter" >> $page
-for scenario in $scenarios; do
-  cat $work/capture/elreydetodo-$overview-${scenario%% *}-committed.ansi >> $page
-  print -- "git status" >> $page
-done
+label elreydetodo-$overview > $work/overview.ansi
+block elreydetodo-$overview >> $work/overview.ansi
 
 # 7: Draw the pages.
-for name in $edges committed overview; do
+for name in $edges overview; do
   $work/ansi-to-png $work/$name.ansi $out/$name.png $font $size $columns $background $foreground
 done
-print -- "Wrote $out/{${(j:,:)edges},committed,overview}.png from $work"
+print -- "Wrote $out/{${(j:,:)edges},overview}.png from $work"

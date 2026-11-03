@@ -1,9 +1,16 @@
 # Screenshots of the `elreydetodo` variants
 
-The screenshots below show each variant twice. The first two lines are the live prompt after a
-command failed, in a repository with staged and unstaged changes. The next two are the live prompt
-after a command succeeded, in a clean repository. The variants are sorted by name, and each one is
-labeled with its full name. [README.md](README.md) explains the names.
+Each variant is shown through two commands, one that succeeded and one that failed. Every prompt
+appears twice, both times with the next command typed at it: first live, as it looks while that
+command is typed, and then committed, as it looks after Enter. In order, the four prompts are:
+
+1. The live prompt after a successful command, with `this-command-fails` typed.
+2. The same prompt after Enter, with green anchors.
+3. The live prompt after `this-command-fails` failed, with `this-command-succeeds` typed.
+4. The same prompt after Enter, with red anchors.
+
+The variants are sorted by name, and each one is labeled with its full name.
+[README.md](README.md) explains the names.
 
 ## Rounded edges
 
@@ -17,14 +24,6 @@ labeled with its full name. [README.md](README.md) explains the names.
 
 ![The none-gaps variants in every color](screenshots/none.png)
 
-## Committed prompts
-
-The committed prompt is the same for every shape of one color, so each color is shown once, from
-its `round-gaps` variant. Each one appears after the failure and the success, with `git status`
-typed as the next command.
-
-![The committed prompt in every color](screenshots/committed.png)
-
 ## Regenerating the screenshots
 
 The screenshots SHOULD be regenerated whenever a variant, a shape, or a color set changes. The
@@ -34,14 +33,14 @@ script can be run from any folder:
 ~/src/shell-scripts/oh-my-posh/screenshots/render-screenshots.zsh
 ```
 
-It writes five images into `screenshots` in about 20 seconds: the four above and the overview in
+It writes four images into `screenshots` in about 20 seconds: the three above and the overview in
 the README. It needs `oh-my-posh`, `git`, `swiftc` from the Xcode Command Line Tools, and the font.
 It does not touch the running shell, its configuration, or Oh My Posh's real cache.
 
-- The script builds two demo repositories and stand-in `java`, `node`, and `python` commands in a
-  new temporary folder. The screenshots therefore never show this machine's own files or tools.
+- The script builds a demo repository and stand-in `java`, `node`, and `python` commands in a new
+  temporary folder. The screenshots therefore never show this machine's own files or tools.
 - It renders every variant's live prompt with `oh-my-posh print primary`, waits four seconds, and
-  renders each color's committed prompt with `oh-my-posh print transient`. The idle times and
+  renders every variant's committed prompts with `oh-my-posh print transient`. The idle times and
   timestamps in the images are real.
 - `screenshots/ansi-to-png.swift` draws the captured escape codes on a grid of character cells, as
   a terminal does. Each background fills its whole cell, and the Powerline shapes are drawn to fill

@@ -5,7 +5,7 @@ reports how the previous command went and the state of git, with tool versions o
 second line is the path and the place to type. When Enter is pressed, both lines are rewritten
 into plain text that copies cleanly out of scrollback.
 
-![The live prompt after a failure and a success, and the committed prompt after Enter](screenshots/overview.png)
+![A prompt after a success and after a failure, each shown while typing and after Enter](screenshots/overview.png)
 
 The theme comes in 35 variants. [SCREENSHOTS.md](SCREENSHOTS.md) shows every one of them.
 
