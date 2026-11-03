@@ -420,8 +420,13 @@ blocks:
           - "{{ if and .Executed (ne .Code 0) }}p:lead-fail{{ end }}"
         template: '{{ if .Root }}❯❯{{ else }}❯{{ end }}{{ " " }}'
 
-# The committed prompt. It replaces both lines of the live prompt when Enter is pressed. Left of
-# the │ describes the command above. Right of it describes the command below.
+# The committed prompt. It replaces both lines of the live prompt when Enter is pressed. Its first
+# line has three segments between the two #: the command above, the idle time, and the command
+# below.
+#
+# The anchors and separators (#, ⬑, ·, │, ↴) take the outcome color of the command above: green
+# after success, red after failure, and blue when there was none. They use the ink-* colors,
+# because a color set's pill colors can be too dark to read as text. All other text is one color.
 #
 # It MUST NOT contain Nerd Font characters or backgrounds, because those paste as junk outside the
 # terminal. Idle time works because .Segments.Time.CurrentDate is the arrival time cached by the
@@ -431,15 +436,18 @@ transient_prompt:
   # newline: true
   foreground: p:text
   template: >-
-    <p:dim># ⬑</>
+    {{- $a := "p:ink-prev-ok" }}
+    {{- if not .Executed }}{{ $a = "p:ink-prev-none" }}
+    {{- else if ne .Code 0 }}{{ $a = "p:ink-prev-fail" }}{{ end -}}
+    <{{ $a }}># ⬑</>
     {{ if eq .PromptCount 1 }}new session at {{ .Segments.Time.CurrentDate | date "2006-01-02T15:04:05Z07:00" }}
-    {{- else if not .Executed }}no command <p:dim>·</> prompt at {{ .Segments.Time.CurrentDate | date "2006-01-02T15:04:05Z07:00" }}
+    {{- else if not .Executed }}no command <{{ $a }}>·</> prompt at {{ .Segments.Time.CurrentDate | date "2006-01-02T15:04:05Z07:00" }}
     {{- else }}ran {{ .Segments.Executiontime.FormattedMs }}
-    <p:dim>·</> exit {{ if eq .Code 0 }}{{ .Code }}{{ else }}<p:lead-fail>{{ .Code }}</>{{ end }}
-    <p:dim>·</> ended {{ .Segments.Time.CurrentDate | date "2006-01-02T15:04:05Z07:00" }}{{ end }}
-    <p:dim>│</> idle {{ .Segments.Time.CurrentDate | durationRound }}
-    <p:dim>·</> {{ if .Interrupted }}cancelled at{{ else }}next command at{{ end }} {{ now | date "2006-01-02T15:04:05Z07:00" }}
-    <p:dim>↴</>{{ "\n" }}
+    <{{ $a }}>·</> exit {{ .Code }}
+    <{{ $a }}>·</> ended {{ .Segments.Time.CurrentDate | date "2006-01-02T15:04:05Z07:00" }}{{ end }}
+    <{{ $a }}>│</> idle {{ .Segments.Time.CurrentDate | durationRound }}
+    <{{ $a }}>│</> {{ if .Interrupted }}cancelled at{{ else }}next command at{{ end }} {{ now | date "2006-01-02T15:04:05Z07:00" }}
+    <{{ $a }}>↴ #</>{{ "\n" }}
     {{- if .Segments.Contains "Session" }}<p:session>{{ .Segments.Session.UserName }}@{{ .Segments.Session.HostName }}</> {{ end }}
     {{- "" }}<p:path>{{ .PWD }}</>
     {{ if .Root }}<p:lead-fail>❯❯</>{{ else if and .Executed (ne .Code 0) }}<p:lead-fail>❯</>{{ else }}<p:lead-ok>❯</>{{ end }}{{ " " }}

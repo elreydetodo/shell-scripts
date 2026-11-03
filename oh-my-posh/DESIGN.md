@@ -71,18 +71,26 @@ so.
 Pressing Enter rewrites both lines into two new ones:
 
 ```
-# ⬑ ran 3.245s · exit 0 · ended 2026-11-03T14:03:07-05:00 │ idle 41s · next command at 2026-11-03T14:03:48-05:00 ↴
+# ⬑ ran 3.245s · exit 0 · ended 2026-11-03T14:03:07-05:00 │ idle 41s │ next command at 2026-11-03T14:03:48-05:00 ↴ #
 ~/src/shell-scripts ❯ git status
 ```
 
-The first line is a shell comment, so pasting it into a shell does nothing. Everything left of the
-`│` describes the command above it. Everything right of it describes the command below it.
+The first line is a shell comment, so pasting it into a shell does nothing. A `#` at each end
+frames it, and two `│` split it into three segments:
 
-- `ran`, `exit`, and `ended` repeat the previous-command facts from the live prompt.
-- `idle` is the time the prompt waited for input. It is the moment Enter was pressed minus the
-  moment the prompt arrived.
-- `next command at` is the moment Enter was pressed.
-- `↴` sits at the end of the line and points down at the command.
+1. The command above: `ran`, `exit`, and `ended` repeat the previous-command facts from the live
+   prompt, separated by `·`.
+2. `idle` is the time the prompt waited for input. It is the moment Enter was pressed minus the
+   moment the prompt arrived.
+3. `next command at` is the moment Enter was pressed. It describes the command below.
+
+`↴` sits just before the closing `#` and points down at the command.
+
+The anchors and separators, `#`, `⬑`, `·`, `│`, and `↴`, all take one color. It is the outcome of
+the command above: green after success, red after failure, and blue when there was no command, as
+in the live prompt's first pill. They use the color set's `ink-*` colors, because its pill colors
+can be too dark to read as text. All the other text on the line is one plain color. The colored
+anchors make the line easy to find in scrollback, and they repeat the exit status at a glance.
 
 The second line is the input line exactly as it was typed, with the same path and lead-in as the
 live prompt. Git and tooling information MUST NOT appear in the committed prompt.
@@ -93,12 +101,13 @@ ends, or other Nerd Font private-use characters, because those paste as junk out
 
 Four cases change the first line:
 
-- **First prompt of a session.** `.PromptCount` is 1. The left half reads `new session at <time>`.
-- **Enter on an empty line.** `.Executed` is false and `.PromptCount` is above 1. The left half
-  reads `no command · prompt at <time>`.
-- **Failure.** A nonzero exit status is shown in red. The wording does not change.
-- **Cancelled input.** When Ctrl-C abandons the line being typed, `.Interrupted` is true. The right
-  half reads `cancelled at <time>` instead of `next command at <time>`.
+- **First prompt of a session.** `.PromptCount` is 1. The first segment reads
+  `new session at <time>`, and the anchors are blue.
+- **Enter on an empty line.** `.Executed` is false and `.PromptCount` is above 1. The first segment
+  reads `no command · prompt at <time>`, and the anchors are blue.
+- **Failure.** The anchors are red. The wording does not change.
+- **Cancelled input.** When Ctrl-C abandons the line being typed, `.Interrupted` is true. The last
+  segment reads `cancelled at <time>` instead of `next command at <time>`.
 
 ### How idle time is computed
 
@@ -220,4 +229,8 @@ off.
 - Any marker on continuation lines. zsh offers no way to remove such a marker after the command
   is submitted.
 - Right alignment on the committed prompt. The transient template cannot see the terminal width,
-  and the padding would be copied along with the line.
+  and the padding would be copied along with the line. The transient `right_template` becomes
+  zsh's `RPROMPT`, which zsh draws on the last line of a prompt, so it would sit beside the typed
+  command instead. Passing the width in through an exported variable would work, but it was judged
+  not worth the extra shell hook. Right-aligned text also stays where it was drawn when the
+  terminal is resized.
