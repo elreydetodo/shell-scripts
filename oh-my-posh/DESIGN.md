@@ -92,12 +92,16 @@ in the live prompt's first pill. They use the color set's `ink-*` colors, becaus
 can be too dark to read as text. All the other text on the line is one plain color. The colored
 anchors make the line easy to find in scrollback, and they repeat the exit status at a glance.
 
+The first line also sits on a background band in the color set's `committed-band` color, a shade a
+little lighter than a dark terminal. The band runs from the first `#` to the last one. It cannot
+run the full width of the terminal, because the template cannot see the width.
+
 The second line is the input line exactly as it was typed, with the same path and lead-in as the
 live prompt. Git and tooling information MUST NOT appear in the committed prompt.
 
-The committed prompt uses colored text only. It MUST NOT contain background colors, rounded pill
-ends, or other Nerd Font private-use characters, because those paste as junk outside the terminal.
-`⬑` and `↴` are standard Unicode and are the only arrows used.
+The committed prompt MUST NOT contain rounded pill ends or other Nerd Font private-use characters,
+because those paste as junk outside the terminal. Colors, including the band, are fine, because
+only the characters are copied. `⬑` and `↴` are standard Unicode and are the only arrows used.
 
 Four cases change the first line:
 

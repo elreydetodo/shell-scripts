@@ -33,6 +33,7 @@ shell_integration: true
 # instead of merging it, while it merges `var` one key at a time.
 palette:
   # Text on the input line and in the committed prompt.
+  committed-band: "#2A2E3F"
   dim: "#7F849C"
   lead-fail: "#FF8A80"
   lead-ok: "#B2FF59"
@@ -109,6 +110,7 @@ palettes:
     # The bright accents of Gruvbox dark: warm, earthy retro colors, with its background as pill
     # text.
     gruvbox:
+      committed-band: "#3C3836"
       dim: "#928374"
       git-ahead: "#83A598"
       git-behind: "#FE8019"
@@ -136,6 +138,7 @@ palettes:
     # The accents of Catppuccin Mocha, as in the catppuccin_mocha theme, with its Crust as pill
     # text.
     mocha:
+      committed-band: "#313244"
       dim: "#7F849C"
       git-ahead: "#89B4FA"
       git-behind: "#FAB387"
@@ -162,6 +165,7 @@ palettes:
     # The Frost and Aurora colors of Nord: cool, calm and low in saturation, with its Polar Night
     # as pill text.
     nord:
+      committed-band: "#3B4252"
       dim: "#616E88"
       git-ahead: "#81A1C1"
       git-behind: "#D08770"
@@ -189,6 +193,7 @@ palettes:
     # The dusty, muted pastels of Rosé Pine Moon, with its Base as pill text. Rosé Pine has no
     # green, so success is its Foam, as in its own terminal colors.
     rosepine:
+      committed-band: "#393552"
       dim: "#6E6A86"
       git-ahead: "#E0DEF4"
       git-behind: "#EA9A97"
@@ -216,6 +221,7 @@ palettes:
     # The accents of Tokyo Night: saturated blues and violets, a little neon, with its background as
     # pill text.
     tokyonight:
+      committed-band: "#292E42"
       dim: "#737AA2"
       git-ahead: "#7AA2F7"
       git-behind: "#FF9E64"
@@ -428,9 +434,14 @@ blocks:
 # after success, red after failure, and blue when there was none. They use the ink-* colors,
 # because a color set's pill colors can be too dark to read as text. All other text is one color.
 #
-# It MUST NOT contain Nerd Font characters or backgrounds, because those paste as junk outside the
-# terminal. Idle time works because .Segments.Time.CurrentDate is the arrival time cached by the
-# live prompt, while `now` is the moment Enter was pressed.
+# The first line sits on a background band, so it stands out in scrollback. The band covers the
+# text only, because the template cannot see the terminal width.
+#
+# It MUST NOT contain Nerd Font characters, because those paste as junk outside the terminal. A
+# background is fine, because only the characters are copied.
+#
+# Idle time works because .Segments.Time.CurrentDate is the arrival time cached by the live prompt,
+# while `now` is the moment Enter was pressed.
 transient_prompt:
   # Uncomment for a blank line before each prompt. Also uncomment it on the first block above.
   # newline: true
@@ -439,7 +450,7 @@ transient_prompt:
     {{- $a := "p:ink-prev-ok" }}
     {{- if not .Executed }}{{ $a = "p:ink-prev-none" }}
     {{- else if ne .Code 0 }}{{ $a = "p:ink-prev-fail" }}{{ end -}}
-    <{{ $a }}># ⬑</>
+    <,p:committed-band><{{ $a }}># ⬑</>
     {{ if eq .PromptCount 1 }}new session at {{ .Segments.Time.CurrentDate | date "2006-01-02T15:04:05Z07:00" }}
     {{- else if not .Executed }}no command <{{ $a }}>·</> prompt at {{ .Segments.Time.CurrentDate | date "2006-01-02T15:04:05Z07:00" }}
     {{- else }}ran {{ .Segments.Executiontime.FormattedMs }}
@@ -447,7 +458,7 @@ transient_prompt:
     <{{ $a }}>·</> ended {{ .Segments.Time.CurrentDate | date "2006-01-02T15:04:05Z07:00" }}{{ end }}
     <{{ $a }}>│</> idle {{ .Segments.Time.CurrentDate | durationRound }}
     <{{ $a }}>│</> {{ if .Interrupted }}cancelled at{{ else }}next command at{{ end }} {{ now | date "2006-01-02T15:04:05Z07:00" }}
-    <{{ $a }}>↴ #</>{{ "\n" }}
+    <{{ $a }}>↴ #</></>{{ "\n" }}
     {{- if .Segments.Contains "Session" }}<p:session>{{ .Segments.Session.UserName }}@{{ .Segments.Session.HostName }}</> {{ end }}
     {{- "" }}<p:path>{{ .PWD }}</>
     {{ if .Root }}<p:lead-fail>❯❯</>{{ else if and .Executed (ne .Code 0) }}<p:lead-fail>❯</>{{ else }}<p:lead-ok>❯</>{{ end }}{{ " " }}
