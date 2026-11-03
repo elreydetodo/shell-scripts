@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+#
+# elreydetodo-c: no backgrounds, pastel text. See docs/oh-my-posh-theme.md.
+#
+# The previous-command facts are colored by outcome and git by the state of the working tree. A dim
+# │ separates the two groups.
+
+extends: elreydetodo-base.yml
+
+blocks:
+  - type: prompt
+    alignment: left
+    index: 1
+    segments:
+      - type: executiontime
+        foreground: p:prev-ok
+        foreground_templates: &prev-foreground
+          - "{{ if not .Executed }}p:prev-none{{ else if ne .Code 0 }}p:prev-fail{{ end }}"
+      - type: status
+        foreground: p:prev-ok
+        foreground_templates: *prev-foreground
+      - type: time
+        foreground: p:prev-ok
+        foreground_templates: *prev-foreground
+      - type: git
+        style: diamond
+        background: transparent
+        leading_diamond: "<p:dim>│</>"
+        foreground: p:git-clean
+        foreground_templates:
+          - "{{ if and .Working.Changed .Staging.Changed }}p:git-mixed{{ end }}"
+          - "{{ if .Staging.Changed }}p:git-staged{{ end }}"
+          - "{{ if .Working.Changed }}p:git-working{{ end }}"
+          - "{{ if and (gt .Ahead 0) (gt .Behind 0) }}p:git-diverged{{ end }}"
+          - "{{ if gt .Ahead 0 }}p:git-ahead{{ end }}"
+          - "{{ if gt .Behind 0 }}p:git-behind{{ end }}"

@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+#
+# elreydetodo-f: the pills of elreydetodo-a in the softer Catppuccin Mocha pastels, as in the
+# catppuccin_mocha theme. See docs/oh-my-posh-theme.md.
+#
+# Only the palette changes. The colors are Catppuccin Mocha's accents, with its Crust as pill text.
+
+extends: elreydetodo-a.yml
+
+palette:
+  dim: "#7F849C"
+  git-ahead: "#89B4FA"
+  git-behind: "#FAB387"
+  git-clean: "#94E2D5"
+  git-diverged: "#CBA6F7"
+  git-mixed: "#F5C2E7"
+  git-staged: "#F9E2AF"
+  git-working: "#89DCEB"
+  lead-fail: "#F38BA8"
+  lead-ok: "#A6E3A1"
+  path: "#F9E2AF"
+  pill-text: "#11111B"
+  prev-fail: "#F38BA8"
+  prev-none: "#B4BEFE"
+  prev-ok: "#A6E3A1"
+  session: "#F5C2E7"
+  text: "#CDD6F4"
+  tool-go: "#89DCEB"
+  tool-gradle: "#94E2D5"
+  tool-java: "#FAB387"
+  tool-node: "#A6E3A1"
+  tool-python: "#F9E2AF"
+  tool-terraform: "#CBA6F7"

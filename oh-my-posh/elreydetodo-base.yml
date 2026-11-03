@@ -1,0 +1,258 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+#
+# Shared content for the elreydetodo themes. See docs/oh-my-posh-theme.md.
+#
+# This file holds what every variant has in common: the segments, their templates and options, the
+# input line, the committed (transient) prompt, and the default palette. It draws the information
+# line as plain text with no colors. Each elreydetodo-<letter>.yml variant extends this file and
+# adds the shapes and colors of the information line.
+#
+# A variant overrides a block by its 1-based `index` and a segment by its `type` or `alias`. An
+# override can replace a string but never clear one, and it appends to a list rather than
+# replacing it. For that reason this file sets no diamonds, backgrounds, or color templates on the
+# information line. Every variant adds its own.
+#
+# Streaming MUST stay off. With `streaming` set, Oh My Posh renders the committed prompt in advance,
+# when the live prompt is drawn, and both "idle" and "next command at" would be wrong.
+# streaming: 100
+
+version: 4
+final_space: false
+shell_integration: true
+
+palette:
+  # Text on the input line and in the committed prompt.
+  dim: "#7F849C"
+  lead-fail: "#FF8A80"
+  lead-ok: "#B2FF59"
+  path: "#FFD770"
+  session: "#FFB2FF"
+  text: "#CDD6F4"
+  # Tool versions on the right of the information line.
+  tool-aws: "#FFD180"
+  tool-az: "#82B1FF"
+  tool-docker: "#80D8FF"
+  tool-go: "#84FFFF"
+  tool-gradle: "#A7FFEB"
+  tool-helm: "#82B1FF"
+  tool-java: "#FFAB40"
+  tool-mvn: "#FF9E80"
+  tool-node: "#9CFF57"
+  tool-npm: "#FF8A80"
+  tool-perl: "#B9F6CA"
+  tool-python: "#FFE873"
+  tool-rust: "#FFAB91"
+  tool-terraform: "#B388FF"
+  # Information line pills, used by the variants. The names say what state each color marks.
+  git-ahead: "#6EFFFF"
+  git-behind: "#FFA06D"
+  git-clean: "#66FFA6"
+  git-diverged: "#C0CFFF"
+  git-mixed: "#FFB2FF"
+  git-staged: "#FFD740"
+  git-working: "#84FFFF"
+  pill-text: "#212121"
+  prev-fail: "#FF8A80"
+  prev-none: "#C0CFFF"
+  prev-ok: "#B2FF59"
+
+blocks:
+  # 1: The information line, left side. Facts about the previous command, then git.
+  - type: prompt
+    alignment: left
+    # Uncomment for a blank line before each prompt. Also uncomment it on transient_prompt below.
+    # newline: true
+    segments:
+      - type: executiontime
+        style: plain
+        foreground: p:text
+        options:
+          always_enabled: true
+          style: austin
+        template: >-
+          {{ if eq .PromptCount 1 }} ⬑ new session
+          {{- else if not .Executed }} ⬑ no command
+          {{- else }} ⬑ {{ .FormattedMs }}{{ end }}
+      - type: status
+        style: plain
+        foreground: p:text
+        options:
+          always_enabled: true
+        template: "{{ if .Executed }} {{ if eq .Code 0 }}✔{{ else }}✘{{ end }} {{ .Code }}{{ end }}"
+      - type: time
+        style: plain
+        foreground: p:text
+        options:
+          time_format: "2006-01-02T15:04:05Z07:00"
+        template: " {{ .CurrentDate | date .Format }} "
+      - type: git
+        style: plain
+        foreground: p:text
+        options:
+          # The default branch icon has no space after it.
+          branch_icon: " "
+          fetch_status: true
+        template: >-
+          {{ " " }}{{ .RepoName }} {{ .HEAD }}
+          {{- if .BranchStatus }} {{ .BranchStatus }}{{ end }}
+          {{- if .Staging.Changed }} ● {{ .Staging.String }}{{ end }}
+          {{- if .Working.Changed }} ✎ {{ .Working.String }}{{ end }}{{ " " }}
+
+  # 2: The information line, right side. Tool versions inside one pair of brackets.
+  #
+  # Every segment here MUST be `style: diamond`. Oh My Posh gives the block's leading diamond to the
+  # first segment that renders, replacing that segment's own " │ ", and the block's trailing
+  # diamond to the last one. So the brackets and separators come out right for any set of visible
+  # tools. Only tool segments belong in this block, because anything else would land inside the
+  # brackets.
+  - type: prompt
+    alignment: right
+    leading_diamond: "<p:dim>[</>"
+    trailing_diamond: "<p:dim>]</>"
+    segments:
+      - type: java
+        style: diamond
+        background: transparent
+        foreground: p:tool-java
+        leading_diamond: "<p:dim> │ </>"
+        # Java does not cache its version by default, because /usr/bin/java can point at any JDK.
+        cache:
+          duration: 1h
+          strategy: folder
+        template: "{{ if not .Error }}java {{ .Major }}{{ end }}"
+      - type: node
+        style: diamond
+        background: transparent
+        foreground: p:tool-node
+        leading_diamond: "<p:dim> │ </>"
+        template: "{{ if not .Error }}node {{ .Major }}.{{ .Minor }}{{ end }}"
+      - type: python
+        style: diamond
+        background: transparent
+        foreground: p:tool-python
+        leading_diamond: "<p:dim> │ </>"
+        options:
+          # The default, "environment", shows Python only inside an active virtualenv.
+          display_mode: context
+        template: "{{ if not .Error }}py {{ .Major }}.{{ .Minor }}{{ if .Venv }} {{ .Venv }}{{ end }}{{ end }}"
+      - type: go
+        style: diamond
+        background: transparent
+        foreground: p:tool-go
+        leading_diamond: "<p:dim> │ </>"
+        template: "{{ if not .Error }}go {{ .Major }}.{{ .Minor }}{{ end }}"
+      - type: terraform
+        style: diamond
+        background: transparent
+        foreground: p:tool-terraform
+        leading_diamond: "<p:dim> │ </>"
+        template: "tf {{ .WorkspaceName }}"
+      - type: helm
+        style: diamond
+        background: transparent
+        foreground: p:tool-helm
+        leading_diamond: "<p:dim> │ </>"
+        template: "helm {{ .Version }}"
+      - type: gradle
+        style: diamond
+        background: transparent
+        foreground: p:tool-gradle
+        leading_diamond: "<p:dim> │ </>"
+        # Gradle starts a JVM to report its version.
+        cache:
+          duration: 1h
+          strategy: folder
+        template: "{{ if not .Error }}gradle {{ .Full }}{{ end }}"
+      # - type: mvn
+      #   style: diamond
+      #   background: transparent
+      #   foreground: p:tool-mvn
+      #   leading_diamond: "<p:dim> │ </>"
+      #   cache:
+      #     duration: 1h
+      #     strategy: folder
+      #   template: "{{ if not .Error }}mvn {{ .Full }}{{ end }}"
+      # - type: npm
+      #   style: diamond
+      #   background: transparent
+      #   foreground: p:tool-npm
+      #   leading_diamond: "<p:dim> │ </>"
+      #   template: "{{ if not .Error }}npm {{ .Full }}{{ end }}"
+      # - type: perl
+      #   style: diamond
+      #   background: transparent
+      #   foreground: p:tool-perl
+      #   leading_diamond: "<p:dim> │ </>"
+      #   template: "{{ if not .Error }}perl {{ .Full }}{{ end }}"
+      # - type: rust
+      #   style: diamond
+      #   background: transparent
+      #   foreground: p:tool-rust
+      #   leading_diamond: "<p:dim> │ </>"
+      #   template: "{{ if not .Error }}rust {{ .Full }}{{ end }}"
+      # - type: docker
+      #   style: diamond
+      #   background: transparent
+      #   foreground: p:tool-docker
+      #   leading_diamond: "<p:dim> │ </>"
+      #   template: "docker {{ .Context }}"
+      # - type: aws
+      #   style: diamond
+      #   background: transparent
+      #   foreground: p:tool-aws
+      #   leading_diamond: "<p:dim> │ </>"
+      #   template: "aws {{ .Profile }}{{ if .Region }}@{{ .Region }}{{ end }}"
+      # - type: az
+      #   style: diamond
+      #   background: transparent
+      #   foreground: p:tool-az
+      #   leading_diamond: "<p:dim> │ </>"
+      #   template: "az {{ .Name }}"
+
+  # 3: The input line. User and host over SSH or as root, the path, and the lead-in.
+  - type: prompt
+    alignment: left
+    newline: true
+    segments:
+      - type: session
+        style: plain
+        foreground: p:session
+        template: "{{ if or .SSHSession .Root }}{{ .UserName }}@{{ .HostName }} {{ end }}"
+      - type: path
+        style: plain
+        foreground: p:path
+        options:
+          style: full
+        template: "{{ .Path }} "
+      # The lead-in. Alternatives to try: $  %  ›  »  >
+      - type: text
+        style: plain
+        foreground: p:lead-ok
+        foreground_templates:
+          - "{{ if .Root }}p:lead-fail{{ end }}"
+          - "{{ if and .Executed (ne .Code 0) }}p:lead-fail{{ end }}"
+        template: '{{ if .Root }}❯❯{{ else }}❯{{ end }}{{ " " }}'
+
+# The committed prompt. It replaces both lines of the live prompt when Enter is pressed. Left of
+# the │ describes the command above. Right of it describes the command below.
+#
+# It MUST NOT contain Nerd Font characters or backgrounds, because those paste as junk outside the
+# terminal. Idle time works because .Segments.Time.CurrentDate is the arrival time cached by the
+# live prompt, while `now` is the moment Enter was pressed.
+transient_prompt:
+  # Uncomment for a blank line before each prompt. Also uncomment it on the first block above.
+  # newline: true
+  foreground: p:text
+  template: >-
+    <p:dim># ⬑</>
+    {{ if eq .PromptCount 1 }}new session at {{ .Segments.Time.CurrentDate | date "2006-01-02T15:04:05Z07:00" }}
+    {{- else if not .Executed }}no command <p:dim>·</> prompt at {{ .Segments.Time.CurrentDate | date "2006-01-02T15:04:05Z07:00" }}
+    {{- else }}ran {{ .Segments.Executiontime.FormattedMs }}
+    <p:dim>·</> exit {{ if eq .Code 0 }}{{ .Code }}{{ else }}<p:lead-fail>{{ .Code }}</>{{ end }}
+    <p:dim>·</> ended {{ .Segments.Time.CurrentDate | date "2006-01-02T15:04:05Z07:00" }}{{ end }}
+    <p:dim>│</> idle {{ .Segments.Time.CurrentDate | durationRound }}
+    <p:dim>·</> {{ if .Interrupted }}cancelled at{{ else }}next command at{{ end }} {{ now | date "2006-01-02T15:04:05Z07:00" }}
+    <p:dim>↴</>{{ "\n" }}
+    {{- if .Segments.Contains "Session" }}<p:session>{{ .Segments.Session.UserName }}@{{ .Segments.Session.HostName }}</> {{ end }}
+    {{- "" }}<p:path>{{ .PWD }}</>
+    {{ if .Root }}<p:lead-fail>❯❯</>{{ else if and .Executed (ne .Code 0) }}<p:lead-fail>❯</>{{ else }}<p:lead-ok>❯</>{{ end }}{{ " " }}

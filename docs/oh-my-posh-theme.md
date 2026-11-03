@@ -20,11 +20,13 @@ Two terms are used throughout:
 
 ## Files
 
-- `oh-my-posh/elreydetodo-a.yml` is the base theme. It holds every setting.
-- `oh-my-posh/elreydetodo-b.yml` and `oh-my-posh/elreydetodo-c.yml` are variants. Each one
-  `extends` the base and restates only the keys that change its look.
-- `.zshrc:147` will load `${basedir}/oh-my-posh/elreydetodo-a.yml`. The other variants are tried
-  by editing that line.
+- `oh-my-posh/elreydetodo-base.yml` holds everything the variants share: the segments, their
+  templates and options, the input line, the committed prompt, and the default palette. On its
+  own it draws the information line as uncolored text.
+- `oh-my-posh/elreydetodo-a.yml` through `oh-my-posh/elreydetodo-f.yml` are the variants. Each one
+  `extends` another file and restates only the keys that change its look.
+- `.zshrc` loads `${basedir}/oh-my-posh/elreydetodo-a.yml`. The other variants are tried by
+  editing that line.
 
 The files are YAML so that any segment or option can be commented out. Every segment we might
 plausibly want is present in the file, with the unused ones commented out.
@@ -116,7 +118,7 @@ carries a comment saying so beside the place the key would go.
 
 - Every timestamp is ISO 8601 in the local time zone, with seconds, as in
   `2026-11-03T14:03:07-05:00`. The Go layout is `2006-01-02T15:04:05Z07:00`.
-- Durations use the `austin` style of the execution time segment, as in `3.2s` or `1m 4s`.
+- Durations use the `austin` style of the execution time segment, as in `3.245s` or `1m 4s`.
 - The execution time segment is always enabled, so a fast command still shows its duration.
 
 ## Segments
@@ -131,8 +133,8 @@ Active, in the order they appear:
 | `git` | information | Repository name, branch or commit, working tree status. |
 | `java` | information, right | Per-folder cache of one hour. |
 | `node` | information, right | |
-| `python` | information, right | Shows the active virtualenv name. |
-| `golang` | information, right | |
+| `python` | information, right | Shows the active virtualenv name. `display_mode: context`. |
+| `go` | information, right | |
 | `terraform` | information, right | |
 | `helm` | information, right | |
 | `gradle` | information, right | Per-folder cache of one hour. |
@@ -178,12 +180,17 @@ All colors are defined once, in the `palette` block of the base file, and refere
 
 ## Variants
 
-The variants differ only in how the information line is drawn:
+The variants differ only in how the information line is drawn. Shape variants extend the base
+file. Color variants extend `-a` and change only the palette.
 
-- **`-a`** draws separate pills with rounded ends and a gap between them.
-- **`-b`** draws one continuous bar with rounded ends on the outside. Adjacent segments butt
-  together and are separated only by the change of background color.
-- **`-c`** draws no backgrounds. Segments are pastel text separated by `│`.
+| Variant | Extends | Look |
+| --- | --- | --- |
+| `-a` | base | Separate pastel pills with rounded ends and a gap between them. |
+| `-b` | base | One continuous bar with rounded ends outside. Segments butt together and differ only in color. |
+| `-c` | base | No backgrounds. Pastel text, with a dim `│` before git. |
+| `-d` | base | Angular powerline arrows between segments, as in `agnoster` and `powerlevel10k`. |
+| `-e` | `-a` | The pills of `-a` in dark tones with light text. |
+| `-f` | `-a` | The pills of `-a` in the softer Catppuccin Mocha pastels, as in `catppuccin_mocha`. |
 
 The input line and the committed prompt are the same in every variant.
 
@@ -275,7 +282,17 @@ They were read at v31.9.1.
 - `.Executed` is false on a session's first prompt and after Enter on an empty line.
 - The format is chosen from the file extension, and `.yml` is accepted (`src/config/data.go`).
 - `extends` merges blocks by `type` and `alignment`, and segments by `alias` or `type`
-  (`website/docs/configuration/general.mdx`, section "Extends").
+  (`src/config/merge.go`). A block with `index: N` matches the Nth block of the base instead.
+  The base file has two left-aligned blocks, so variants MUST use `index`. An override replaces a
+  string or scalar but cannot clear a string, and it appends to a list rather than replacing it.
+  This is why the base file sets no diamonds, backgrounds, or color templates on the information
+  line.
+- The Go segment's type is `go`, not `golang` (`src/config/segment_types.go`), although its
+  documentation page is named `golang`. An unknown type renders nothing and reports no error.
+- The Python segment's default `display_mode` is `environment`, which shows Python only inside an
+  active virtualenv. The theme sets `context`, which also shows it in a folder of Python files.
+- The git segment's default branch icon has no space after it. The theme sets
+  `branch_icon: " "`.
 - Language segments cache their version automatically when the binary's path identifies it
   (`versionCacheKey` in `src/segments/language.go`). Java is cacheable only through `JAVA_HOME`
   (`src/segments/java.go`).
