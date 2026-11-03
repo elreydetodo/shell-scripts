@@ -348,39 +348,41 @@ blocks:
           duration: 1h
           strategy: folder
         template: "{{ if not .Error }}gradle {{ .Full }}{{ end }}"
-      # - type: mvn
-      #   style: diamond
-      #   background: transparent
-      #   foreground: p:tool-mvn
-      #   leading_diamond: "<p:dim> │ </>"
-      #   cache:
-      #     duration: 1h
-      #     strategy: folder
-      #   template: "{{ if not .Error }}mvn {{ .Full }}{{ end }}"
+      - type: mvn
+        style: diamond
+        background: transparent
+        foreground: p:tool-mvn
+        leading_diamond: "<p:dim> │ </>"
+        # Maven starts a JVM to report its version.
+        cache:
+          duration: 1h
+          strategy: folder
+        template: "{{ if not .Error }}mvn {{ .Full }}{{ end }}"
       # - type: npm
       #   style: diamond
       #   background: transparent
       #   foreground: p:tool-npm
       #   leading_diamond: "<p:dim> │ </>"
       #   template: "{{ if not .Error }}npm {{ .Full }}{{ end }}"
-      # - type: perl
-      #   style: diamond
-      #   background: transparent
-      #   foreground: p:tool-perl
-      #   leading_diamond: "<p:dim> │ </>"
-      #   template: "{{ if not .Error }}perl {{ .Full }}{{ end }}"
-      # - type: rust
-      #   style: diamond
-      #   background: transparent
-      #   foreground: p:tool-rust
-      #   leading_diamond: "<p:dim> │ </>"
-      #   template: "{{ if not .Error }}rust {{ .Full }}{{ end }}"
-      # - type: docker
-      #   style: diamond
-      #   background: transparent
-      #   foreground: p:tool-docker
-      #   leading_diamond: "<p:dim> │ </>"
-      #   template: "docker {{ .Context }}"
+      - type: perl
+        style: diamond
+        background: transparent
+        foreground: p:tool-perl
+        leading_diamond: "<p:dim> │ </>"
+        template: "{{ if not .Error }}perl {{ .Full }}{{ end }}"
+      - type: rust
+        style: diamond
+        background: transparent
+        foreground: p:tool-rust
+        leading_diamond: "<p:dim> │ </>"
+        template: "{{ if not .Error }}rust {{ .Full }}{{ end }}"
+      - type: docker
+        style: diamond
+        background: transparent
+        foreground: p:tool-docker
+        leading_diamond: "<p:dim> │ </>"
+        # Shows the Docker context, and only when it is something other than "default".
+        template: "docker {{ .Context }}"
       # - type: aws
       #   style: diamond
       #   background: transparent

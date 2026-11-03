@@ -137,12 +137,19 @@ Active, in the order they appear:
 | `terraform` | information, right | |
 | `helm` | information, right | |
 | `gradle` | information, right | Per-folder cache of one hour. |
+| `mvn` | information, right | Per-folder cache of one hour. |
+| `perl` | information, right | |
+| `rust` | information, right | |
+| `docker` | information, right | The Docker context, only when it is not `default`. |
 | `session` | input | Only over SSH or as root. |
 | `path` | input | Full path, `~` for home. |
 | `text` | input | The lead-in. |
 
-Present but commented out: `aws`, `az`, `docker`, `mvn`, `npm`, `perl`, `rust`. If `mvn` is
-enabled, it also gets the per-folder cache.
+Present but commented out: `aws`, `az`, `npm`.
+
+The `docker` segment is the only tool segment that does not depend on the folder. It reads the
+context from `DOCKER_HOST`, `DOCKER_CONTEXT`, or `~/.docker/config.json`. With Docker Desktop
+running a context such as `desktop-linux`, it appears on every prompt.
 
 A language segment whose tool is not installed MUST render nothing. It MUST NOT leave an empty
 label such as `java ` behind.
@@ -194,9 +201,9 @@ saturated tones.
 
 - The language segments only run their version command in a folder with matching project files,
   or, for Python, inside an active virtualenv. Elsewhere they cost a file check.
-- Java and Gradle get `cache: { strategy: folder, duration: 1h }`. Java does not cache its version
-  by default, because the macOS `/usr/bin/java` stub can point at any installed JDK. Gradle starts
-  a JVM to report its version.
+- Java, Gradle, and Maven get `cache: { strategy: folder, duration: 1h }`. Java does not cache its
+  version by default, because the macOS `/usr/bin/java` stub can point at any installed JDK.
+  Gradle and Maven start a JVM to report their versions.
 - Python MUST NOT use a folder cache. Activating a virtualenv changes its answer without changing
   the folder.
 - Git is the most expensive segment. `core.fsmonitor` and `core.untrackedCache` are on in

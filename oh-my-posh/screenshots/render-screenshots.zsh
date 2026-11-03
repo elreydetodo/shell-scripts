@@ -41,9 +41,9 @@ mkdir -p $out $work/bin $work/home $work/capture
 swiftc -O -o $work/ansi-to-png $here/ansi-to-png.swift
 
 # 2: Isolate everything from this machine. The home folder is empty, so git reads no global
-# configuration, and Oh My Posh gets its own cache.
+# configuration and Docker finds no context, and Oh My Posh gets its own cache.
 export HOME=$work/home XDG_CACHE_HOME=$work/cache GIT_CONFIG_NOSYSTEM=1 PATH=$work/bin:$PATH
-unset POSH_CONFIG
+unset POSH_CONFIG DOCKER_CONFIG DOCKER_CONTEXT DOCKER_HOST
 print '#!/bin/sh\necho "OpenJDK 64-Bit Server VM (21.0.5+11-LTS) for bsd-aarch64 JRE (21.0.5+11-LTS), built on 2024-10-01"' > $work/bin/java
 print '#!/bin/sh\necho "v22.11.0"' > $work/bin/node
 print '#!/bin/sh\necho "Python 3.12.7"' > $work/bin/python3
@@ -51,13 +51,14 @@ cp $work/bin/python3 $work/bin/python
 chmod u+x $work/bin/*
 
 # 3: Build the demo repositories. acme-service is clean and level with its upstream. acme-web has
-# both staged and unstaged changes.
+# both staged and unstaged changes. Main.java marks each as a Java project, because a pom.xml would
+# also run Maven.
 git=(git -c user.name=Demo -c user.email=demo@example.com -c init.defaultBranch=main
   -c commit.gpgsign=false)
 for repo in acme-service acme-web; do
   $git init -q --bare $work/$repo.git
   $git init -q $HOME/$repo
-  print '<project/>' > $HOME/$repo/pom.xml
+  print "class Main {}" > $HOME/$repo/Main.java
   print '{"name": "'$repo'"}' > $HOME/$repo/package.json
   print 'print("hello")' > $HOME/$repo/main.py
   $git -C $HOME/$repo add .
