@@ -1,14 +1,14 @@
 #!/bin/zsh
-# Renders the screenshots of the elreydetodo variants into docs/images/oh-my-posh.
+# Renders the screenshots of the elreydetodo variants into the folder that holds this script.
 #
-# Usage: oh-my-posh/screenshots/render-screenshots.zsh
+# Usage: render-screenshots.zsh, from any folder
 #
 # The script builds two demo repositories and stand-in java, node, and python commands in a new
 # temporary folder, so the screenshots never show this machine's own files or tools. It renders
 # every variant's live prompt after a failed command and after a successful one, waits a few
 # seconds, and renders each color's committed prompt, so the idle times are real. Then
 # ansi-to-png.swift draws the captured output as one image per edge style, plus one image of the
-# committed prompts.
+# committed prompts, and one overview of a single variant for the README.
 #
 # It needs oh-my-posh, git, swiftc from the Xcode Command Line Tools, and the font. The font,
 # size, and colors default to the iTerm2 profile in use when the screenshots were made. The
@@ -21,12 +21,14 @@ setopt err_exit no_unset pipe_fail
 
 here=${0:A:h}
 themes=${here:h}
-out=${themes:h}/docs/images/oh-my-posh
+out=$here
 font=${ELREYDETODO_FONT:-MesloLGSDZNFM-Regular}
 size=${ELREYDETODO_FONT_SIZE:-14}
 background=${ELREYDETODO_BACKGROUND:-#000000}
 foreground=${ELREYDETODO_FOREGROUND:-#BBBBBB}
 columns=120
+# The variant shown in overview.png. Its live and committed prompts are shown together.
+overview=round-gaps-mocha
 colors=(pastel dark mocha rosepine nord tokyonight gruvbox)
 typeset -A edges=(
   round "round-gaps round-nogaps"
@@ -88,10 +90,10 @@ for theme in $themes/elreydetodo-*.yml; do
 done
 
 # 5: Wait, then render the committed prompts. They are the same for every shape of one color, so
-# only the round-gaps variants are used.
+# only the round-gaps variants and the overview's variant are used.
 sleep 4
-for color in $colors; do
-  variant=elreydetodo-round-gaps-$color
+for variant in ${(u)${colors/#/elreydetodo-round-gaps-}} elreydetodo-$overview; do
+  [[ -e $work/capture/$variant-${scenarios[1]%% *}-committed.ansi ]] && continue
   for scenario in $scenarios; do
     read name repo code ms <<< $scenario
     POSH_SESSION_ID=$sessions[$variant-$name] oh-my-posh print transient \
@@ -102,7 +104,7 @@ done
 
 # 6: Assemble one page per image. Each variant gets a dim label line, the live prompt after a
 # failure, and the live prompt after a success. Each color's committed prompts are followed by a
-# typed command, as they would appear in scrollback.
+# typed command, as they would appear in scrollback. The overview shows one variant both ways.
 label() { print -rn -- $'\e[38;2;127;132;156m'"$1"$'\e[0m\n' }
 for edge in ${(k)edges}; do
   page=$work/$edge.ansi
@@ -129,9 +131,21 @@ for color in $colors; do
   done
   print >> $page
 done
+page=$work/overview.ansi
+label "While typing" > $page
+for scenario in $scenarios; do
+  cat $work/capture/elreydetodo-$overview-${scenario%% *}-live.ansi >> $page
+  print >> $page
+done
+print >> $page
+label "After Enter" >> $page
+for scenario in $scenarios; do
+  cat $work/capture/elreydetodo-$overview-${scenario%% *}-committed.ansi >> $page
+  print -- "git status" >> $page
+done
 
 # 7: Draw the pages.
-for name in ${(k)edges} committed; do
+for name in ${(k)edges} committed overview; do
   $work/ansi-to-png $work/$name.ansi $out/$name.png $font $size $columns $background $foreground
 done
-print -- "Wrote $out/{${(kj:,:)edges},committed}.png from $work"
+print -- "Wrote $out/{${(kj:,:)edges},committed,overview}.png from $work"

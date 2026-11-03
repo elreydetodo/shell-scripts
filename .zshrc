@@ -144,7 +144,7 @@ if (( $+commands[oh-my-posh] )); then
 #    eval "$(oh-my-posh init zsh --config jandedobbeleer)"
 #    eval "$(oh-my-posh init zsh --config powerlevel10k_lean)"
 #    eval "$(oh-my-posh init zsh --config quick-term)"
-    # The elreydetodo variants are described in docs/oh-my-posh-theme.md.
+    # The elreydetodo variants are described in oh-my-posh/README.md.
     eval "$(oh-my-posh init zsh --config ${basedir}/oh-my-posh/elreydetodo-round-gaps-pastel.yml)"
 fi
 

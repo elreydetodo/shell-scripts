@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
 #
-# Shared content for the elreydetodo themes. See docs/oh-my-posh-theme.md.
+# Shared content for the elreydetodo themes. See ../DESIGN.md.
 #
 # This file holds what every variant has in common: the segments, their templates and options, the
 # input line, the committed (transient) prompt, and the color sets. It draws the information line

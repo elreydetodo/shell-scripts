@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
 #
 # The angle-nogaps shape: one continuous bar with angular powerline transitions, in the style of
-# the agnoster and powerlevel10k themes. See docs/oh-my-posh-theme.md.
+# the agnoster and powerlevel10k themes. See ../DESIGN.md.
 #
 # The bar starts square and each segment ends in an arrow that points into the next one.
 

@@ -1,7 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
 #
-# The round-gaps shape: separate pills with rounded ends and a gap between them. See
-# docs/oh-my-posh-theme.md.
+# The round-gaps shape: separate pills with rounded ends and a gap between them. See ../DESIGN.md.
 #
 # The previous-command pill is green after success, red after failure, and blue when there was no
 # command. The git pill's color shows the state of the working tree and the upstream.
