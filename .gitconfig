@@ -14,6 +14,9 @@
 ; the file containing it, and because ~/.gitconfig is a symlink that directory
 ; is ~/, not this repo. A relative include here fails silently.
 
+[branch]
+#    sort = -committerdate
+
 [color]
     ui = auto
 
@@ -32,18 +35,42 @@
     navigate = true  # use n and N to move between diff sections
     syntax-theme = Catppuccin Mocha
 
+[diff]
+    algorithm = histogram
+    colorMoved = default
+
 [fetch]
     prune = true
 #    pruneTags = true
+    writeCommitGraph = true
+
+[help]
+    autocorrect = prompt
+
+[init]
+    defaultBranch = main
 
 [interactive]
     diffFilter = delta --color-only
+
+[merge]
+    conflictStyle = zdiff3
 
 [pull]
     ff = only
 
 [push]
+    autoSetupRemote = true
     default = simple
+
+[rebase]
+    updateRefs = true
+
+[rerere]
+    enabled = true
+
+[tag]
+    sort = version:refname
 
 [url "git@github.com:"]
     insteadOf = https://github.com/
