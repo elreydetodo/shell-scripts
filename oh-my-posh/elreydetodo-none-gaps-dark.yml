@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+#
+# elreydetodo-none-gaps-dark. See docs/oh-my-posh-theme.md.
+#
+# No backgrounds, only colored text, in dark tones.
+
+extends: parts/none-gaps.yml
+
+var:
+  color: dark

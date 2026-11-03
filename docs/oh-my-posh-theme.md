@@ -188,6 +188,11 @@ lacks, so a file in the chain with no blocks drops the blocks of every file belo
 cannot set `palettes.template` itself, because `extends` replaces the whole `palettes` key of the
 parent rather than merging it. It does merge `var` one key at a time.
 
+The `none-gaps` shape draws text in the `ink-*` colors instead of the pill colors. Each `ink-*` key
+defaults to the pill color of the same name, as in `ink-prev-ok: p:prev-ok`. A color set whose
+pills are too dark to read as text, such as `dark`, overrides the `ink-*` keys with deeper,
+saturated tones.
+
 ## Variants
 
 A variant is named `elreydetodo-<edge>-<gaps>-<color>`. The variants differ only in how the
@@ -198,8 +203,11 @@ apart from their colors.
 | --- | --- |
 | `round-gaps` | Separate pills with rounded ends and a gap between them. |
 | `round-nogaps` | One continuous bar with rounded ends outside. Segments butt together and differ only in color. |
+| `angle-gaps` | Separate chips with angular ends and a gap between them. |
 | `angle-nogaps` | Angular powerline arrows between segments, as in `agnoster` and `powerlevel10k`. |
 | `none-gaps` | No backgrounds. Colored text, with a dim `│` before git. |
+
+There is no `none-nogaps`. With no backgrounds, there is nothing to join.
 
 | Color | Look |
 | --- | --- |
@@ -207,14 +215,7 @@ apart from their colors.
 | `dark` | Deep shades of the pastels with light text. |
 | `mocha` | The softer Catppuccin Mocha accents, as in `catppuccin_mocha`. |
 
-These combinations exist:
-
-- `elreydetodo-angle-nogaps-pastel`
-- `elreydetodo-none-gaps-pastel`
-- `elreydetodo-round-gaps-dark`
-- `elreydetodo-round-gaps-mocha`
-- `elreydetodo-round-gaps-pastel`
-- `elreydetodo-round-nogaps-pastel`
+Every combination of a shape and a color exists as a variant file.
 
 ## Performance
 

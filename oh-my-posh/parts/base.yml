@@ -66,11 +66,24 @@ palette:
   prev-fail: "#FF8A80"
   prev-none: "#C0CFFF"
   prev-ok: "#B2FF59"
+  # Information line text in the none-gaps shape. Each one defaults to the pill color of the same
+  # name.
+  ink-git-ahead: p:git-ahead
+  ink-git-behind: p:git-behind
+  ink-git-clean: p:git-clean
+  ink-git-diverged: p:git-diverged
+  ink-git-mixed: p:git-mixed
+  ink-git-staged: p:git-staged
+  ink-git-working: p:git-working
+  ink-prev-fail: p:prev-fail
+  ink-prev-none: p:prev-none
+  ink-prev-ok: p:prev-ok
 
 palettes:
   template: "{{ .Var.color }}"
   list:
-    # Deep shades of the pastel pills, with light text.
+    # Deep shades of the pastel pills, with light text. As text, the pill colors would vanish into a
+    # dark terminal, so the ink colors are deeper, saturated tones that stay readable.
     dark:
       git-ahead: "#14424A"
       git-behind: "#4A2A14"
@@ -79,6 +92,16 @@ palettes:
       git-mixed: "#42214A"
       git-staged: "#4A3D10"
       git-working: "#123E4A"
+      ink-git-ahead: "#42A5F5"
+      ink-git-behind: "#FF7043"
+      ink-git-clean: "#26A69A"
+      ink-git-diverged: "#9575CD"
+      ink-git-mixed: "#BA68C8"
+      ink-git-staged: "#FFB300"
+      ink-git-working: "#26C6DA"
+      ink-prev-fail: "#EF5350"
+      ink-prev-none: "#7986CB"
+      ink-prev-ok: "#7CB342"
       pill-text: "#E6E9F5"
       prev-fail: "#5A1F24"
       prev-none: "#2A2F4A"

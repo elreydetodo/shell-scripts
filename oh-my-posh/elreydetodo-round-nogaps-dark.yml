@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+#
+# elreydetodo-round-nogaps-dark. See docs/oh-my-posh-theme.md.
+#
+# One continuous bar with rounded ends, in dark tones.
+
+extends: parts/round-nogaps.yml
+
+var:
+  color: dark

@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+#
+# elreydetodo-angle-nogaps-dark. See docs/oh-my-posh-theme.md.
+#
+# One continuous bar with angular powerline transitions, in dark tones.
+
+extends: parts/angle-nogaps.yml
+
+var:
+  color: dark
