@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+#
+# elreydetodo-round-gaps-rosepine. See docs/oh-my-posh-theme.md.
+#
+# Separate pills with rounded ends, in Rosé Pine colors.
+
+extends: parts/round-gaps.yml
+
+var:
+  color: rosepine

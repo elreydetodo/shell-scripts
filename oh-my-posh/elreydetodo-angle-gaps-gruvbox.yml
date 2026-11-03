@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+#
+# elreydetodo-angle-gaps-gruvbox. See docs/oh-my-posh-theme.md.
+#
+# Separate chips with angular ends, in Gruvbox colors.
+
+extends: parts/angle-gaps.yml
+
+var:
+  color: gruvbox

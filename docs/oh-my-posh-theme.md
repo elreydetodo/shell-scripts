@@ -214,6 +214,13 @@ There is no `none-nogaps`. With no backgrounds, there is nothing to join.
 | `pastel` | Light pastel backgrounds with near-black text, after the stock `chips` theme. |
 | `dark` | Deep shades of the pastels with light text. |
 | `mocha` | The softer Catppuccin Mocha accents, as in `catppuccin_mocha`. |
+| `rosepine` | The dusty, muted pastels of Rosé Pine Moon. Success is its cyan Foam, because Rosé Pine has no green. |
+| `nord` | The cool, low-saturation Frost and Aurora colors of Nord. |
+| `tokyonight` | The saturated blues and violets of Tokyo Night. |
+| `gruvbox` | The warm, earthy bright accents of Gruvbox dark. |
+
+The colors are ordered from the closest to the plain pastels to the furthest from them. Each set
+from `mocha` on takes its pill text from its own theme's background color.
 
 Every combination of a shape and a color exists as a variant file.
 
