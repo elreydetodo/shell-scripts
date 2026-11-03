@@ -21,9 +21,10 @@
     gpgsign = true
 
 [core]
+    fsmonitor = true
     pager = delta | less
-    whitespace = blank-at-eol,space-before-tab,tab-in-indent,tabwidth=4
     untrackedCache = true
+    whitespace = blank-at-eol,space-before-tab,tab-in-indent,tabwidth=4
 
 [delta]
 #    hyperlinks = true
