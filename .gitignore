@@ -1,2 +1,24 @@
+# Machine-specific git settings, included from .gitconfig.
 .gitconfig.d/work
 .gitconfig.d/work-identity
+
+# Backups made before a destructive edit, named <file>-yyyyMMdd or <file>-yyyyMMdd<letter>.
+*-[0-9][0-9][0-9][0-9][0-1][0-9][0-3][0-9]
+*-[0-9][0-9][0-9][0-9][0-1][0-9][0-3][0-9][a-z]
+
+# Editors and IDEs.
+*.sublime-workspace
+*.swo
+*.swp
+*~
+.idea/
+.vscode/
+
+# Local settings of agents and tools.
+.claude/settings.local.json
+
+# macOS.
+._*
+.DS_Store
+.Spotlight-V100
+.Trashes
