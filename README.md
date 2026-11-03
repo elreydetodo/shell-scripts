@@ -187,16 +187,16 @@ ln -Fis $(pwd)/.vimrc ~
 mkdir -p ~/.config/nvim/
 ln -s $(pwd)/init.lua ~/.config/nvim/init.lua
 
-# Karabiner Elements
-mkdir -p ~/.config/karabiner/assets/complex_modifications/
-ln -Fis $(pwd)/karabiner-config.json ~/.config/karabiner/assets/complex_modifications/
-
 # Sublime Text
 mkdir -p ~/Library/Application\ Support/Sublime\ Text/Packages/User/
 for FILE in "$(pwd)/Sublime Text"/*; do
     [ -e "${FILE}" ] || continue
     ln -Fis "${FILE}" ~/Library/Application\ Support/Sublime\ Text/Packages/User/
 done
+
+# macOS KeyBindings
+mkdir -p ~/Library/KeyBindings
+ln -s $(pwd)/DefaultKeyBinding.dict ~/Library/KeyBindings/DefaultKeyBinding.dict
 ```
 
 # Editor defaults
