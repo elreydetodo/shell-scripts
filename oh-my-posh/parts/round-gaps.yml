@@ -1,11 +1,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
 #
-# elreydetodo-d: angular powerline transitions, in the style of the agnoster and powerlevel10k
-# themes. See docs/oh-my-posh-theme.md.
+# The round-gaps shape: separate pills with rounded ends and a gap between them. See
+# docs/oh-my-posh-theme.md.
 #
-# The bar starts square and each segment ends in an arrow that points into the next one.
+# The previous-command pill is green after success, red after failure, and blue when there was no
+# command. The git pill's color shows the state of the working tree and the upstream.
 
-extends: elreydetodo-base.yml
+extends: base.yml
 
 blocks:
   - type: prompt
@@ -13,30 +14,30 @@ blocks:
     index: 1
     segments:
       - type: executiontime
-        style: powerline
-        powerline_symbol: ""
+        style: diamond
+        leading_diamond: ""
         foreground: p:pill-text
         background: p:prev-ok
         background_templates: &prev-background
           - "{{ if not .Executed }}p:prev-none{{ else if ne .Code 0 }}p:prev-fail{{ end }}"
       - type: status
-        style: powerline
-        powerline_symbol: ""
+        style: diamond
         foreground: p:pill-text
         background: p:prev-ok
         background_templates: *prev-background
       - type: time
-        style: powerline
-        powerline_symbol: ""
+        style: diamond
+        trailing_diamond: ""
         foreground: p:pill-text
         background: p:prev-ok
         background_templates: *prev-background
       - type: git
-        style: powerline
-        powerline_symbol: ""
+        style: diamond
+        leading_diamond: " "
+        trailing_diamond: ""
         foreground: p:pill-text
         background: p:git-clean
-        background_templates:
+        background_templates: &git-background
           - "{{ if and .Working.Changed .Staging.Changed }}p:git-mixed{{ end }}"
           - "{{ if .Staging.Changed }}p:git-staged{{ end }}"
           - "{{ if .Working.Changed }}p:git-working{{ end }}"

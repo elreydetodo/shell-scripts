@@ -20,13 +20,15 @@ Two terms are used throughout:
 
 ## Files
 
-- `oh-my-posh/elreydetodo-base.yml` holds everything the variants share: the segments, their
-  templates and options, the input line, the committed prompt, and the default palette. On its
-  own it draws the information line as uncolored text.
-- `oh-my-posh/elreydetodo-a.yml` through `oh-my-posh/elreydetodo-f.yml` are the variants. Each one
-  `extends` another file and restates only the keys that change its look.
-- `.zshrc` loads `${basedir}/oh-my-posh/elreydetodo-a.yml`. The other variants are tried by
-  editing that line.
+- `oh-my-posh/parts/base.yml` holds everything the variants share: the segments, their templates
+  and options, the input line, the committed prompt, and the color sets. On its own it draws the
+  information line as uncolored text.
+- `oh-my-posh/parts/<edge>-<gaps>.yml` are the shapes. Each one `extends` the base file and adds
+  the diamonds, backgrounds, and color templates of the information line.
+- `oh-my-posh/elreydetodo-<edge>-<gaps>-<color>.yml` are the variants. Each one `extends` a shape
+  and picks a color set with `var: { color: <name> }`. Nothing else is in them.
+- `.zshrc` loads `${basedir}/oh-my-posh/elreydetodo-round-gaps-pastel.yml`. The other variants are
+  tried by editing that line.
 
 The files are YAML so that any segment or option can be commented out. Every segment we might
 plausibly want is present in the file, with the unused ones commented out.
@@ -176,23 +178,43 @@ near-black text (`#212121`). Colors carry state:
 Tooling on the right is pastel text with no background, in every variant. Each tool has its own
 color.
 
-All colors are defined once, in the `palette` block of the base file, and referenced by name.
+All colors are defined in the base file and referenced by name. The `palette` block is the pastel
+set. Each other color set is an entry of `palettes.list` that overrides only the keys it changes.
+Oh My Posh picks the entry named by the template `{{ .Var.color }}`, and each variant sets that
+variable. An unknown name falls back to pastel.
+
+The color sets cannot live in a file of their own. `extends` never adds a block that the parent
+lacks, so a file in the chain with no blocks drops the blocks of every file below it. A variant also
+cannot set `palettes.template` itself, because `extends` replaces the whole `palettes` key of the
+parent rather than merging it. It does merge `var` one key at a time.
 
 ## Variants
 
-The variants differ only in how the information line is drawn. Shape variants extend the base
-file. Color variants extend `-a` and change only the palette.
+A variant is named `elreydetodo-<edge>-<gaps>-<color>`. The variants differ only in how the
+information line is drawn. The input line and the committed prompt are the same in every variant,
+apart from their colors.
 
-| Variant | Extends | Look |
-| --- | --- | --- |
-| `-a` | base | Separate pastel pills with rounded ends and a gap between them. |
-| `-b` | base | One continuous bar with rounded ends outside. Segments butt together and differ only in color. |
-| `-c` | base | No backgrounds. Pastel text, with a dim `│` before git. |
-| `-d` | base | Angular powerline arrows between segments, as in `agnoster` and `powerlevel10k`. |
-| `-e` | `-a` | The pills of `-a` in dark tones with light text. |
-| `-f` | `-a` | The pills of `-a` in the softer Catppuccin Mocha pastels, as in `catppuccin_mocha`. |
+| Shape | Look |
+| --- | --- |
+| `round-gaps` | Separate pills with rounded ends and a gap between them. |
+| `round-nogaps` | One continuous bar with rounded ends outside. Segments butt together and differ only in color. |
+| `angle-nogaps` | Angular powerline arrows between segments, as in `agnoster` and `powerlevel10k`. |
+| `none-gaps` | No backgrounds. Colored text, with a dim `│` before git. |
 
-The input line and the committed prompt are the same in every variant.
+| Color | Look |
+| --- | --- |
+| `pastel` | Light pastel backgrounds with near-black text, after the stock `chips` theme. |
+| `dark` | Deep shades of the pastels with light text. |
+| `mocha` | The softer Catppuccin Mocha accents, as in `catppuccin_mocha`. |
+
+These combinations exist:
+
+- `elreydetodo-angle-nogaps-pastel`
+- `elreydetodo-none-gaps-pastel`
+- `elreydetodo-round-gaps-dark`
+- `elreydetodo-round-gaps-mocha`
+- `elreydetodo-round-gaps-pastel`
+- `elreydetodo-round-nogaps-pastel`
 
 ## Performance
 
@@ -247,9 +269,9 @@ primary prompt saves. Flags passed only to the transient render do not change th
 
 ```zsh
 export XDG_CACHE_HOME=<scratch>/cache POSH_SESSION_ID=test-0001
-oh-my-posh print primary --config oh-my-posh/elreydetodo-a.yml --shell zsh \
+oh-my-posh print primary --config oh-my-posh/elreydetodo-round-gaps-pastel.yml --shell zsh \
     --status 2 --execution-time 12345 --save-cache --terminal-width 150 --plain
-oh-my-posh print transient --config oh-my-posh/elreydetodo-a.yml --shell zsh --plain
+oh-my-posh print transient --config oh-my-posh/elreydetodo-round-gaps-pastel.yml --shell zsh --plain
 ```
 
 `--no-status` simulates a prompt with no command before it. Leave `--plain` off and pipe through
@@ -262,7 +284,7 @@ To try a theme interactively, the owner runs this in an existing iTerm2 tab. Sta
 `zsh` first does not work.
 
 ```zsh
-eval "$(oh-my-posh init zsh --config ~/src/shell-scripts/oh-my-posh/elreydetodo-a.yml)"
+eval "$(oh-my-posh init zsh --config ~/src/shell-scripts/oh-my-posh/elreydetodo-round-gaps-pastel.yml)"
 ```
 
 ### Facts about Oh My Posh
@@ -283,7 +305,7 @@ They were read at v31.9.1.
 - The format is chosen from the file extension, and `.yml` is accepted (`src/config/data.go`).
 - `extends` merges blocks by `type` and `alignment`, and segments by `alias` or `type`
   (`src/config/merge.go`). A block with `index: N` matches the Nth block of the base instead.
-  The base file has two left-aligned blocks, so variants MUST use `index`. An override replaces a
+  The base file has two left-aligned blocks, so shapes MUST use `index`. An override replaces a
   string or scalar but cannot clear a string, and it appends to a list rather than replacing it.
   This is why the base file sets no diamonds, backgrounds, or color templates on the information
   line.

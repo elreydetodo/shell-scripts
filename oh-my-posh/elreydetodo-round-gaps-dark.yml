@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+#
+# elreydetodo-round-gaps-dark. See docs/oh-my-posh-theme.md.
+#
+# Separate pills with rounded ends, in dark tones.
+
+extends: parts/round-gaps.yml
+
+var:
+  color: dark

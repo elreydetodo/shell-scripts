@@ -1,11 +1,11 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
 #
-# elreydetodo-c: no backgrounds, pastel text. See docs/oh-my-posh-theme.md.
+# The none-gaps shape: no backgrounds, only colored text. See docs/oh-my-posh-theme.md.
 #
 # The previous-command facts are colored by outcome and git by the state of the working tree. A dim
 # │ separates the two groups.
 
-extends: elreydetodo-base.yml
+extends: base.yml
 
 blocks:
   - type: prompt

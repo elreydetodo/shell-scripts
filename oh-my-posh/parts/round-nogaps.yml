@@ -1,11 +1,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
 #
-# elreydetodo-b: one continuous bar with rounded ends on the outside. See docs/oh-my-posh-theme.md.
+# The round-nogaps shape: one continuous bar with rounded ends on the outside. See
+# docs/oh-my-posh-theme.md.
 #
 # Adjacent segments butt together and are told apart only by their background color. The block's
 # diamonds supply the rounded ends, so they land on whichever segments actually render.
 
-extends: elreydetodo-base.yml
+extends: base.yml
 
 blocks:
   - type: prompt

@@ -3,14 +3,19 @@
 # Shared content for the elreydetodo themes. See docs/oh-my-posh-theme.md.
 #
 # This file holds what every variant has in common: the segments, their templates and options, the
-# input line, the committed (transient) prompt, and the default palette. It draws the information
-# line as plain text with no colors. Each elreydetodo-<letter>.yml variant extends this file and
-# adds the shapes and colors of the information line.
+# input line, the committed (transient) prompt, and the color sets. It draws the information line
+# as plain text with no colors. Each shape file in this folder extends this file and adds the
+# shapes and colors of the information line. Each elreydetodo-<edge>-<gaps>-<color>.yml variant
+# extends a shape file and picks a color set.
 #
-# A variant overrides a block by its 1-based `index` and a segment by its `type` or `alias`. An
+# A shape overrides a block by its 1-based `index` and a segment by its `type` or `alias`. An
 # override can replace a string but never clear one, and it appends to a list rather than
 # replacing it. For that reason this file sets no diamonds, backgrounds, or color templates on the
-# information line. Every variant adds its own.
+# information line. Every shape adds its own.
+#
+# The color sets live here because `extends` never adds a block that the parent lacks, and a file
+# in the middle of the chain with no blocks drops the blocks of every file below it. Every file in
+# the chain MUST therefore hold blocks, so a separate file of colors cannot be part of it.
 #
 # Streaming MUST stay off. With `streaming` set, Oh My Posh renders the committed prompt in advance,
 # when the live prompt is drawn, and both "idle" and "next command at" would be wrong.
@@ -20,6 +25,12 @@ version: 4
 final_space: false
 shell_integration: true
 
+# `palette` is the pastel set and the fallback for every other set. A variant picks a set by name
+# with `var: { color: <name> }`. The chosen entry of `palettes.list` overrides the keys it lists,
+# and every key it leaves out keeps its pastel value. An unknown name selects pastel.
+#
+# The selection goes through `var` because `extends` replaces the whole `palettes` key of a parent
+# instead of merging it, while it merges `var` one key at a time.
 palette:
   # Text on the input line and in the committed prompt.
   dim: "#7F849C"
@@ -55,6 +66,49 @@ palette:
   prev-fail: "#FF8A80"
   prev-none: "#C0CFFF"
   prev-ok: "#B2FF59"
+
+palettes:
+  template: "{{ .Var.color }}"
+  list:
+    # Deep shades of the pastel pills, with light text.
+    dark:
+      git-ahead: "#14424A"
+      git-behind: "#4A2A14"
+      git-clean: "#143D2A"
+      git-diverged: "#2A2F4A"
+      git-mixed: "#42214A"
+      git-staged: "#4A3D10"
+      git-working: "#123E4A"
+      pill-text: "#E6E9F5"
+      prev-fail: "#5A1F24"
+      prev-none: "#2A2F4A"
+      prev-ok: "#24401A"
+    # The accents of Catppuccin Mocha, as in the catppuccin_mocha theme, with its Crust as pill
+    # text.
+    mocha:
+      dim: "#7F849C"
+      git-ahead: "#89B4FA"
+      git-behind: "#FAB387"
+      git-clean: "#94E2D5"
+      git-diverged: "#CBA6F7"
+      git-mixed: "#F5C2E7"
+      git-staged: "#F9E2AF"
+      git-working: "#89DCEB"
+      lead-fail: "#F38BA8"
+      lead-ok: "#A6E3A1"
+      path: "#F9E2AF"
+      pill-text: "#11111B"
+      prev-fail: "#F38BA8"
+      prev-none: "#B4BEFE"
+      prev-ok: "#A6E3A1"
+      session: "#F5C2E7"
+      text: "#CDD6F4"
+      tool-go: "#89DCEB"
+      tool-gradle: "#94E2D5"
+      tool-java: "#FAB387"
+      tool-node: "#A6E3A1"
+      tool-python: "#F9E2AF"
+      tool-terraform: "#CBA6F7"
 
 blocks:
   # 1: The information line, left side. Facts about the previous command, then git.

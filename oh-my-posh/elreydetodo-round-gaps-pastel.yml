@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+#
+# elreydetodo-round-gaps-pastel. See docs/oh-my-posh-theme.md.
+#
+# Separate pills with rounded ends, in pastel colors.
+
+extends: parts/round-gaps.yml
+
+var:
+  color: pastel
