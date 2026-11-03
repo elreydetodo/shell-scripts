@@ -1,5 +1,6 @@
 coreutils
 findutils
+font-meslo-lg-nerd-font
 fzf
 gawk
 gnu-sed
