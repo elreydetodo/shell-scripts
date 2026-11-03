@@ -1,0 +1,135 @@
+/* ~/Library/KeyBindings/DefaultKeyBinding.Dict
+List: https://web.archive.org/web/20160314030051/http://osxnotes.net/keybindings.html
+This file remaps the key bindings of a single user on macOS to more closely
+match default behavior on Linux systems.
+
+Key Modifiers
+^ : Ctrl
+$ : Shift
+~ : Option (Alt)
+@ : Command (Apple)
+# : Numeric Keypad
+
+
+Non-Printable Key Codes
+Up Arrow:     \UF700        Backspace:    \U0008        F1:           \UF704
+Down Arrow:   \UF701        Tab:          \U0009        F2:           \UF705
+Left Arrow:   \UF702        Escape:       \U001B        F3:           \UF706
+Right Arrow:  \UF703        Enter:        \U000A        ...
+Insert:       \UF727        Page Up:      \UF72C
+Delete:       \UF728        Page Down:    \UF72D
+Home:         \UF729        Print Screen: \UF72E
+End:          \UF72B        Scroll Lock:  \UF72F
+Break:        \UF732        Pause:        \UF730
+SysReq:       \UF731        Menu:         \UF735
+Help:         \UF746
+
+All available binding operations:
+https://developer.apple.com/documentation/appkit/nsstandardkeybindingresponding/
+Most of the useful ones are captired below in the same groupings.
+
+
+Deleting content:
+deleteBackward
+deleteBackwardByDecomposingPreviousCharacter
+deleteForward
+deleteToBeginningOfLine
+deleteToBeginningOfParagraph
+deleteToEndOfLine
+deleteToEndOfParagraph
+deleteWordBackward
+deleteWordForward
+yank
+
+
+Moveing the insertion pointer:
+moveBackward
+moveDown
+moveForward
+moveLeft
+moveRight
+moveUp
+
+
+Modifying the selection:
+moveBackwardAndModifySelection
+moveDownAndModifySelection
+moveForwardAndModifySelection
+moveLeftAndModifySelection
+moveRightAndModifySelection
+moveUpAndModifySelection
+
+
+Moving the selection in the document:
+moveToBeginningOfDocument
+moveToBeginningOfDocumentAndModifySelection
+moveToEndOfDocument
+moveToEndOfDocumentAndModifySelection
+
+
+Moving the selectin in paragraphs:
+moveParagraphBackwardAndModifySelection
+moveParagraphForwardAndModifySelection
+moveToBeginningOfParagraph
+moveToBeginningOfParagraphAndModifySelection
+moveToEndOfParagraph
+moveToEndOfParagraphAndModifySelection
+
+
+Moving the selection in lines of text:
+moveToBeginningOfLine
+moveToBeginningOfLineAndModifySelection
+moveToEndOfLine
+moveToEndOfLineAndModifySelection
+moveToLeftEndOfLine
+moveToLeftEndOfLineAndModifySelection
+moveToRightEndOfLine
+moveToRightEndOfLineAndModifySelection
+
+
+Moving the selection by word boundaries:
+moveWordBackward
+moveWordBackwardAndModifySelection
+moveWordForward
+moveWordForwardAndModifySelection
+moveWordLeft
+moveWordLeftAndModifySelection
+moveWordRight
+moveWordRightAndModifySelection
+
+*/
+{
+  "\UF729"  = (moveToBeginningOfLine:);                       // home
+  "\UF72B"  = (moveToEndOfLine:);                             // end
+
+// ctrl+shift+up/down conflict with something to do with multipoint editing.
+//  "^$\UF700"  = (moveToBeginningOfParagraphAndModifySelection:);// ctrl+shift+up
+//  "^$\UF701"  = (moveToEndOfParagraphAndModifySelection:);  // ctrl+shift+down
+  "^$\UF702"  = (moveWordBackwardAndModifySelection:);        // ctrl+shift+left
+  "^$\UF703"  = (moveWordForwardAndModifySelection:);         // ctrl+shift+right
+  "^$\UF729"  = (moveToBeginningOfLineAndModifySelection:);   // ctrl+shift+home
+  "^$\UF72B"  = (moveToEndOfParagraphAndModifySelection:);    // ctrl+shift+end
+
+
+  "^\UF700" = (moveToBeginningOfParagraph:);                  // ctrl-up
+  "^\UF701" = (moveToEndOfParagraph:);                        // ctrl-down
+// Must disable system level keymapping before ctrl+left/right will work.
+  "^\UF702" = (moveWordBackward:);                            // ctrl-left
+  "^\UF703" = (moveWordForward:);                             // ctrl-right
+  "^\UF729" = (moveToBeginningOfDocument:);                   // ctrl+home
+  "^\UF72B" = (moveToEndOfDocument:);                         // ctrl+end
+
+//  "~\UF700" = (:);                                          // alt-up
+//  "~\UF701" = (:);                                          // alt-down
+  "~\UF702" = (moveWordLeft:);                                // alt-left
+  "~\UF703" = (moveWordRight:);                               // alt-right
+//  "~\UF729" = (:);                                          // alt+home
+//  "~\UF72B" = (:);                                          // alt+end
+
+  "~\UF700" = (moveToBeginningOfDocument:);                   // cmd-up
+  "~\UF701" = (moveToEndOfDocument:);                         // cmd-down
+  "~\UF702" = (moveToBeginningOfLine:);                       // cmd-left
+  "~\UF703" = (moveToEndOfLine:);                             // cmd-right
+//  "~\UF729" = (:);                                          // cmd+home
+//  "~\UF72B" = (:);                                          // cmd+end
+}
