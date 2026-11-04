@@ -1,13 +1,15 @@
 # Screenshots of the `elreydetodo` variants
 
-Each variant is shown through two commands, one that succeeded and one that failed. Every prompt
-appears twice, both times with the next command typed at it: first live, as it looks while that
-command is typed, and then committed, as it looks after Enter. In order, the four prompts are:
+Each variant is shown as scrollback, through two commands, one that succeeds and one that fails.
+Every prompt sits below the command it reports on. After the first, each prompt appears twice,
+both times with the next command typed at it: first live, as it looks while that command is typed,
+and then committed, as it looks after Enter. In order, the five prompts are:
 
-1. The live prompt after a successful command, with `this-command-fails` typed.
-2. The same prompt after Enter, with green anchors.
-3. The live prompt after `this-command-fails` failed, with `this-command-succeeds` typed.
-4. The same prompt after Enter, with red anchors.
+1. The first prompt of a session after Enter, with blue anchors and `this-command-succeeds` typed.
+2. The live prompt after `this-command-succeeds`, with `this-command-fails` typed.
+3. The same prompt after Enter, with green anchors.
+4. The live prompt after `this-command-fails`, with `this-command-succeeds` typed.
+5. The same prompt after Enter, with red anchors.
 
 The variants are sorted by name, and each one is labeled with its full name.
 [README.md](README.md) explains the names.
@@ -33,15 +35,15 @@ script can be run from any folder:
 ~/src/shell-scripts/oh-my-posh/screenshots/render-screenshots.zsh
 ```
 
-It writes four images into `screenshots` in about 20 seconds: the three above and the overview in
+It writes four images into `screenshots` in about 25 seconds: the three above and the overview in
 the README. It needs `oh-my-posh`, `git`, `swiftc` from the Xcode Command Line Tools, and the font.
 It does not touch the running shell, its configuration, or Oh My Posh's real cache.
 
 - The script builds a demo repository and stand-in `java`, `node`, and `python` commands in a new
   temporary folder. The screenshots therefore never show this machine's own files or tools.
-- It renders every variant's live prompt with `oh-my-posh print primary`, waits four seconds, and
-  renders every variant's committed prompts with `oh-my-posh print transient`. The idle times and
-  timestamps in the images are real.
+- It renders every variant's prompts with `oh-my-posh print primary` and commits them with
+  `oh-my-posh print transient`. It waits four seconds before each round of committed prompts, so
+  the idle times and timestamps in the images are real.
 - `screenshots/ansi-to-png.swift` draws the captured escape codes on a grid of character cells, as
   a terminal does. Each background fills its whole cell, and the Powerline shapes are drawn to fill
   their cells exactly, as iTerm2 does with "Draw Powerline Glyphs" on.

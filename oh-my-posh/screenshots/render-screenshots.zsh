@@ -5,10 +5,10 @@
 #
 # The script builds a demo repository and stand-in java, node, and python commands in a new
 # temporary folder, so the screenshots never show this machine's own files or tools. It renders
-# every variant's live prompt after a successful command and after a failed one, waits a few
-# seconds, and renders the committed prompt of each, so the idle times are real. Then
-# ansi-to-png.swift draws the captured output as one image per edge style, and one overview of a
-# single variant for the README.
+# every variant's first prompt of a session, then its live prompt after a successful command and
+# after a failed one, and then the committed prompt of each. It waits a few seconds between those
+# steps, so the idle times are real. Then ansi-to-png.swift draws the captured output as one image
+# per edge style, and one overview of a single variant for the README.
 #
 # It needs oh-my-posh, git, swiftc from the Xcode Command Line Tools, and the font. The font,
 # size, and colors default to the iTerm2 profile in use when the screenshots were made. The
@@ -31,9 +31,10 @@ columns=120
 overview=round-gaps-mocha
 # One image is drawn per edge style. It shows every variant of that edge, sorted by name.
 edges=(angle none round)
-# Each scenario is a name, the exit status and duration of the command before the prompt, and the
-# command typed at the prompt. Each one's typed command leads into the next scenario.
-scenarios=("success 0 3245 this-command-fails" "failure 2 12345 this-command-succeeds")
+# Each scenario is a name, then the exit status, duration, and text of the command before the
+# prompt. The command typed at each prompt is the next scenario's command, and the first scenario's
+# command is typed at the session's first prompt.
+scenarios=("success 0 3245 this-command-succeeds" "failure 2 12345 this-command-fails")
 repo=acme-service
 
 work=$(mktemp -d -t elreydetodo-screenshots)
@@ -66,46 +67,62 @@ $git -C $HOME/$repo commit -q -m "Initial commit"
 $git -C $HOME/$repo remote add origin $work/$repo.git
 $git -C $HOME/$repo push -q -u origin main
 
-# 4: Render each live prompt after a throwaway one, so it is not the session's first prompt. The
-# primary prompt saves the cache that the committed prompt reads later.
-typeset -A sessions
+# 4: Render the first prompt of a session for each scenario. Every primary prompt saves the cache
+# that the committed prompt reads later.
+render() {
+  local theme=$1 name=$2
+  shift 2
+  POSH_SESSION_ID=screenshot-${${theme:t}:r}-$name oh-my-posh print "$@" --config $theme \
+    --shell zsh --pwd $HOME/$repo --terminal-width $columns
+}
 for theme in $themes/elreydetodo-*.yml; do
-  variant=${${theme:t}:r}
   for scenario in $scenarios; do
-    read name code ms typed <<< $scenario
-    session=screenshot-$variant-$name
-    sessions[$variant-$name]=$session
-    common=(--config $theme --shell zsh --pwd $HOME/$repo --terminal-width $columns)
-    POSH_SESSION_ID=$session oh-my-posh print primary $common --no-status --save-cache > /dev/null
-    POSH_SESSION_ID=$session oh-my-posh print primary $common --status $code --execution-time $ms \
-      --save-cache > $work/capture/$variant-$name-live.ansi
+    read name code ms command <<< $scenario
+    render $theme $name primary --no-status --save-cache > /dev/null
   done
 done
 
-# 5: Wait, then render every committed prompt from the cache its live prompt saved.
+# 5: Wait, then commit the first scenario's first prompt, which shows the start of a session. Then
+# render each scenario's live prompt.
+sleep 4
+for theme in $themes/elreydetodo-*.yml; do
+  variant=${${theme:t}:r}
+  render $theme ${${=scenarios[1]}[1]} transient > $work/capture/$variant-start-committed.ansi
+  for scenario in $scenarios; do
+    read name code ms command <<< $scenario
+    render $theme $name primary --status $code --execution-time $ms --save-cache \
+      > $work/capture/$variant-$name-live.ansi
+  done
+done
+
+# 6: Wait, then render every committed prompt from the cache its live prompt saved.
 sleep 4
 for theme in $themes/elreydetodo-*.yml; do
   variant=${${theme:t}:r}
   for scenario in $scenarios; do
-    read name code ms typed <<< $scenario
-    POSH_SESSION_ID=$sessions[$variant-$name] oh-my-posh print transient \
-      --config $theme --shell zsh --pwd $HOME/$repo --terminal-width $columns \
-      --status $code --execution-time $ms > $work/capture/$variant-$name-committed.ansi
+    read name code ms command <<< $scenario
+    render $theme $name transient --status $code --execution-time $ms \
+      > $work/capture/$variant-$name-committed.ansi
   done
 done
 
-# 6: Assemble one page per image, with the variants sorted by name. Each variant gets a dim label
-# line with its full name. Then each scenario's prompt appears twice, both times with its command
-# typed: first live, as it looks while the command is typed, then committed, as it looks after
-# Enter. The overview is the same block for one variant.
+# 7: Assemble one page per image, with the variants sorted by name. Each variant gets a dim label
+# line with its full name, then reads like scrollback. The committed start of the session comes
+# first, with the first scenario's command typed. Each scenario's prompt then appears twice, both
+# times with the next scenario's command typed: first live, as it looks while the command is typed,
+# then committed, as it looks after Enter. So every prompt sits below the command it reports on.
+# The overview is the same block for one variant.
 label() { print -rn -- $'\e[38;2;127;132;156m'"$1"$'\e[0m\n' }
 block() {
-  local variant=$1 scenario name code ms typed kind
-  for scenario in $scenarios; do
-    read name code ms typed <<< $scenario
+  local variant=$1 i name code ms command next kind
+  cat $work/capture/$variant-start-committed.ansi
+  print -- ${${=scenarios[1]}[4]}
+  for i in {1..$#scenarios}; do
+    read name code ms command <<< $scenarios[i]
+    next=${${=scenarios[i % $#scenarios + 1]}[4]}
     for kind in live committed; do
       cat $work/capture/$variant-$name-$kind.ansi
-      print -- $typed
+      print -- $next
     done
   done
 }
@@ -121,7 +138,7 @@ done
 label elreydetodo-$overview > $work/overview.ansi
 block elreydetodo-$overview >> $work/overview.ansi
 
-# 7: Draw the pages.
+# 8: Draw the pages.
 for name in $edges overview; do
   $work/ansi-to-png $work/$name.ansi $out/$name.png $font $size $columns $background $foreground
 done
