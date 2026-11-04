@@ -42,14 +42,16 @@ plausibly want is present in the file, with the unused ones commented out.
 The live prompt is two lines.
 
 ```
- ⬑ 3.245s ✔ 0 2026-11-03T14:03:07-05:00    shell-scripts  main ?1 ~2       [java 21 │ py 3.12 .venv]
+ ↳ 2026-11-03 14:03:07 │ 3.24s │ ✔ 0    shell-scripts  main ?1 ~2       [java 21 │ py 3.12 .venv]
 ~/src/shell-scripts ❯ ▌
 ```
 
 The first line is the information line. Its left side carries, in order:
 
-1. Facts about the previous command: the `⬑` marker, its duration, its exit status, and the time
-   it ended. The time it ended is the time this prompt arrived.
+1. Facts about the previous command: the `↳` marker, the time it ended, its duration, and its exit
+   status, separated by `│`. The time it ended is the time this prompt arrived. They come in the
+   same order as on the committed prompt. With no command before the prompt, `new session` or
+   `no command` replaces the duration and the status.
 2. Git: the repository name, the branch or commit, and the working tree status.
 
 Its right side carries tooling versions, separated by `│` inside one pair of square brackets. A
@@ -71,25 +73,39 @@ so.
 Pressing Enter rewrites both lines into two new ones:
 
 ```
-# ⬑ ran 3.245s · exit 0 · ended 2026-11-03T14:03:07-05:00 │ idle 41s │ next command at 2026-11-03T14:03:48-05:00 ↴ #
+# ↳ ended   2026-11-03 14:03:07 │ took  3.24s  │ exit 0       │ idle 41s     │ started 2026-11-03 14:03:48 ↴ #
 ~/src/shell-scripts ❯ git status
 ```
 
 The first line is a shell comment, so pasting it into a shell does nothing. A `#` at each end
-frames it, and two `│` split it into three segments:
+frames it, and four `│` split it into five segments:
 
-1. The command above: `ran`, `exit`, and `ended` repeat the previous-command facts from the live
-   prompt, separated by `·`.
-2. `idle` is the time the prompt waited for input. It is the moment Enter was pressed minus the
+1. `ended` is the time the command above ended. It is the time the live prompt arrived.
+2. `took` is how long the command above ran.
+3. `exit` is its exit status.
+4. `idle` is the time the prompt waited for input. It is the moment Enter was pressed minus the
    moment the prompt arrived.
-3. `next command at` is the moment Enter was pressed. It describes the command below.
+5. `started` is the moment Enter was pressed. It describes the command below.
 
-`↴` sits just before the closing `#` and points down at the command.
+The line reads as a flow from top to bottom. `↳` after the first `#` brings the command above down
+into the line, and `↴` before the last `#` sends it out to the command below. A session's first
+prompt has no command above it, so `→` takes the place of `↳`, on the live prompt as well.
 
-The anchors and separators, `#`, `⬑`, `·`, `│`, and `↴`, all take one color. It is the outcome of
-the command above: green after success, red after failure, and blue when there was no command, as
-in the live prompt's first pill. They use the color set's `ink-*` colors, because its pill colors
-can be too dark to read as text. All the other text on the line is one plain color. The colored
+Every segment has a fixed width, so the columns line up from one committed prompt to the next:
+
+- The labels of the two timestamps are padded to 7 characters, the width of `started`.
+- `took`, `exit`, and `idle` are each padded to 12 characters.
+- The duration uses the `lucky7` style, which is always 7 characters wide and keeps the decimal
+  point in one column. `took` therefore never overflows its 12 characters.
+- Idle time keeps the two largest units, as in `41s`, `5m 32s`, or `2d 3h`. The widest is
+  `idle 23h 59m`, which fits exactly.
+
+The whole line is 110 characters wide. A wider terminal is needed to keep it on one line.
+
+The anchors and separators, `#`, `↳`, `│`, and `↴`, all take one color. It is the outcome of the
+command above: green after success, red after failure, and blue when there was no command, as in
+the live prompt's first pill. They use the color set's `ink-*` colors, because its pill colors can
+be too dark to read as text. All the other text on the line is one plain color. The colored
 anchors make the line easy to find in scrollback, and they repeat the exit status at a glance.
 
 The first line also sits on a background band in the color set's `committed-band` color, a shade a
@@ -101,17 +117,21 @@ live prompt. Git and tooling information MUST NOT appear in the committed prompt
 
 The committed prompt MUST NOT contain rounded pill ends or other Nerd Font private-use characters,
 because those paste as junk outside the terminal. Colors, including the band, are fine, because
-only the characters are copied. `⬑` and `↴` are standard Unicode and are the only arrows used.
+only the characters are copied. `↳`, `→`, and `↴` are standard Unicode and are the only arrows
+used.
 
 Four cases change the first line:
 
-- **First prompt of a session.** `.PromptCount` is 1. The first segment reads
-  `new session at <time>`, and the anchors are blue.
+- **First prompt of a session.** `.PromptCount` is 1. The arrow is `→`, the first segment reads
+  `started <time>`, `took` and `exit` are blank, and the anchors are blue.
 - **Enter on an empty line.** `.Executed` is false and `.PromptCount` is above 1. The first segment
-  reads `no command · prompt at <time>`, and the anchors are blue.
+  reads `prompt <time>`, `took` and `exit` are blank, and the anchors are blue.
 - **Failure.** The anchors are red. The wording does not change.
-- **Cancelled input.** When Ctrl-C abandons the line being typed, `.Interrupted` is true. The last
-  segment reads `cancelled at <time>` instead of `next command at <time>`.
+- **Abandoned input.** Pressing Ctrl-C instead of Enter abandons the line being typed. Oh My Posh
+  draws the committed prompt at that moment, with `.Interrupted` set, and the last segment reads
+  `aborted <time>` instead of `started <time>`. The abandoned text stays on the line below and
+  never runs. A command interrupted with Ctrl-C while it runs is a different case. Its committed
+  prompt already reads `started`, and the next prompt reports its exit status, usually 130.
 
 ### How idle time is computed
 
@@ -119,18 +139,21 @@ Oh My Posh has no property for the moment a prompt was drawn. However, the time 
 `CurrentDate` when the live prompt renders, and the primary prompt saves segment data to a cache.
 The committed prompt is rendered by a fresh `oh-my-posh print transient` call at the moment Enter
 is pressed, and that call reads the cache back as `.Segments.Time.CurrentDate`. So
-`.Segments.Time.CurrentDate | durationRound` is the idle time, and `now` is the moment Enter was
-pressed. No shell hook is needed.
+the difference between `now` and `.Segments.Time.CurrentDate` is the idle time, and `now` is the
+moment Enter was pressed. No shell hook is needed. Oh My Posh's `secondsRound` function formats the
+difference with every unit, and the template keeps the first two.
 
 Streaming MUST NOT be enabled. With streaming, the committed prompt is rendered in advance, when
-the live prompt is drawn, and both `idle` and `next command at` would be wrong. The base file
+the live prompt is drawn, and both `idle` and `started` would be wrong. The base file
 carries a comment saying so beside the place the key would go.
 
 ## Formats
 
-- Every timestamp is ISO 8601 in the local time zone, with seconds, as in
-  `2026-11-03T14:03:07-05:00`. The Go layout is `2006-01-02T15:04:05Z07:00`.
-- Durations use the `austin` style of the execution time segment, as in `3.245s` or `1m 4s`.
+- Every timestamp is ISO 8601 in the local time zone, with seconds and a space in place of the
+  `T`, as in `2026-11-03 14:03:07`. The zone is left out, because it is always the local one. The
+  Go layout is `2006-01-02 15:04:05`.
+- Durations use the `lucky7` style of the execution time segment, as in `3.24s` or `5m 32s`. The
+  live prompt trims the padding that keeps it 7 characters wide.
 - The execution time segment is always enabled, so a fast command still shows its duration.
 
 ## Segments
@@ -139,9 +162,9 @@ Active, in the order they appear:
 
 | Segment | Line | Notes |
 | --- | --- | --- |
-| `executiontime` | information | Always enabled, `austin` style. |
-| `status` | information | Always enabled. |
 | `time` | information | ISO 8601 layout. Supplies the arrival time for idle time. |
+| `executiontime` | information | Always enabled, `lucky7` style. |
+| `status` | information | Always enabled. Says `new session` or `no command` when nothing ran. |
 | `git` | information | Repository name, branch or commit, working tree status. |
 | `java` | information, right | Per-folder cache of one hour. |
 | `node` | information, right | |

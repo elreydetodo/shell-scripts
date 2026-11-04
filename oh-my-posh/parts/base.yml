@@ -18,7 +18,8 @@
 # the chain MUST therefore hold blocks, so a separate file of colors cannot be part of it.
 #
 # Streaming MUST stay off. With `streaming` set, Oh My Posh renders the committed prompt in advance,
-# when the live prompt is drawn, and both "idle" and "next command at" would be wrong.
+# when the live prompt is drawn, and both "idle" and the time the next command started would be
+# wrong.
 # streaming: 100
 
 version: 4
@@ -253,29 +254,35 @@ blocks:
     alignment: left
     # Uncomment for a blank line before each prompt. Also uncomment it on transient_prompt below.
     # newline: true
+    #
+    # The previous-command facts come in the order of the committed prompt: when it ended, how long
+    # it took, and its exit status. With no command before the prompt, the status segment says why
+    # instead. It always renders, so a shape can close the pill on it.
     segments:
+      - type: time
+        style: plain
+        foreground: p:text
+        options:
+          time_format: "2006-01-02 15:04:05"
+        # A session's first prompt has no command above it, so its arrow points straight right.
+        template: " {{ if eq .PromptCount 1 }}→{{ else }}↳{{ end }} {{ .CurrentDate | date .Format }} "
       - type: executiontime
         style: plain
         foreground: p:text
         options:
           always_enabled: true
-          style: austin
-        template: >-
-          {{ if eq .PromptCount 1 }} ⬑ new session
-          {{- else if not .Executed }} ⬑ no command
-          {{- else }} ⬑ {{ .FormattedMs }}{{ end }}
+          # Always 7 characters, padded with spaces, so the committed prompt's columns line up.
+          style: lucky7
+        template: "{{ if .Executed }}│ {{ trim .FormattedMs }} {{ end }}"
       - type: status
         style: plain
         foreground: p:text
         options:
           always_enabled: true
-        template: "{{ if .Executed }} {{ if eq .Code 0 }}✔{{ else }}✘{{ end }} {{ .Code }}{{ end }}"
-      - type: time
-        style: plain
-        foreground: p:text
-        options:
-          time_format: "2006-01-02T15:04:05Z07:00"
-        template: " {{ .CurrentDate | date .Format }} "
+        template: >-
+          │ {{ if eq .PromptCount 1 }}new session
+          {{- else if not .Executed }}no command
+          {{- else }}{{ if eq .Code 0 }}✔{{ else }}✘{{ end }} {{ .Code }}{{ end }}{{ " " }}
       - type: git
         style: plain
         foreground: p:text
@@ -427,12 +434,13 @@ blocks:
         template: '{{ if .Root }}❯❯{{ else }}❯{{ end }}{{ " " }}'
 
 # The committed prompt. It replaces both lines of the live prompt when Enter is pressed. Its first
-# line has three segments between the two #: the command above, the idle time, and the command
-# below.
+# line has five segments between the two #: when the command above ended, how long it took, its
+# exit status, the idle time, and when the command below started. Each segment is padded to a fixed
+# width, so the columns line up from one committed prompt to the next.
 #
-# The anchors and separators (#, ⬑, ·, │, ↴) take the outcome color of the command above: green
-# after success, red after failure, and blue when there was none. They use the ink-* colors,
-# because a color set's pill colors can be too dark to read as text. All other text is one color.
+# The anchors and separators (#, ↳ or → on a session's first prompt, │, ↴) take the outcome color of the command above: green after
+# success, red after failure, and blue when there was none. They use the ink-* colors, because a
+# color set's pill colors can be too dark to read as text. All other text is one color.
 #
 # The first line sits on a background band, so it stands out in scrollback. The band covers the
 # text only, because the template cannot see the terminal width.
@@ -441,7 +449,8 @@ blocks:
 # background is fine, because only the characters are copied.
 #
 # Idle time works because .Segments.Time.CurrentDate is the arrival time cached by the live prompt,
-# while `now` is the moment Enter was pressed.
+# while `now` is the moment Enter was pressed. secondsRound writes every unit, as in "2d 3h 5m 4s",
+# so only the first two are kept.
 transient_prompt:
   # Uncomment for a blank line before each prompt. Also uncomment it on the first block above.
   # newline: true
@@ -449,15 +458,16 @@ transient_prompt:
   template: >-
     {{- $a := "p:ink-prev-ok" }}
     {{- if not .Executed }}{{ $a = "p:ink-prev-none" }}
-    {{- else if ne .Code 0 }}{{ $a = "p:ink-prev-fail" }}{{ end -}}
-    <,p:committed-band><{{ $a }}># ⬑</>
-    {{ if eq .PromptCount 1 }}new session at {{ .Segments.Time.CurrentDate | date "2006-01-02T15:04:05Z07:00" }}
-    {{- else if not .Executed }}no command <{{ $a }}>·</> prompt at {{ .Segments.Time.CurrentDate | date "2006-01-02T15:04:05Z07:00" }}
-    {{- else }}ran {{ .Segments.Executiontime.FormattedMs }}
-    <{{ $a }}>·</> exit {{ .Code }}
-    <{{ $a }}>·</> ended {{ .Segments.Time.CurrentDate | date "2006-01-02T15:04:05Z07:00" }}{{ end }}
-    <{{ $a }}>│</> idle {{ .Segments.Time.CurrentDate | durationRound }}
-    <{{ $a }}>│</> {{ if .Interrupted }}cancelled at{{ else }}next command at{{ end }} {{ now | date "2006-01-02T15:04:05Z07:00" }}
+    {{- else if ne .Code 0 }}{{ $a = "p:ink-prev-fail" }}{{ end }}
+    {{- $at := "2006-01-02 15:04:05" }}
+    {{- $idle := splitList " " (secondsRound (sub (now).Unix .Segments.Time.CurrentDate.Unix)) }}
+    {{- if gt (len $idle) 2 }}{{ $idle = slice $idle 0 2 }}{{ end -}}
+    <,p:committed-band><{{ $a }}># {{ if eq .PromptCount 1 }}→{{ else }}↳{{ end }}</>
+    {{ if eq .PromptCount 1 }}started{{ else if not .Executed }}prompt {{ else }}ended  {{ end }} {{ .Segments.Time.CurrentDate | date $at }}
+    <{{ $a }}>│</> {{ printf "%-12s" (ternary (print "took " .Segments.Executiontime.FormattedMs) "" .Executed) }}
+    <{{ $a }}>│</> {{ printf "%-12s" (ternary (print "exit " .Code) "" .Executed) }}
+    <{{ $a }}>│</> {{ printf "%-12s" (print "idle " (join " " $idle)) }}
+    <{{ $a }}>│</> {{ if .Interrupted }}aborted{{ else }}started{{ end }} {{ now | date $at }}
     <{{ $a }}>↴ #</></>{{ "\n" }}
     {{- if .Segments.Contains "Session" }}<p:session>{{ .Segments.Session.UserName }}@{{ .Segments.Session.HostName }}</> {{ end }}
     {{- "" }}<p:path>{{ .PWD }}</>

@@ -12,20 +12,20 @@ blocks:
     alignment: left
     index: 1
     segments:
-      - type: executiontime
+      - type: time
         style: powerline
         powerline_symbol: ""
         foreground: p:pill-text
         background: p:prev-ok
         background_templates: &prev-background
           - "{{ if not .Executed }}p:prev-none{{ else if ne .Code 0 }}p:prev-fail{{ end }}"
-      - type: status
+      - type: executiontime
         style: powerline
         powerline_symbol: ""
         foreground: p:pill-text
         background: p:prev-ok
         background_templates: *prev-background
-      - type: time
+      - type: status
         style: powerline
         powerline_symbol: ""
         foreground: p:pill-text

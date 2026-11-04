@@ -15,14 +15,14 @@ blocks:
     alignment: left
     index: 1
     segments:
-      - type: executiontime
+      - type: time
         foreground: p:ink-prev-ok
         foreground_templates: &prev-foreground
           - "{{ if not .Executed }}p:ink-prev-none{{ else if ne .Code 0 }}p:ink-prev-fail{{ end }}"
-      - type: status
+      - type: executiontime
         foreground: p:ink-prev-ok
         foreground_templates: *prev-foreground
-      - type: time
+      - type: status
         foreground: p:ink-prev-ok
         foreground_templates: *prev-foreground
       - type: git

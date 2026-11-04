@@ -6,14 +6,21 @@ designing it, so that none of it has to be rediscovered.
 ## The owner's preferences
 
 - Copying scrollback into messages is the top priority. Anything that would paste as junk is
-  rejected, including padding, Nerd Font characters on committed lines, and continuation markers.
+  rejected, including padding out to the terminal width, Nerd Font characters on committed lines,
+  and continuation markers. Padding inside the committed line is wanted, because it lines up the
+  columns from one committed prompt to the next.
 - The owner uses iTerm2 with `MesloLGSDZ Nerd Font Mono` at 14 points. Glyph alignment matters.
   Check that a glyph is in the font before using it:
   `fc-list ":charset=2b11" family | grep -ci meslo` prints 0 when the font lacks U+2B11.
-- `⬑` U+2B11 is the intended shape for "about the line above". Meslo lacks the whole U+2B0E to
-  U+2B11 group, so iTerm2 draws it from a fallback font, slightly small and high. The owner
-  accepted that. No Nerd Font icon has this shape. `md-arrow_left_top` U+F17A7 is the
-  up-then-left shape and was rejected.
+- The committed line is read as a process flow. The command above comes down through `↳` U+21B3
+  at the left, passes through the explanation, and leaves through `↴` U+21B4 at the right toward
+  the command below. The live prompt starts with the same `↳`. A session's first prompt uses `→`
+  U+2192 instead, because nothing comes down from above. All three arrows are in Meslo. The
+  U+2B0E to U+2B11 group, such as `⬑`, is not, and iTerm2 draws it from a fallback font, slightly
+  small and high. Nor are the curved `⤶` and `⤷`.
+- The committed line was asked to be 100 characters wide. It is 110, which the owner accepted.
+  Narrowing it means shorter labels or a narrower `took` column, and the owner chose `lucky7`
+  durations for that reason.
 - Pastel colors are preferred. So are rounded ends or no background at all, and fewer gaps between
   segments. Angled powerline transitions are disliked. Of the color sets, pastel, dark, and Mocha
   were liked best, and `round-gaps-mocha` was the favorite variant when the set was built.
@@ -72,18 +79,23 @@ They were read at v31.9.1.
   (`_omp_zle-line-init`). With streaming on, a copy rendered in advance is used instead.
 - Streaming is opt-in through the top-level `streaming` key (`src/config/config.go`).
 - The transient template is rendered in trusted mode (`src/prompt/extra.go`, `extraPrompt`). The
-  full sprig function set is available there, including `now` and `durationRound`.
+  full sprig function set is available there, including `now`, `printf`, and `ternary`, plus Oh My
+  Posh's own `secondsRound` (`src/template/round.go`). Go's `printf` pads by character, not byte.
+- The `round` and `lucky7` duration styles belong to the execution time segment
+  (`src/segments/executiontime.go`). No template function applies them to another duration.
+- When Ctrl-C abandons the line being typed, the zsh integration renders the committed prompt at
+  once with `--interrupted` (`src/shell/scripts/omp.zsh`, around line 660).
 - The transient template has no access to the terminal width.
 - `.PromptCount` is stored per session and counts primary prompts (`src/runtime/terminal.go`,
   `setPromptCount`).
 - `.Executed` is false on a session's first prompt and after Enter on an empty line.
 - The format is chosen from the file extension, and `.yml` is accepted (`src/config/data.go`).
 - `extends` merges blocks by `type` and `alignment`, and segments by `alias` or `type`
-  (`src/config/merge.go`). A block with `index: N` matches the Nth block of the base instead.
-  The base file has two left-aligned blocks, so shapes MUST use `index`. An override replaces a
-  string or scalar but cannot clear a string, and it appends to a list rather than replacing it.
-  This is why the base file sets no diamonds, backgrounds, or color templates on the information
-  line.
+  (`src/config/merge.go`). The segments keep the order of the base file. A block with `index: N`
+  matches the Nth block of the base instead. The base file has two left-aligned blocks, so shapes
+  MUST use `index`. An override replaces a string or scalar but cannot clear a string, and it
+  appends to a list rather than replacing it. This is why the base file sets no diamonds,
+  backgrounds, or color templates on the information line.
 - `extends` never adds a block that the parent lacks. Blocks of the child with no match are
   dropped silently (`src/config/merge.go`, `merge`). The chain is merged one hop at a time, so a
   file with no blocks anywhere in it drops the blocks of every file below it. The root of the chain

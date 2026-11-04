@@ -14,18 +14,18 @@ blocks:
     leading_diamond: ""
     trailing_diamond: ""
     segments:
-      - type: executiontime
+      - type: time
         style: diamond
         foreground: p:pill-text
         background: p:prev-ok
         background_templates: &prev-background
           - "{{ if not .Executed }}p:prev-none{{ else if ne .Code 0 }}p:prev-fail{{ end }}"
-      - type: status
+      - type: executiontime
         style: diamond
         foreground: p:pill-text
         background: p:prev-ok
         background_templates: *prev-background
-      - type: time
+      - type: status
         style: diamond
         foreground: p:pill-text
         background: p:prev-ok
