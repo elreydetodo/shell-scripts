@@ -451,6 +451,11 @@ blocks:
 # Idle time works because .Segments.Time.CurrentDate is the arrival time cached by the live prompt,
 # while `now` is the moment Enter was pressed. secondsRound writes every unit, as in "2d 3h 5m 4s",
 # so only the first two are kept.
+#
+# Oh My Posh keeps the live prompt's segment data for 24 hours. A prompt left waiting longer than
+# that has no .Segments.Time or .Segments.Executiontime when Enter is pressed. The arrival time
+# then reads "unknown", the duration "?", and the idle time ">1d". The exit status survives,
+# because the shell passes it to the committed prompt's render directly.
 transient_prompt:
   # Uncomment for a blank line before each prompt. Also uncomment it on the first block above.
   # newline: true
@@ -460,11 +465,18 @@ transient_prompt:
     {{- if not .Executed }}{{ $a = "p:ink-prev-none" }}
     {{- else if ne .Code 0 }}{{ $a = "p:ink-prev-fail" }}{{ end }}
     {{- $at := "2006-01-02 15:04:05" }}
-    {{- $idle := splitList " " (secondsRound (sub (now).Unix .Segments.Time.CurrentDate.Unix)) }}
-    {{- if gt (len $idle) 2 }}{{ $idle = slice $idle 0 2 }}{{ end -}}
+    {{- $arrived := printf "%-19s" "unknown" }}
+    {{- $took := "?" }}
+    {{- $idle := list ">1d" }}
+    {{- if .Segments.Contains "Time" }}
+    {{- $arrived = .Segments.Time.CurrentDate | date $at }}
+    {{- $took = .Segments.Executiontime.FormattedMs }}
+    {{- $idle = splitList " " (secondsRound (sub (now).Unix .Segments.Time.CurrentDate.Unix)) }}
+    {{- if gt (len $idle) 2 }}{{ $idle = slice $idle 0 2 }}{{ end }}
+    {{- end -}}
     <,p:committed-band><{{ $a }}># {{ if eq .PromptCount 1 }}→{{ else }}↳{{ end }}</>
-    {{ if eq .PromptCount 1 }}started{{ else if not .Executed }}prompt {{ else }}ended  {{ end }} {{ .Segments.Time.CurrentDate | date $at }}
-    <{{ $a }}>│</> {{ printf "%-12s" (ternary (print "took " .Segments.Executiontime.FormattedMs) "" .Executed) }}
+    {{ if eq .PromptCount 1 }}started{{ else if not .Executed }}prompt {{ else }}ended  {{ end }} {{ $arrived }}
+    <{{ $a }}>│</> {{ printf "%-12s" (ternary (print "took " $took) "" .Executed) }}
     <{{ $a }}>│</> {{ printf "%-12s" (ternary (print "exit " .Code) "" .Executed) }}
     <{{ $a }}>│</> {{ printf "%-12s" (print "idle " (join " " $idle)) }}
     <{{ $a }}>│</> {{ if .Interrupted }}aborted{{ else }}started{{ end }} {{ now | date $at }}

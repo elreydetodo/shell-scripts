@@ -120,7 +120,7 @@ because those paste as junk outside the terminal. Colors, including the band, ar
 only the characters are copied. `↳`, `→`, and `↴` are standard Unicode and are the only arrows
 used.
 
-Four cases change the first line:
+Five cases change the first line:
 
 - **First prompt of a session.** `.PromptCount` is 1. The arrow is `→`, the first segment reads
   `started <time>`, `took` and `exit` are blank, and the anchors are blue.
@@ -132,6 +132,9 @@ Four cases change the first line:
   `aborted <time>` instead of `started <time>`. The abandoned text stays on the line below and
   never runs. A command interrupted with Ctrl-C while it runs is a different case. Its committed
   prompt already reads `started`, and the next prompt reports its exit status, usually 130.
+- **Expired cache.** A live prompt left waiting more than 24 hours loses its cached segment data,
+  as described below. The first segment reads `ended unknown`, `took` reads `took ?`, and `idle`
+  reads `idle >1d`. The exit status and the colors are still correct.
 
 ### How idle time is computed
 
@@ -142,6 +145,14 @@ is pressed, and that call reads the cache back as `.Segments.Time.CurrentDate`. 
 the difference between `now` and `.Segments.Time.CurrentDate` is the idle time, and `now` is the
 moment Enter was pressed. No shell hook is needed. Oh My Posh's `secondsRound` function formats the
 difference with every unit, and the template keeps the first two.
+
+The cache entry expires 24 hours after the live prompt saves it. The expiry is fixed in Oh My Posh
+(`SaveCache` in `src/template/cache.go`). After it, `.Segments` is empty, and the template MUST NOT
+read `.Segments.Time` or `.Segments.Executiontime` as though they were present. Sprig would treat
+the missing arrival time as zero, and the idle time would be measured from 1970, as in `56y 10mo`.
+The template checks `.Segments.Contains "Time"` and writes `unknown`, `?`, and
+`>1d` instead. The shell passes the exit status to the committed prompt's render directly, so it
+does not depend on the cache.
 
 Streaming MUST NOT be enabled. With streaming, the committed prompt is rendered in advance, when
 the live prompt is drawn, and both `idle` and `started` would be wrong. The base file
