@@ -6,6 +6,7 @@
 local HOMEBREW_PATHS=()
 if [[ -n "${HOMEBREW_PREFIX}" ]]; then
     HOMEBREW_PATHS+=(
+        "${HOMEBREW_PREFIX}/opt/homebrew/opt/curl/bin"
         "${HOMEBREW_PREFIX}/opt/gawk/libexec/gnubin"
         "${HOMEBREW_PREFIX}/opt/libxslt/bin"
         "${HOMEBREW_PREFIX}/opt/mariadb-connector-c/bin"
