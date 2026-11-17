@@ -1,4 +1,3 @@
-datamash
 dos2unix
 fnm
 gh
@@ -7,13 +6,7 @@ git-delta
 go
 jenv
 jq
-libxslt
 mycli
 openjdk
-pandoc
 pinentry-mac
-poppler
 shellcheck
-typst
-uv
-yamllint

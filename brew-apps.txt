@@ -1,0 +1,7 @@
+claude
+claude-code@latest
+docker-desktop
+jetbrains-toolbox
+karabiner-elements
+signal
+sublime-text

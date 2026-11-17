@@ -1,0 +1,7 @@
+datamash
+libxslt
+pandoc
+poppler
+typst
+uv
+yamllint
