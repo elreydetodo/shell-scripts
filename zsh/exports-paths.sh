@@ -18,6 +18,7 @@ fi
 HOMEBREW_PATHS+=(
     "${HOME}/.bin"
     "${HOME}/.jenv/shims"
+    "${HOME}/.local/bin:$PATH"
     "${HOME}/go/bin"
 )
 
