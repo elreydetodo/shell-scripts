@@ -23,6 +23,7 @@ defaults write "$ITERM" "Default Bookmark Guid" -string 5D6C3F0A-2B7E-4C1D-9A8E-
 defaults write "$ITERM" AddNewTabAtEndOfTabs -bool false           # A new tab opens beside the current one.
 defaults write "$ITERM" AdjustWindowForFontSizeChange -bool false  # Changing the font size keeps the window size.
 defaults write "$ITERM" HideTab -bool false                        # The tab bar shows even with one tab.
+defaults write "$ITERM" OpenBookmark -bool false                   # The Profiles window stays closed at startup.
 defaults write "$ITERM" PromptOnQuit -bool false                   # Quitting does not ask first.
 defaults write "$ITERM" QuitWhenAllWindowsClosed -bool true        # Closing the last window quits.
 
