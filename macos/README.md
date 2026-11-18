@@ -8,8 +8,8 @@ consult `DefaultKeyBinding.dict`.
 ## Cocoa key bindings
 
 `macos/DefaultKeyBinding.dict` rebinds the cursor keys in every Cocoa text view. Its
-header comment lists what it changes and explains the file format. The
-`keybindings` part links it.
+header comment lists what it changes and explains the file format.
+`macos/install.sh` links it.
 
 ```
 mkdir -p ~/Library/KeyBindings
@@ -20,7 +20,7 @@ ln -s $(pwd)/macos/DefaultKeyBinding.dict ~/Library/KeyBindings/DefaultKeyBindin
 
 Mission Control claims the Control+arrow chords by default, so apps never see
 them. `macos/hotkeys.sh` turns those shortcuts off for the current user. Its
-header comment explains which ones and how. The `hotkeys` part runs it.
+header comment explains which ones and how. `macos/install.sh` runs it.
 
 ```
 sh macos/hotkeys.sh

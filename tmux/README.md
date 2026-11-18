@@ -1,6 +1,6 @@
 # tmux
 
-`tmux/tmux.conf` makes tmux behave in sane and consistent ways. The `tmux` part
+`tmux/tmux.conf` makes tmux behave in sane and consistent ways. `tmux/install.sh`
 links it.
 
 ```

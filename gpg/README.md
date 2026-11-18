@@ -24,7 +24,7 @@ EOF
 gpgconf --kill gpg-agent
 ```
 
-The `gpg-agent` part does this. It appends only the settings the file lacks,
+`gpg/install.sh` does this. It appends only the settings the file lacks,
 and copies the file to a backup first. It does nothing until pinentry-mac is
 installed.
 

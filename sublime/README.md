@@ -1,10 +1,10 @@
 # Sublime Text
 
-The `sublime` part links the Sublime Text settings in `sublime/`.
+`sublime/install.sh` links the Sublime Text settings in `sublime/`.
 
 ```
 mkdir -p ~/Library/Application\ Support/Sublime\ Text/Packages/User/
-for FILE in "$(pwd)/sublime"/*; do
+for FILE in "$(pwd)/sublime"/*.sublime-settings; do
     [ -e "${FILE}" ] || continue
     ln -Fis "${FILE}" ~/Library/Application\ Support/Sublime\ Text/Packages/User/
 done

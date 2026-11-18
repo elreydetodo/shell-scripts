@@ -252,7 +252,7 @@ def main():
     args = parser.parse_args()
 
     if not LIVE_FILE.exists():
-        sys.exit(f"capture.py: {LIVE_FILE} does not exist. Run 'sh install.sh --only iterm' first.")
+        sys.exit(f"capture.py: {LIVE_FILE} does not exist. Run 'sh iterm2/install.sh' first.")
     profile_changed = capture_profile(args.dry_run)
     settings_changed = capture_settings(args.dry_run)
     if (profile_changed or settings_changed) and not args.dry_run:

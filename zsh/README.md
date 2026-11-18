@@ -8,8 +8,9 @@ back to [powerlevel10k](https://github.com/romkatv/powerlevel10k) with
 `zsh/p10k.zsh`, and to the `agnoster` theme when powerlevel10k is not installed
 either.
 
-The `zsh`, `oh-my-zsh` and `p10k` parts do the steps below. A machine with Oh
-My Posh never loads powerlevel10k, so `p10k` is off by default.
+`zsh/install.sh` does the steps below. It installs powerlevel10k only with
+`--p10k`, because a machine with Oh My Posh never loads it. `sh install.sh`
+passes that option when `p10k` is named with `--with` or `--only`.
 
 ```
 # Symlink rc files

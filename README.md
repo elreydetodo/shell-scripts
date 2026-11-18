@@ -25,56 +25,65 @@ have loaded yet. Homebrew won't do that on its own readily.
 
 # Installing
 
-Run the install script from the clone:
+Each directory holds the files of one tool and an `install.sh` that sets the tool
+up. Run the scripts from the top of the clone. Every script takes `--dry-run`,
+which prints what it would do without changing anything.
 
-```
-sh install.sh
-```
+These scripts run by default, in this order:
 
-It runs the parts in the table below, in order. Parts marked "off by default"
-run only when named. `--with` adds those, `--exclude` skips parts, and
-`--only` runs just the parts it names, whether or not they are off by
-default. Separate the names with commas:
+- `sh brew/install.sh` installs Homebrew and the packages in its lists. See
+  [brew/README.md](brew/README.md).
+- `sh zsh/install.sh` links `~/.zshrc` and installs Oh My Zsh. See
+  [zsh/README.md](zsh/README.md).
+- `sh gpg/install.sh` points gpg-agent at the macOS passphrase dialog. macOS
+  only. See [gpg/README.md](gpg/README.md).
+- `sh git/install.sh` links `~/.gitconfig` and `~/.gitconfig.d`. See
+  [git/README.md](git/README.md).
+- `sh editorconfig/install.sh` links `~/.editorconfig`. See
+  [editorconfig/README.md](editorconfig/README.md).
+- `sh tmux/install.sh` links `~/.tmux.conf`. See [tmux/README.md](tmux/README.md).
+- `sh nvim/install.sh` links `~/.config/nvim/init.lua`. See
+  [nvim/README.md](nvim/README.md).
+- `sh sublime/install.sh` links the Sublime Text settings. macOS only. See
+  [sublime/README.md](sublime/README.md).
+- `sh iterm2/install.sh` links the iTerm2 profile and applies its other settings.
+  macOS only. See [iterm2/README.md](iterm2/README.md).
+- `sh macos/install.sh` links the Cocoa key bindings and turns off the Mission
+  Control hotkeys on Control+arrow. macOS only. See
+  [macos/README.md](macos/README.md).
+- `sh hammerspoon/install.sh` links `~/.hammerspoon/init.lua`. macOS only. See
+  [hammerspoon/README.md](hammerspoon/README.md).
+
+These are off by default:
+
+- `sh zsh/install.sh --p10k` also installs powerlevel10k, the fallback prompt.
+  See [zsh/README.md](zsh/README.md).
+- `sh vim/install.sh` links `~/.vimrc` and creates `~/.vim/undo`. See
+  [vim/README.md](vim/README.md).
+- `sh karabiner/install.sh` links the Karabiner-Elements rules. macOS only. See
+  [karabiner/README.md](karabiner/README.md).
+
+A script marked "macOS only" skips itself on other systems.
+
+`sh install.sh` runs every script of the first list, in order. Its options name
+directories, plus `p10k` for the powerlevel10k option of `zsh/install.sh`.
+`--with` adds items from the second list, `--exclude` skips items, and `--only`
+runs just the items it names, whether or not they are off by default. Separate
+the names with commas:
 
 ```
 sh install.sh --with vim
-sh install.sh --exclude karabiner,sublime
+sh install.sh --exclude iterm2,sublime
 sh install.sh --only git,tmux
 ```
 
-`--list` prints the parts, and `--dry-run` prints what the script would do
-without changing anything.
+`--list` prints the items, and `--dry-run` hands the option on to every script.
 
-The script is safe to run again. A link that already points into this clone is
+The scripts are safe to run again. A link that already points into this clone is
 left alone. Anything else in the way is moved aside to `<name>-yyyyMMdd`, with
-a letter added when that name is taken. A part marked "macOS only" skips itself
-on other systems.
+a letter added when that name is taken.
 
-| Part | What it does |
-| --- | --- |
-| `homebrew` | Installs Homebrew. macOS only. |
-| `brew-leaves` | Installs the packages in `brew/leaves.txt`. |
-| `brew-extras` | Installs the packages in `brew/extras.txt`. |
-| `brew-devtools` | Installs the packages in `brew/devtools.txt`. |
-| `brew-devtools-exotic` | Installs the packages in `brew/devtools-exotic.txt`. |
-| `brew-apps` | Installs the apps in `brew/apps.txt`. macOS only. |
-| `zsh` | Links `~/.zshrc`. |
-| `oh-my-zsh` | Installs Oh My Zsh. |
-| `p10k` | Installs powerlevel10k, the fallback prompt. Off by default. |
-| `gpg-agent` | Points gpg-agent at the macOS passphrase dialog. macOS only. |
-| `git` | Links `~/.gitconfig` and `~/.gitconfig.d`. |
-| `editorconfig` | Links `~/.editorconfig`. |
-| `tmux` | Links `~/.tmux.conf`. |
-| `vim` | Links `~/.vimrc` and creates `~/.vim/undo`. Off by default. |
-| `neovim` | Links `~/.config/nvim/init.lua`. |
-| `sublime` | Links the Sublime Text settings. macOS only. |
-| `iterm` | Links the iTerm2 profile and applies its other settings. macOS only. |
-| `keybindings` | Links `~/Library/KeyBindings/DefaultKeyBinding.dict`. macOS only. |
-| `hotkeys` | Turns off the Mission Control hotkeys on Control+arrow. macOS only. |
-| `hammerspoon` | Links `~/.hammerspoon/init.lua`. macOS only. |
-| `karabiner` | Links the Karabiner-Elements rules. macOS only. Off by default. |
-
-Some steps need a person, so the script leaves them to you:
+Some steps need a person, so the scripts leave them to you:
 
 - Set the terminal's font to a Meslo Nerd Font, as described in
   [zsh/README.md](zsh/README.md).
@@ -86,5 +95,5 @@ Some steps need a person, so the script leaves them to you:
 - Turn on the Karabiner-Elements rules, as described in
   [karabiner/README.md](karabiner/README.md).
 
-Each directory's README names the parts that cover it and gives the commands to
-do the same by hand. Run them from the top of the clone.
+Each directory's README describes its script and gives the commands to do the
+same by hand. Run them from the top of the clone.

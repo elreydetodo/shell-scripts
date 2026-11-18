@@ -29,7 +29,8 @@ updates the values in `settings.sh`, and adds a line for any general setting
 that changed since its last run. Write a comment for each added line. The first
 run on a machine only records the settings, so later changes can be found.
 
-To set it up by hand:
+`iterm2/install.sh` links the profile and runs `settings.sh`. To do the same by
+hand:
 
 ```
 mkdir -p ~/Library/Application\ Support/iTerm2/DynamicProfiles

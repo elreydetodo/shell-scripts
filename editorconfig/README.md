@@ -20,8 +20,8 @@ error. `gofmt` uses tabs and has no flag to change it, because `-tabs` and
 `root = true` ignores this file, which is the point.
 
 The `.editorconfig` at the top of this repository is a link to
-`editorconfig/editorconfig`, because the file governs this repository too. The
-`editorconfig` part links it into your home directory.
+`editorconfig/editorconfig`, because the file governs this repository too.
+`editorconfig/install.sh` links it into your home directory.
 
 ```
 ln -s $(pwd)/editorconfig/editorconfig ~/.editorconfig

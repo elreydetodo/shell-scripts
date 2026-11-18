@@ -1,7 +1,7 @@
 # Vim
 
-`vim/vimrc` makes Vim behave in sane and consistent ways. The `vim` part links
-it.
+`vim/vimrc` makes Vim behave in sane and consistent ways. `vim/install.sh`
+links it.
 
 ```
 ln -Fis $(pwd)/vim/vimrc ~/.vimrc

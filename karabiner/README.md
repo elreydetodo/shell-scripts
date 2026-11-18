@@ -5,7 +5,7 @@
 [Karabiner-Elements](https://karabiner-elements.pqrs.org/), which changes a key
 before any app sees it. That reaches apps that handle keys themselves and never
 consult `DefaultKeyBinding.dict`. Karabiner-Elements needs a driver, and
-installing the driver needs administrator rights. The `karabiner` part links
+installing the driver needs administrator rights. `karabiner/install.sh` links
 the file.
 
 ```

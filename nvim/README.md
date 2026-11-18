@@ -1,6 +1,6 @@
 # Neovim
 
-The `neovim` part links `nvim/init.lua`.
+`nvim/install.sh` links `nvim/init.lua`.
 
 ```
 mkdir -p ~/.config/nvim/

@@ -9,7 +9,7 @@ ln -Fis $(pwd)/git/config ~/.gitconfig
 ln -Fis $(pwd)/git ~/.gitconfig.d
 ```
 
-The `git` part makes both links. Then open `git/local` and set the
+`git/install.sh` makes both links. Then open `git/local` and set the
 name, email and signing key to your own. That file is the only one carrying an
 identity. It also explains how to find your signing key's ID and how to skip
 commit signing entirely.
