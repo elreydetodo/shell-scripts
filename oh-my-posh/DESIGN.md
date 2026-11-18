@@ -133,26 +133,29 @@ Five cases change the first line:
   never runs. A command interrupted with Ctrl-C while it runs is a different case. Its committed
   prompt already reads `started`, and the next prompt reports its exit status, usually 130.
 - **Expired cache.** A live prompt left waiting more than 24 hours loses its cached segment data,
-  as described below. The first segment reads `ended unknown`, `took` reads `took ?`, and `idle`
-  reads `idle >1d`. The exit status and the colors are still correct.
+  as described below. `took` reads `took ?`. The arrival time, the idle time, the exit status, and
+  the colors are still correct.
 
 ### How idle time is computed
 
-Oh My Posh has no property for the moment a prompt was drawn. However, the time segment records
-`CurrentDate` when the live prompt renders, and the primary prompt saves segment data to a cache.
-The committed prompt is rendered by a fresh `oh-my-posh print transient` call at the moment Enter
-is pressed, and that call reads the cache back as `.Segments.Time.CurrentDate`. So
-the difference between `now` and `.Segments.Time.CurrentDate` is the idle time, and `now` is the
-moment Enter was pressed. No shell hook is needed. Oh My Posh's `secondsRound` function formats the
-difference with every unit, and the template keeps the first two.
+Oh My Posh records when each live prompt is created, as `.PromptCreatedAt`, and the milliseconds
+since then, as `.PromptElapsedTime`. Both need Oh My Posh 33.0.0 or later. The committed prompt is
+rendered by a fresh `oh-my-posh print transient` call at the moment Enter is pressed, so
+`.PromptElapsedTime` is the idle time, and `now` is the moment Enter was pressed. No shell hook is
+needed. Oh My Posh's `secondsRound` function formats the idle time with every unit, and the
+template keeps the first two.
 
-The cache entry expires 24 hours after the live prompt saves it. The expiry is fixed in Oh My Posh
-(`SaveCache` in `src/template/cache.go`). After it, `.Segments` is empty, and the template MUST NOT
-read `.Segments.Time` or `.Segments.Executiontime` as though they were present. Sprig would treat
-the missing arrival time as zero, and the idle time would be measured from 1970, as in `56y 10mo`.
-The template checks `.Segments.Contains "Time"` and writes `unknown`, `?`, and
-`>1d` instead. The shell passes the exit status to the committed prompt's render directly, so it
-does not depend on the cache.
+Oh My Posh keeps the creation time for the whole session. When it has none, for example after its
+cache was cleared, `.PromptCreatedAt` is the zero time. The template checks `.PromptCreatedAt.IsZero`
+and writes `unknown` and `?` instead.
+
+The duration comes from the execution time segment's data, which the primary prompt saves to a
+cache. That cache entry expires 24 hours after the live prompt saves it. The expiry is fixed in Oh
+My Posh (`SaveCache` in `src/template/cache.go`). After it, `.Segments` is empty, and the template
+MUST NOT read `.Segments.Executiontime` as though it were present, or the duration prints as
+`<nil>`. The template checks `.Segments.Contains "Executiontime"` and writes `?` instead. The shell
+passes the exit status to the committed prompt's render directly, so it does not depend on the
+cache.
 
 Streaming MUST NOT be enabled. With streaming, the committed prompt is rendered in advance, when
 the live prompt is drawn, and both `idle` and `started` would be wrong. The base file
