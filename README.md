@@ -1,7 +1,7 @@
 # Introduction
 
-This repository contains all of my basic shell and software configuration 
-script. My goal is to facilitate rapid system setup and configuration 
+This repository contains all of my basic shell and software configuration
+scripts. My goal is to facilitate rapid system setup and configuration
 consistency across every computer I use and support.
 
 Nothing in this repository is specific to me except one file,
@@ -29,9 +29,15 @@ There are a number of basic software bits you should install first. Let's start
 with Homebrew and things installable by Homebrew. This is mostly for macOS
 for obvious reasons. Maybe later I'll add sections for linux distros.
 
-The instructions below break packages into three groups. You MUST install the
-first, you SHOULD install the second (they're fun extras), and you MAY install
-the third (if you need to develop software).
+The packages come in five lists:
+
+- `brew-leaves.txt` holds the basics, which you MUST install.
+- `brew-extras.txt` holds fun extras, which you SHOULD install. The Oh My Posh
+  prompt is one of them.
+- `brew-devtools.txt` holds software development tools, which you MAY install.
+- `brew-devtools-exotic.txt` holds development tools needed less often, which
+  you MAY install.
+- `brew-apps.txt` holds desktop apps, which you MAY install.
 
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -39,13 +45,19 @@ the third (if you need to develop software).
 cat brew-leaves.txt | xargs brew install
 cat brew-extras.txt | xargs brew install
 cat brew-devtools.txt | xargs brew install
+cat brew-devtools-exotic.txt | xargs brew install
+cat brew-apps.txt | xargs brew install
 ```
 
 # Setup ZSH
 
 ZSH is the coolest thing since git. Especially when you have a good plugin
-manager and theme. I use [oh my zsh](https://ohmyz.sh/) and
-[powerlevel10k](https://github.com/romkatv/powerlevel10k).
+manager and theme. We use [Oh My Zsh](https://ohmyz.sh/) with the
+[Oh My Posh](https://ohmyposh.dev) prompt in `oh-my-posh/`, which
+`brew-extras.txt` installs. Where Oh My Posh is not installed, `.zshrc` falls
+back to [powerlevel10k](https://github.com/romkatv/powerlevel10k) with
+`.p10k.zsh`, and to the `agnoster` theme when powerlevel10k is not installed
+either.
 
 ```
 # Symlink rc files
@@ -160,9 +172,8 @@ ln -Fis $(pwd)/.gitconfig.d ~
 ```
 
 Then open `.gitconfig.d/local` and set the name, email and signing key to your
-own. That file is the only one carrying an identity, and it explains how to
-create a GPG key if you do not already have one, plus how to skip commit
-signing entirely if you would rather not.
+own. That file is the only one carrying an identity. It also explains how to
+find your signing key's ID and how to skip commit signing entirely.
 
 Two notes if you extend the config. Include paths must be `~/`-rooted rather
 than relative: `~/.gitconfig` is a symlink, and git resolves a relative include
@@ -224,7 +235,7 @@ error. `gofmt` uses tabs and has no flag to change it, because `-tabs` and
 `root = true` stops the search at your home directory. A repository with its own
 `root = true` ignores this file, which is the point.
 
-`init.lua` sets only the three indent behaviours EditorConfig has no property
+`init.lua` sets only the three indent behaviors EditorConfig has no property
 for. Do not add `expandtab`, `shiftwidth`, `softtabstop` or `tabstop` back to
 it. EditorConfig applies per buffer, and only where it finds a `.editorconfig`
 above the file. Editing outside your home directory falls back to the Neovim
