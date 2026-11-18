@@ -1,6 +1,7 @@
 #!/bin/sh
-# Links each Sublime Text settings file here into the User package. Run it
-# with "sh sublime/install.sh", and see README.md beside it.
+# Links each Sublime Text settings file here into the User package, and
+# installs Sublime Text with Homebrew. Run it with "sh sublime/install.sh", and
+# see README.md beside it.
 
 set -u
 REPO=$(cd "$(dirname "$0")/.." && pwd -P)
@@ -16,4 +17,5 @@ for file in "$REPO/sublime"/*.sublime-settings; do
     [ -e "$file" ] || continue
     link "$file" "$USER_PACKAGE/$(basename "$file")" || status=1
 done
+brew_cask sublime-text "Sublime Text.app" || status=1
 exit $status

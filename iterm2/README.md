@@ -1,7 +1,8 @@
 # iTerm2
 
-[iTerm2](https://iterm2.com/) is the terminal we use. No package list installs
-it. Two files in `iterm2/` hold its settings.
+[iTerm2](https://iterm2.com/) is the terminal we use. `iterm2/install.sh`
+installs it with Homebrew, unless it is already in `/Applications` or
+`~/Applications`. Two files in `iterm2/` hold its settings.
 
 `profile.json` is a
 [dynamic profile](https://iterm2.com/documentation-dynamic-profiles.html)

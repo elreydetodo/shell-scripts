@@ -24,9 +24,9 @@ EOF
 gpgconf --kill gpg-agent
 ```
 
-`gpg/install.sh` does this. It appends only the settings the file lacks,
-and copies the file to a backup first. It does nothing until pinentry-mac is
-installed.
+`gpg/install.sh` does this, after it installs gnupg and pinentry-mac with
+Homebrew. It appends only the settings the file lacks, and copies the file to a
+backup first. It does nothing until pinentry-mac is installed.
 
 The two cache settings are how long a passphrase is remembered: the first resets
 on each use, the second is a hard ceiling. An hour and eight hours mean roughly

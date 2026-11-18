@@ -1,7 +1,7 @@
 # Vim
 
 `vim/vimrc` makes Vim behave in sane and consistent ways. `vim/install.sh`
-links it.
+links it. Where no `vim` command exists, it installs Vim with Homebrew too.
 
 ```
 ln -Fis $(pwd)/vim/vimrc ~/.vimrc

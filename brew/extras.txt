@@ -2,6 +2,4 @@ bat
 duf
 fd
 mdless
-oh-my-posh
-neovim
 ripgrep

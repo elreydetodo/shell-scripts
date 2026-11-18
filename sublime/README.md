@@ -1,6 +1,8 @@
 # Sublime Text
 
-`sublime/install.sh` links the Sublime Text settings in `sublime/`.
+`sublime/install.sh` links the Sublime Text settings in `sublime/`. It installs
+Sublime Text with Homebrew too, unless it is already in `/Applications` or
+`~/Applications`.
 
 ```
 mkdir -p ~/Library/Application\ Support/Sublime\ Text/Packages/User/

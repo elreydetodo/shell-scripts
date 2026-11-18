@@ -1,6 +1,7 @@
 #!/bin/sh
-# Links ~/.hammerspoon/init.lua to init.lua. Run it with
-# "sh hammerspoon/install.sh", and see README.md beside it.
+# Links ~/.hammerspoon/init.lua to init.lua, and installs Hammerspoon with
+# Homebrew. Run it with "sh hammerspoon/install.sh", and see README.md beside
+# it.
 
 set -u
 REPO=$(cd "$(dirname "$0")/.." && pwd -P)
@@ -9,4 +10,7 @@ REPO=$(cd "$(dirname "$0")/.." && pwd -P)
 parse_options "$@"
 macos_only
 
-link "$REPO/hammerspoon/init.lua" "$INSTALL_ROOT/.hammerspoon/init.lua"
+status=0
+link "$REPO/hammerspoon/init.lua" "$INSTALL_ROOT/.hammerspoon/init.lua" || status=1
+brew_cask hammerspoon Hammerspoon.app || status=1
+exit $status

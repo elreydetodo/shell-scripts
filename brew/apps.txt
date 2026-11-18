@@ -1,8 +1,5 @@
 claude
 claude-code@latest
 docker-desktop
-hammerspoon
 jetbrains-toolbox
-karabiner-elements
 signal
-sublime-text

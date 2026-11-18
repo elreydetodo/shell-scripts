@@ -160,3 +160,46 @@ find_brew() {
     [ -n "$BREW" ] || return 1
     eval "$("$BREW" shellenv)"
 }
+
+# Installs each Homebrew formula named in the arguments that Homebrew does not
+# have yet. Without Homebrew, says so and installs nothing. Calls find_brew the
+# first time.
+brew_formula() {
+    [ -n "${BREW+set}" ] || find_brew
+    for formula; do
+        if [ -z "$BREW" ]; then
+            echo "    skip: Homebrew is not installed, so it cannot install $formula"
+        elif "$BREW" list --formula --versions "$formula" >/dev/null 2>&1; then
+            echo "    ok: $formula is installed"
+        else
+            run "$BREW" install "$formula" || return 1
+        fi
+    done
+}
+
+# Installs the Homebrew cask $1 unless its app, $2, is in /Applications or
+# ~/Applications already. brew install --cask fails over an app that was
+# installed by hand, or installs a second copy beside one in ~/Applications.
+# A cask without an app, such as a font, passes no $2, and is skipped when
+# Homebrew has it already. Without Homebrew, says so and installs nothing.
+# Calls find_brew the first time.
+brew_cask() {
+    if [ -n "${2:-}" ]; then
+        for apps in /Applications "$HOME/Applications"; do
+            if [ -d "$apps/$2" ]; then
+                echo "    ok: $apps/$2 is installed"
+                return 0
+            fi
+        done
+    fi
+    [ -n "${BREW+set}" ] || find_brew
+    if [ -z "$BREW" ]; then
+        echo "    skip: Homebrew is not installed, so it cannot install $1"
+        return 0
+    fi
+    if [ -z "${2:-}" ] && "$BREW" list --cask --versions "$1" >/dev/null 2>&1; then
+        echo "    ok: $1 is installed"
+        return 0
+    fi
+    run "$BREW" install --cask "$1"
+}

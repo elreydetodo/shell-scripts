@@ -29,6 +29,11 @@ Each directory holds the files of one tool and an `install.sh` that sets the too
 up. Run the scripts from the top of the clone. Every script takes `--dry-run`,
 which prints what it would do without changing anything.
 
+A script also installs its tool with Homebrew, when Homebrew is there and the
+tool is not. It leaves an app that is already in `/Applications` or
+`~/Applications` alone, because Homebrew refuses to install over an app
+installed by hand. Without Homebrew, the script says so and carries on.
+
 These scripts run by default, in this order:
 
 - `sh brew/install.sh` installs Homebrew and the packages in its lists. macOS

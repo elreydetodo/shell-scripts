@@ -13,5 +13,6 @@ mkdir -p ~/.hammerspoon
 ln -Fis $(pwd)/hammerspoon/init.lua ~/.hammerspoon/
 ```
 
-`brew/install.sh` installs Hammerspoon from `brew/apps.txt`. Turn on its
-Accessibility permission in System Settings, under Privacy & Security.
+`hammerspoon/install.sh` also installs Hammerspoon with Homebrew, unless it is
+already in `/Applications` or `~/Applications`. Turn on its Accessibility
+permission in System Settings, under Privacy & Security.

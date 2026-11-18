@@ -6,7 +6,8 @@
 before any app sees it. That reaches apps that handle keys themselves and never
 consult `DefaultKeyBinding.dict`. Karabiner-Elements needs a driver, and
 installing the driver needs administrator rights. `karabiner/install.sh` links
-the file.
+the file. It installs Karabiner-Elements with Homebrew too, unless it is already
+in `/Applications` or `~/Applications`.
 
 ```
 mkdir -p ~/.config/karabiner/assets/complex_modifications/

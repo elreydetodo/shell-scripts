@@ -14,6 +14,9 @@ name, email and signing key to your own. That file is the only one carrying an
 identity. It also explains how to find your signing key's ID and how to skip
 commit signing entirely.
 
+`git/install.sh` also installs git with Homebrew, and delta, the pager that
+`git/config` names.
+
 Two notes if you extend the config. Include paths must be `~/`-rooted rather
 than relative: `~/.gitconfig` is a symlink, and git resolves a relative include
 against the symlink's own directory instead of this repo's, then fails silently.

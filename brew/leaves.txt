@@ -1,13 +1,9 @@
 coreutils
 findutils
-font-meslo-lg-nerd-font
 fzf
 gawk
 gnu-sed
-gnupg
 grep
 less
 rsync
-tmux
 wget
-zsh

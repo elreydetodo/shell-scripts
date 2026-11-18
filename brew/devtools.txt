@@ -1,12 +1,9 @@
 dos2unix
 fnm
 gh
-git
-git-delta
 go
 jenv
 jq
 mycli
 openjdk
-pinentry-mac
 shellcheck

@@ -1,7 +1,7 @@
 #!/bin/sh
-# Points gpg-agent at the macOS passphrase dialog, pinentry-mac, and sets how
-# long it remembers a passphrase. Run it with "sh gpg/install.sh", and see
-# README.md beside it.
+# Installs gnupg and pinentry-mac with Homebrew, points gpg-agent at the macOS
+# passphrase dialog that pinentry-mac shows, and sets how long it remembers a
+# passphrase. Run it with "sh gpg/install.sh", and see README.md beside it.
 #
 # Each setting that gpg-agent.conf lacks is appended. A setting already there,
 # with any value, is left alone. The file is backed up before it changes.
@@ -13,12 +13,14 @@ REPO=$(cd "$(dirname "$0")/.." && pwd -P)
 parse_options "$@"
 macos_only
 
+brew_formula gnupg pinentry-mac || exit 1
+
 GNUPG="$INSTALL_ROOT/.gnupg"
 CONF="$GNUPG/gpg-agent.conf"
 
 pinentry=$(command -v pinentry-mac) || pinentry=
 if [ -z "$pinentry" ] && [ "$DRY_RUN" = 0 ]; then
-    echo "    skip: pinentry-mac is not installed. brew/devtools.txt has it."
+    echo "    skip: pinentry-mac is not installed"
     exit 0
 fi
 missing=

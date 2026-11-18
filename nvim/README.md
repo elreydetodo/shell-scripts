@@ -1,7 +1,7 @@
 # Neovim
 
 `nvim/install.sh` links this directory as `~/.config/nvim`, where Neovim finds
-`init.lua`.
+`init.lua`. It installs Neovim with Homebrew too.
 
 ```
 mkdir -p ~/.config

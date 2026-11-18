@@ -1,7 +1,9 @@
 #!/bin/sh
-# Links ~/.zshrc to zshrc and installs Oh My Zsh. With --p10k, it also installs
-# powerlevel10k, the fallback prompt, into the Oh My Zsh theme directory. Run it
-# with "sh zsh/install.sh", and see README.md beside it.
+# Links ~/.zshrc to zshrc, installs zsh and the Oh My Posh prompt with Homebrew,
+# and installs Oh My Zsh. On macOS it also installs the Meslo Nerd Font, which
+# the prompt draws its icons from. With --p10k, it also installs powerlevel10k,
+# the fallback prompt, into the Oh My Zsh theme directory. Run it with
+# "sh zsh/install.sh", and see README.md beside it.
 
 set -u
 REPO=$(cd "$(dirname "$0")/.." && pwd -P)
@@ -46,6 +48,10 @@ install_p10k() {
 
 status=0
 link "$REPO/zsh/zshrc" "$INSTALL_ROOT/.zshrc" || status=1
+brew_formula zsh oh-my-posh || status=1
+if [ "$OS" = Darwin ]; then
+    brew_cask font-meslo-lg-nerd-font || status=1
+fi
 install_oh_my_zsh || status=1
 if [ "$P10K" = 1 ]; then
     install_p10k || status=1
