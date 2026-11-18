@@ -80,6 +80,8 @@ Some steps need a person, so the script leaves them to you:
 - Create a GPG key, as described in [Setup GPG](#setup-gpg).
 - Set your name, email address and signing key in `.gitconfig.d/local`, as
   described in [Setup Git](#setup-git).
+- Turn on Hammerspoon's Accessibility permission, as described in
+  [Keyboard](#keyboard).
 - Turn on the Karabiner-Elements rules, as described in [Keyboard](#keyboard).
 
 Each section below names the parts that cover it and gives the commands to do
@@ -335,6 +337,33 @@ header comment lists what it changes and explains the file format. The
 mkdir -p ~/Library/KeyBindings
 ln -s $(pwd)/DefaultKeyBinding.dict ~/Library/KeyBindings/DefaultKeyBinding.dict
 ```
+
+## Mission Control hotkeys
+
+Mission Control claims the Control+arrow chords by default, so apps never see
+them. `macos-hotkeys.sh` turns those shortcuts off for the current user. Its
+header comment explains which ones and how. The `hotkeys` part runs it.
+
+```
+sh macos-hotkeys.sh
+```
+
+## Hammerspoon
+
+`hammerspoon/init.lua` gives the same behavior through
+[Hammerspoon](https://www.hammerspoon.org/), for apps that never consult
+`DefaultKeyBinding.dict`. Its header comment explains which apps those are.
+It holds the same rules as `karabiner-config.json`, and a machine runs one or
+the other. Hammerspoon needs no driver, only the Accessibility permission. The
+`hammerspoon` part links the file.
+
+```
+mkdir -p ~/.hammerspoon
+ln -Fis $(pwd)/hammerspoon/init.lua ~/.hammerspoon/
+```
+
+The `brew-apps` part installs Hammerspoon. Turn on its Accessibility
+permission in System Settings, under Privacy & Security.
 
 ## Karabiner-Elements
 
