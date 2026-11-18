@@ -21,6 +21,15 @@ the first label of `uname -n`. `git/install.sh` links the gitignored `git/host`
 to that file, and `git/config` includes `host` after `local`, so its settings
 win.
 
+A machine without a `host-<name>` file, such as one that belongs to someone
+else, gets a `git/host` that `git/install.sh` writes once and never overwrites.
+The name is the account's full name. When gpg holds exactly one secret key,
+the email is that key's and the signing key is its newest signing subkey on
+the machine. Otherwise the email is left for you to fill in, and commits go
+unsigned. The file sets `user.useConfigOnly`, so git refuses to commit until it
+has an email rather than inventing one. Moving it to `git/host-<name>` tracks
+it like the others.
+
 `ignore` holds the patterns that every repository ignores. Git reads it as
 `~/.config/git/ignore`, its default `core.excludesFile`.
 
