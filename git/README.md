@@ -14,6 +14,13 @@ name, email and signing key to your own. That file is the only one carrying an
 identity. It also explains how to find your signing key's ID and how to skip
 commit signing entirely.
 
+Each of Martin's machines has its own signing key, so each has its own
+`host-<name>` file, named for the machine's short host name. On macOS that is
+the local host name, as `scutil --get LocalHostName` prints it. Elsewhere it is
+the first label of `uname -n`. `git/install.sh` links the gitignored `git/host`
+to that file, and `git/config` includes `host` after `local`, so its settings
+win.
+
 `ignore` holds the patterns that every repository ignores. Git reads it as
 `~/.config/git/ignore`, its default `core.excludesFile`.
 

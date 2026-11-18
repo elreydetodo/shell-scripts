@@ -83,7 +83,13 @@
 [include]
     path = local
 
-; 2. Employer overlay. Gitignored, and on work machines it is a symlink into a
+; 2. This machine's identity. Gitignored. git/install.sh links it to
+;    host-<name> beside this file, where <name> is the machine's short host
+;    name.
+[include]
+    path = host
+
+; 3. Employer overlay. Gitignored, and on work machines it is a symlink into a
 ;    private work repo -- so that repo can live anywhere and no path to it is
 ;    hardcoded here. On personal machines the file is absent and this does
 ;    nothing.

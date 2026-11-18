@@ -1,4 +1,5 @@
 # Machine-specific git settings, included from git/config.
+git/host
 git/work
 git/work-identity
 
