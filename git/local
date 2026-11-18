@@ -9,7 +9,7 @@
 ;
 ;     gpg --list-secret-keys --keyid-format=long --with-subkey-fingerprint
 ;
-; See "Setup GPG" in the README to create a key, or add
+; See gpg/README.md to create a key, or add
 ; commit.gpgsign = false below to skip signing entirely.
 
 [user]
