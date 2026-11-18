@@ -39,7 +39,7 @@ describe() {
         gpg) echo "Point gpg-agent at the macOS passphrase dialog" ;;
         git) echo "Link ~/.gitconfig and ~/.gitconfig.d" ;;
         editorconfig) echo "Link ~/.editorconfig" ;;
-        tmux) echo "Link ~/.tmux.conf" ;;
+        tmux) echo "Link ~/.config/tmux" ;;
         vim) echo "Link ~/.vimrc" ;;
         nvim) echo "Link ~/.config/nvim/init.lua" ;;
         sublime) echo "Link the Sublime Text settings" ;;
