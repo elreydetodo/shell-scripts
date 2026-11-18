@@ -1,135 +1,149 @@
-/* ~/Library/KeyBindings/DefaultKeyBinding.Dict
-List: https://web.archive.org/web/20160314030051/http://osxnotes.net/keybindings.html
-This file remaps the key bindings of a single user on macOS to more closely
-match default behavior on Linux systems.
+/* ~/Library/KeyBindings/DefaultKeyBinding.dict
 
-Key Modifiers
-^ : Ctrl
-$ : Shift
-~ : Option (Alt)
-@ : Command (Apple)
-# : Numeric Keypad
+These bindings make the text cursor keys of Cocoa apps behave as they do in GTK
+text widgets on a GNOME desktop. An app reads this file when it launches, so a
+change takes effect in an app only after the app restarts.
 
+Each binding here replaces the macOS default for the same key, which lives in
+/System/Library/Frameworks/AppKit.framework/Resources/StandardKeyBinding.dict.
+A key not bound here keeps its macOS default. That is deliberate for these:
 
-Non-Printable Key Codes
-Up Arrow:     \UF700        Backspace:    \U0008        F1:           \UF704
-Down Arrow:   \UF701        Tab:          \U0009        F2:           \UF705
-Left Arrow:   \UF702        Escape:       \U001B        F3:           \UF706
-Right Arrow:  \UF703        Enter:        \U000A        ...
-Insert:       \UF727        Page Up:      \UF72C
-Delete:       \UF728        Page Down:    \UF72D
-Home:         \UF729        Print Screen: \UF72E
-End:          \UF72B        Scroll Lock:  \UF72F
-Break:        \UF732        Pause:        \UF730
-SysReq:       \UF731        Menu:         \UF735
-Help:         \UF746
+  Option+Left/Right   Move by word. GTK text widgets do not bind these.
+  Option+Up/Down      Move by paragraph. GTK text widgets do not bind these.
+  Command+Left/Right  Move to the start or end of the line, the same as Home/End.
+  Command+Up/Down     Move to the start or end of the document.
 
-All available binding operations:
-https://developer.apple.com/documentation/appkit/nsstandardkeybindingresponding/
-Most of the useful ones are captired below in the same groupings.
+Chromium apps such as Chrome and Slack honor these bindings in plain text
+fields. They do not reach a field whose page script handles the key itself.
+
+Mission Control claims the Control+arrow chords by default. macos-hotkeys.sh
+turns those shortcuts off so that the chords reach apps.
 
 
-Deleting content:
-deleteBackward
-deleteBackwardByDecomposingPreviousCharacter
-deleteForward
-deleteToBeginningOfLine
-deleteToBeginningOfParagraph
-deleteToEndOfLine
-deleteToEndOfParagraph
-deleteWordBackward
-deleteWordForward
-yank
+File format
+
+The file is an old-style property list. Each key is zero or more modifier
+characters followed by one key character. Each value is a list of selectors,
+which run in order.
 
 
-Moveing the insertion pointer:
-moveBackward
-moveDown
-moveForward
-moveLeft
-moveRight
-moveUp
+Modifier characters
+
+  ^   Control
+  $   Shift
+  ~   Option
+  @   Command
+  #   Numeric keypad
 
 
-Modifying the selection:
-moveBackwardAndModifySelection
-moveDownAndModifySelection
-moveForwardAndModifySelection
-moveLeftAndModifySelection
-moveRightAndModifySelection
-moveUpAndModifySelection
+Key characters, as AppKit reports them
+
+  \UF700  Up Arrow
+  \UF701  Down Arrow
+  \UF702  Left Arrow
+  \UF703  Right Arrow
+  \UF704  F1, counting up to \UF726 for F35
+  \UF728  Forward Delete (fn+Delete on a Mac keyboard)
+  \UF729  Home
+  \UF72B  End
+  \UF72C  Page Up
+  \UF72D  Page Down
+  \UF746  Help, which is what a PC keyboard's Insert key reports
+  \U0003  Enter on the numeric keypad
+  \U0009  Tab
+  \U000D  Return
+  \U001B  Escape
+  \U007F  Backspace, the key labeled Delete on a Mac keyboard
+
+Arrow keys report the numeric keypad modifier on their own. A binding does not
+need "#" to match them.
 
 
-Moving the selection in the document:
-moveToBeginningOfDocument
-moveToBeginningOfDocumentAndModifySelection
-moveToEndOfDocument
-moveToEndOfDocumentAndModifySelection
+Selectors
 
+The full list is at
+https://developer.apple.com/documentation/appkit/nsstandardkeybindingresponding
+These are the ones most useful for cursor keys.
 
-Moving the selectin in paragraphs:
-moveParagraphBackwardAndModifySelection
-moveParagraphForwardAndModifySelection
-moveToBeginningOfParagraph
-moveToBeginningOfParagraphAndModifySelection
-moveToEndOfParagraph
-moveToEndOfParagraphAndModifySelection
+Moving by character or line of the display:
+  moveBackward  moveForward  moveLeft  moveRight  moveUp  moveDown
 
+Moving within a line of the display, as wrapped on screen:
+  moveToBeginningOfLine  moveToEndOfLine
+  moveToLeftEndOfLine    moveToRightEndOfLine
 
-Moving the selection in lines of text:
-moveToBeginningOfLine
-moveToBeginningOfLineAndModifySelection
-moveToEndOfLine
-moveToEndOfLineAndModifySelection
-moveToLeftEndOfLine
-moveToLeftEndOfLineAndModifySelection
-moveToRightEndOfLine
-moveToRightEndOfLineAndModifySelection
+Moving within a paragraph, which ends at a line break in the text:
+  moveToBeginningOfParagraph  moveToEndOfParagraph
 
+Moving by word:
+  moveWordBackward  moveWordForward  moveWordLeft  moveWordRight
 
-Moving the selection by word boundaries:
-moveWordBackward
-moveWordBackwardAndModifySelection
-moveWordForward
-moveWordForwardAndModifySelection
-moveWordLeft
-moveWordLeftAndModifySelection
-moveWordRight
-moveWordRightAndModifySelection
+Moving by page or to the ends of the document:
+  pageUp  pageDown  moveToBeginningOfDocument  moveToEndOfDocument
 
+Scrolling without moving the cursor:
+  scrollPageUp  scrollPageDown
+  scrollToBeginningOfDocument  scrollToEndOfDocument
+
+Extending the selection. Every movement above except scrolling has a variant
+with "AndModifySelection" appended, such as moveWordLeftAndModifySelection.
+Paragraphs also have these, with no plain variant:
+  moveParagraphBackwardAndModifySelection
+  moveParagraphForwardAndModifySelection
+
+Deleting:
+  deleteBackward  deleteForward  deleteWordBackward  deleteWordForward
+  deleteToBeginningOfLine       deleteToEndOfLine
+  deleteToBeginningOfParagraph  deleteToEndOfParagraph
+
+"Left" and "Right" selectors follow the screen. "Backward" and "Forward"
+selectors follow reading order. The two differ only in right-to-left text.
 */
 {
-  "\UF729"  = (moveToBeginningOfLine:);                       // home
-  "\UF72B"  = (moveToEndOfLine:);                             // end
+  /* Home and End move to the start and end of the line. macOS scrolls to the
+     ends of the document instead. */
+  "\UF729"    = (moveToBeginningOfLine:);                       // Home
+  "\UF72B"    = (moveToEndOfLine:);                             // End
+  "$\UF729"   = (moveToBeginningOfLineAndModifySelection:);     // Shift+Home
+  "$\UF72B"   = (moveToEndOfLineAndModifySelection:);           // Shift+End
 
-// ctrl+shift+up/down conflict with something to do with multipoint editing.
-//  "^$\UF700"  = (moveToBeginningOfParagraphAndModifySelection:);// ctrl+shift+up
-//  "^$\UF701"  = (moveToEndOfParagraphAndModifySelection:);  // ctrl+shift+down
-  "^$\UF702"  = (moveWordBackwardAndModifySelection:);        // ctrl+shift+left
-  "^$\UF703"  = (moveWordForwardAndModifySelection:);         // ctrl+shift+right
-  "^$\UF729"  = (moveToBeginningOfLineAndModifySelection:);   // ctrl+shift+home
-  "^$\UF72B"  = (moveToEndOfParagraphAndModifySelection:);    // ctrl+shift+end
+  /* Control+Home and Control+End move to the start and end of the document. */
+  "^\UF729"   = (moveToBeginningOfDocument:);                   // Control+Home
+  "^\UF72B"   = (moveToEndOfDocument:);                         // Control+End
+  "^$\UF729"  = (moveToBeginningOfDocumentAndModifySelection:); // Control+Shift+Home
+  "^$\UF72B"  = (moveToEndOfDocumentAndModifySelection:);       // Control+Shift+End
 
+  /* Control+Left moves to the start of a word and Control+Right to the end of
+     one. These are the same selectors as the Option+Left/Right default. */
+  "^\UF702"   = (moveWordLeft:);                                // Control+Left
+  "^\UF703"   = (moveWordRight:);                               // Control+Right
+  "^$\UF702"  = (moveWordLeftAndModifySelection:);              // Control+Shift+Left
+  "^$\UF703"  = (moveWordRightAndModifySelection:);             // Control+Shift+Right
 
-  "^\UF700" = (moveToBeginningOfParagraph:);                  // ctrl-up
-  "^\UF701" = (moveToEndOfParagraph:);                        // ctrl-down
-// Must disable system level keymapping before ctrl+left/right will work.
-  "^\UF702" = (moveWordBackward:);                            // ctrl-left
-  "^\UF703" = (moveWordForward:);                             // ctrl-right
-  "^\UF729" = (moveToBeginningOfDocument:);                   // ctrl+home
-  "^\UF72B" = (moveToEndOfDocument:);                         // ctrl+end
+  /* Control+Up moves to the start of the paragraph, or to the start of the one
+     before when the cursor is already there. Control+Down mirrors it at the
+     end. These are the same selectors as the Option+Up/Down default. With
+     Shift, they select to the same places. The paragraph selectors behind
+     Option+Shift+Up/Down are not used, because Chromium moves those by a line
+     and keeps the column. */
+  "^\UF700"   = (moveBackward:, moveToBeginningOfParagraph:);   // Control+Up
+  "^\UF701"   = (moveForward:, moveToEndOfParagraph:);          // Control+Down
+  "^$\UF700"  = (moveBackwardAndModifySelection:,
+                 moveToBeginningOfParagraphAndModifySelection:); // Control+Shift+Up
+  "^$\UF701"  = (moveForwardAndModifySelection:,
+                 moveToEndOfParagraphAndModifySelection:);      // Control+Shift+Down
 
-//  "~\UF700" = (:);                                          // alt-up
-//  "~\UF701" = (:);                                          // alt-down
-  "~\UF702" = (moveWordLeft:);                                // alt-left
-  "~\UF703" = (moveWordRight:);                               // alt-right
-//  "~\UF729" = (:);                                          // alt+home
-//  "~\UF72B" = (:);                                          // alt+end
+  /* Page Up and Page Down move the cursor by a page. macOS scrolls and leaves
+     the cursor where it was. */
+  "\UF72C"    = (pageUp:);                                      // Page Up
+  "\UF72D"    = (pageDown:);                                    // Page Down
+  "$\UF72C"   = (pageUpAndModifySelection:);                    // Shift+Page Up
+  "$\UF72D"   = (pageDownAndModifySelection:);                  // Shift+Page Down
 
-  "~\UF700" = (moveToBeginningOfDocument:);                   // cmd-up
-  "~\UF701" = (moveToEndOfDocument:);                         // cmd-down
-  "~\UF702" = (moveToBeginningOfLine:);                       // cmd-left
-  "~\UF703" = (moveToEndOfLine:);                             // cmd-right
-//  "~\UF729" = (:);                                          // cmd+home
-//  "~\UF72B" = (:);                                          // cmd+end
+  /* Control+Backspace and Control+Delete delete a word. With Shift, they
+     delete to the start or end of the paragraph. */
+  "^\U007F"   = (deleteWordBackward:);                          // Control+Backspace
+  "^\UF728"   = (deleteWordForward:);                           // Control+Delete
+  "^$\U007F"  = (deleteToBeginningOfParagraph:);                // Control+Shift+Backspace
+  "^$\UF728"  = (deleteToEndOfParagraph:);                      // Control+Shift+Delete
 }
