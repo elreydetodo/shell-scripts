@@ -1,0 +1,3 @@
+# Patterns that every repository ignores. Git reads this file as
+# ~/.config/git/ignore, the default core.excludesFile.
+**/.claude/settings.local.json

@@ -37,7 +37,7 @@ describe() {
         zsh) echo "Link ~/.zshrc and install Oh My Zsh" ;;
         p10k) echo "Install powerlevel10k, the fallback prompt, with zsh" ;;
         gpg) echo "Point gpg-agent at the macOS passphrase dialog" ;;
-        git) echo "Link ~/.gitconfig and ~/.gitconfig.d" ;;
+        git) echo "Link ~/.config/git" ;;
         editorconfig) echo "Link ~/.editorconfig" ;;
         tmux) echo "Link ~/.config/tmux" ;;
         vim) echo "Link ~/.vimrc" ;;

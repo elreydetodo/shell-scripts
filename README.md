@@ -42,8 +42,7 @@ These scripts run by default, in this order:
   [zsh/README.md](zsh/README.md).
 - `sh gpg/install.sh` points gpg-agent at the macOS passphrase dialog. macOS
   only. See [gpg/README.md](gpg/README.md).
-- `sh git/install.sh` links `~/.gitconfig` and `~/.gitconfig.d`. See
-  [git/README.md](git/README.md).
+- `sh git/install.sh` links `~/.config/git`. See [git/README.md](git/README.md).
 - `sh editorconfig/install.sh` links `~/.editorconfig`. See
   [editorconfig/README.md](editorconfig/README.md).
 - `sh tmux/install.sh` links `~/.config/tmux`. See

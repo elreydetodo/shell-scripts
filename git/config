@@ -5,14 +5,14 @@
 ; -- see the instructions at the top of that file, including how to create a
 ; GPG key if you do not have one.
 ;
-; Install by symlinking both this file and the directory holding it:
-;     ln -Fis $(pwd)/git/config ~/.gitconfig
-;     ln -Fis $(pwd)/git ~/.gitconfig.d
+; Install by linking this whole directory as ~/.config/git, where git reads
+; this file as its global configuration:
+;     ln -s $(pwd)/git ~/.config/git
 ;
-; Note for anyone editing the includes at the bottom: paths must be ~/-rooted,
-; never relative. Git resolves a relative include.path against the directory of
-; the file containing it, and because ~/.gitconfig is a symlink that directory
-; is ~/, not this repo. A relative include here fails silently.
+; The includes at the bottom are relative. Git resolves a relative include.path
+; against the directory of the file containing it, as git found that file,
+; without following links. That directory is ~/.config/git, the link, so the
+; includes reach the files beside this one.
 
 [branch]
 #    sort = -committerdate
@@ -81,11 +81,11 @@
 
 ; 1. Who you are. Tracked, but edit it in place for your own identity.
 [include]
-    path = ~/.gitconfig.d/local
+    path = local
 
 ; 2. Employer overlay. Gitignored, and on work machines it is a symlink into a
 ;    private work repo -- so that repo can live anywhere and no path to it is
 ;    hardcoded here. On personal machines the file is absent and this does
 ;    nothing.
 [include]
-    path = ~/.gitconfig.d/work
+    path = work
