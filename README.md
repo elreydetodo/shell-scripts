@@ -104,3 +104,25 @@ Some steps need a person, so the scripts leave them to you:
 
 Each directory's README describes its script and gives the commands to do the
 same by hand. Run them from the top of the clone.
+
+# Leaving the old layout
+
+An older layout of this repository kept most files at its top. A machine set up
+from it has links into places that no longer exist, such as `~/.gitconfig`.
+After pulling, run the cleanup script once, and then the install scripts:
+
+```
+sh cleanup.sh --dry-run
+sh cleanup.sh
+sh install.sh
+```
+
+`cleanup.sh` moves the untracked `work` and `work-identity` files from
+`.gitconfig.d` into `git/`. It removes `~/.gitconfig`, `~/.gitconfig.d`,
+`~/.tmux.conf` and the `~/.config/nvim/init.lua` link, each only when it is a
+link into this clone. Its header comment gives the details. The other old links,
+such as `~/.zshrc`, sit where the install scripts link too, and they replace
+them.
+
+`cleanup.sh` exists only for this move. We will delete it, and this section,
+once no machine is left on the old layout.
