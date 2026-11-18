@@ -43,7 +43,7 @@ These scripts run by default, in this order:
   [editorconfig/README.md](editorconfig/README.md).
 - `sh tmux/install.sh` links `~/.config/tmux`. See
   [tmux/README.md](tmux/README.md).
-- `sh nvim/install.sh` links `~/.config/nvim/init.lua`. See
+- `sh nvim/install.sh` links `~/.config/nvim`. See
   [nvim/README.md](nvim/README.md).
 - `sh sublime/install.sh` links the Sublime Text settings. macOS only. See
   [sublime/README.md](sublime/README.md).

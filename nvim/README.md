@@ -1,10 +1,11 @@
 # Neovim
 
-`nvim/install.sh` links `nvim/init.lua`.
+`nvim/install.sh` links this directory as `~/.config/nvim`, where Neovim finds
+`init.lua`.
 
 ```
-mkdir -p ~/.config/nvim/
-ln -s $(pwd)/nvim/init.lua ~/.config/nvim/init.lua
+mkdir -p ~/.config
+ln -s $(pwd)/nvim ~/.config/nvim
 ```
 
 `nvim/init.lua` sets only the three indent behaviors EditorConfig has no property

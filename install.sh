@@ -41,7 +41,7 @@ describe() {
         editorconfig) echo "Link ~/.editorconfig" ;;
         tmux) echo "Link ~/.config/tmux" ;;
         vim) echo "Link ~/.vimrc" ;;
-        nvim) echo "Link ~/.config/nvim/init.lua" ;;
+        nvim) echo "Link ~/.config/nvim" ;;
         sublime) echo "Link the Sublime Text settings" ;;
         iterm2) echo "Link the iTerm2 profile and apply its other settings" ;;
         macos) echo "Link the Cocoa key bindings and turn off the Mission Control hotkeys" ;;
