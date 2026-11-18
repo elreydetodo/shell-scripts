@@ -68,6 +68,7 @@ on other systems.
 | `vim` | Links `~/.vimrc` and creates `~/.vim/undo`. Off by default. |
 | `neovim` | Links `~/.config/nvim/init.lua`. |
 | `sublime` | Links the Sublime Text settings. macOS only. |
+| `iterm` | Links the iTerm2 profile and applies its other settings. macOS only. |
 | `keybindings` | Links `~/Library/KeyBindings/DefaultKeyBinding.dict`. macOS only. |
 | `hotkeys` | Turns off the Mission Control hotkeys on Control+arrow. macOS only. |
 | `hammerspoon` | Links `~/.hammerspoon/init.lua`. macOS only. |

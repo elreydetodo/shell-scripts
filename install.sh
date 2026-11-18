@@ -18,7 +18,7 @@ OS=$(uname -s)
 # the Homebrew packages come first.
 PARTS="homebrew brew-leaves brew-extras brew-devtools brew-devtools-exotic
 brew-apps zsh oh-my-zsh p10k gpg-agent git editorconfig tmux vim neovim
-sublime keybindings hotkeys hammerspoon karabiner"
+sublime iterm keybindings hotkeys hammerspoon karabiner"
 
 # Parts that run only when named with --with or --only.
 OPTIONAL="karabiner p10k vim"
@@ -42,6 +42,7 @@ describe() {
         vim) echo "Link ~/.vimrc" ;;
         neovim) echo "Link ~/.config/nvim/init.lua" ;;
         sublime) echo "Link the Sublime Text settings" ;;
+        iterm) echo "Link the iTerm2 profile and apply its other settings" ;;
         keybindings) echo "Link ~/Library/KeyBindings/DefaultKeyBinding.dict" ;;
         hotkeys) echo "Turn off the Mission Control hotkeys on Control+arrow" ;;
         hammerspoon) echo "Link ~/.hammerspoon/init.lua" ;;
@@ -52,7 +53,7 @@ describe() {
 # Succeeds when part $1 works only on macOS.
 macos_only() {
     case $1 in
-        brew-apps|gpg-agent|hammerspoon|homebrew|hotkeys|karabiner|keybindings|sublime) return 0 ;;
+        brew-apps|gpg-agent|hammerspoon|homebrew|hotkeys|iterm|karabiner|keybindings|sublime) return 0 ;;
         *) return 1 ;;
     esac
 }
@@ -284,6 +285,14 @@ part_sublime() {
         [ -e "$file" ] || continue
         link "$file" "$HOME/Library/Application Support/Sublime Text/Packages/User/$(basename "$file")" || return 1
     done
+}
+
+# iTerm2 reloads the profile whenever the linked file changes. The other
+# settings take effect when it restarts.
+part_iterm() {
+    link "$REPO/iterm2/profile.json" \
+        "$HOME/Library/Application Support/iTerm2/DynamicProfiles/dotfiles.json" || return 1
+    run sh "$REPO/iterm2/settings.sh"
 }
 
 part_keybindings() {
