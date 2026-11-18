@@ -31,8 +31,8 @@ which prints what it would do without changing anything.
 
 These scripts run by default, in this order:
 
-- `sh brew/install.sh` installs Homebrew and the packages in its lists. See
-  [brew/README.md](brew/README.md).
+- `sh brew/install.sh` installs Homebrew and the packages in its lists. macOS
+  only. See [brew/README.md](brew/README.md).
 - `sh zsh/install.sh` links `~/.zshrc` and installs Oh My Zsh. See
   [zsh/README.md](zsh/README.md).
 - `sh gpg/install.sh` points gpg-agent at the macOS passphrase dialog. macOS

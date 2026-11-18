@@ -53,7 +53,7 @@ describe() {
 # Succeeds when item $1 works only on macOS.
 mac_item() {
     case $1 in
-        gpg|hammerspoon|iterm2|karabiner|macos|sublime) return 0 ;;
+        brew|gpg|hammerspoon|iterm2|karabiner|macos|sublime) return 0 ;;
         *) return 1 ;;
     esac
 }

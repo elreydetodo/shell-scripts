@@ -4,9 +4,8 @@
 # the lists to install, as in "sh brew/install.sh leaves extras". README.md
 # beside it describes the lists.
 #
-# Homebrew itself is installed only on macOS. Elsewhere the lists install when
-# Homebrew is already there. apps.txt holds macOS apps, so it is skipped on
-# other systems.
+# It runs only on macOS. Elsewhere the system's own packages serve, and the
+# directory scripts still use Homebrew where someone installed it.
 
 set -u
 REPO=$(cd "$(dirname "$0")/.." && pwd -P)
@@ -23,15 +22,12 @@ for arg; do
     esac
 done
 [ -n "$LISTS" ] || LISTS=$ALL_LISTS
+macos_only
 
-# Installs Homebrew, on macOS only.
+# Installs Homebrew when it is missing.
 install_homebrew() {
     if [ -n "$BREW" ]; then
         echo "    ok: $BREW is installed"
-        return 0
-    fi
-    if [ "$OS" != Darwin ]; then
-        echo "    skip: Homebrew is installed only on macOS"
         return 0
     fi
     if [ "$DRY_RUN" = 1 ]; then
@@ -47,10 +43,6 @@ install_homebrew() {
 
 # Installs every package named in brew/$1.txt.
 install_list() {
-    if [ "$1" = apps ] && [ "$OS" != Darwin ]; then
-        echo "    skip: $1.txt is macOS only"
-        return 0
-    fi
     if [ -z "$BREW" ]; then
         echo "    skip: Homebrew is not installed, so $1.txt is not either"
         return 0

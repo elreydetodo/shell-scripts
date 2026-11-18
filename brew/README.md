@@ -14,9 +14,9 @@ The packages come in five lists:
   you MAY install.
 - `brew/apps.txt` holds desktop apps, which you MAY install.
 
-`brew/install.sh` installs Homebrew when it is missing, on macOS only, and then
-every list. Name lists to install only those, as in
-`sh brew/install.sh leaves extras`. `apps.txt` installs on macOS only.
+`brew/install.sh` installs Homebrew when it is missing, and then every list.
+Name lists to install only those, as in `sh brew/install.sh leaves extras`. It
+runs only on macOS, and skips itself elsewhere.
 
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
