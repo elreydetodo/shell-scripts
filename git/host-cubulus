@@ -1,0 +1,16 @@
+; Martin's git identity on cubulus. git/config includes git/host, and on the
+; machine whose short host name is cubulus, git/install.sh links git/host to
+; this file.
+;
+; signingkey names the signing subkey by its long key ID. The trailing "!" pins
+; gpg to exactly that subkey rather than letting it choose. To list the keys on
+; a machine:
+;
+;     gpg --list-secret-keys --keyid-format=long --with-subkey-fingerprint
+;
+; See gpg/README.md to create a key.
+
+[user]
+    name = Martin Meyer
+    email = elreydetodo@gmail.com
+    signingkey = 9C3F38CAF64A25CE!

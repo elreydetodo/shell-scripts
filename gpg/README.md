@@ -2,7 +2,7 @@
 
 Only needed if you sign commits, which the git config in
 [git/](../git/README.md) does by default.
-Skip this and set `commit.gpgsign = false` in `git/local` if you would
+Skip this and set `commit.gpgsign = false` in `git/host` if you would
 rather not.
 
 ```
@@ -55,7 +55,7 @@ whichever host you use, or your commits will show up as unverified:
 gpg --armor --export "$FPR"
 ```
 
-Then put the signing subkey's ID in `git/local`. You want the one
+Then put the signing subkey's ID in `git/host`. You want the one
 marked `[S]`, not the primary, and a trailing `!` so gpg uses exactly that
 subkey rather than choosing for itself:
 

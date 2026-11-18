@@ -1,9 +1,9 @@
 ; Primary git configuration entry point, used on every machine.
 ;
 ; This file is deliberately generic: it holds no name, no email, no key. Those
-; live in git/local, which is tracked but meant to be edited in place
-; -- see the instructions at the top of that file, including how to create a
-; GPG key if you do not have one.
+; live in git/host, which git/install.sh links to the host-<name> file for this
+; machine, or writes when there is none. See git/README.md, and gpg/README.md
+; to create a GPG key if you do not have one.
 ;
 ; Install by linking this whole directory as ~/.config/git, where git reads
 ; this file as its global configuration:
@@ -76,20 +76,16 @@
     insteadOf = https://github.com/
 
 ; --- layered overrides, lowest priority first -------------------------------
-; Git ignores a missing include target without complaint, so both lines below
-; are safe on a machine where the file does not exist.
+; Git ignores a missing include target without complaint, so both includes
+; below are safe on a machine where the file does not exist.
 
-; 1. Who you are. Tracked, but edit it in place for your own identity.
-[include]
-    path = local
-
-; 2. This machine's identity. Gitignored. git/install.sh links it to
+; 1. This machine's identity. Gitignored. git/install.sh links it to
 ;    host-<name> beside this file, where <name> is the machine's short host
-;    name.
+;    name, or writes it when there is no such file.
 [include]
     path = host
 
-; 3. Employer overlay. Gitignored, and on work machines it is a symlink into a
+; 2. Employer overlay. Gitignored, and on work machines it is a symlink into a
 ;    private work repo -- so that repo can live anywhere and no path to it is
 ;    hardcoded here. On personal machines the file is absent and this does
 ;    nothing.

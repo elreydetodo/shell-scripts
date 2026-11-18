@@ -4,10 +4,11 @@ This repository contains all of my basic shell and software configuration
 scripts. My goal is to facilitate rapid system setup and configuration
 consistency across every computer I use and support.
 
-Nothing in this repository is specific to me except one file,
-`git/local`, which holds the name, email address and GPG key that git
-signs commits with. Everything else is shared. Change that one file and the
-rest applies unmodified.
+Nothing in this repository is specific to me except the `git/host-<name>`
+files, which hold the name, email address and GPG key that git signs commits
+with on each of my machines. Everything else is shared. On any other machine,
+`git/install.sh` writes an identity from the account and its GPG key instead,
+and the rest applies unmodified.
 
 Anyone can clone this repo, run the install script, and get up and running
 within 5 minutes (estimated). The clone does not have to live in
@@ -95,7 +96,7 @@ Some steps need a person, so the scripts leave them to you:
 - Set the terminal's font to a Meslo Nerd Font, as described in
   [zsh/README.md](zsh/README.md).
 - Create a GPG key, as described in [gpg/README.md](gpg/README.md).
-- Set your name, email address and signing key in `git/local`, as
+- Check the name, email address and signing key in `git/host`, as
   described in [git/README.md](git/README.md).
 - Turn on Hammerspoon's Accessibility permission, as described in
   [hammerspoon/README.md](hammerspoon/README.md).

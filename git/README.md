@@ -1,7 +1,7 @@
 # Setup Git
 
 Link this whole directory as `~/.config/git`, where git reads `config` as its
-global configuration. The `local` and `work` files beside it are what let the
+global configuration. The `host` and `work` files beside it are what let the
 config layer machine-specific settings on top of the shared ones.
 
 ```
@@ -9,17 +9,16 @@ mkdir -p ~/.config
 ln -s $(pwd)/git ~/.config/git
 ```
 
-`git/install.sh` makes the link. Then open `git/local` and set the
-name, email and signing key to your own. That file is the only one carrying an
-identity. It also explains how to find your signing key's ID and how to skip
-commit signing entirely.
+`git/install.sh` makes the link. Then check the name, email and signing key in
+`git/host`. That file is the only one carrying an identity. Set
+`commit.gpgsign = false` there to skip commit signing entirely, and see
+[gpg/README.md](../gpg/README.md) to find your signing key's ID.
 
 Each of Martin's machines has its own signing key, so each has its own
 `host-<name>` file, named for the machine's short host name. On macOS that is
 the local host name, as `scutil --get LocalHostName` prints it. Elsewhere it is
 the first label of `uname -n`. `git/install.sh` links the gitignored `git/host`
-to that file, and `git/config` includes `host` after `local`, so its settings
-win.
+to that file, which `git/config` includes.
 
 A machine without a `host-<name>` file, such as one that belongs to someone
 else, gets a `git/host` that `git/install.sh` writes once and never overwrites.
