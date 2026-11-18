@@ -84,18 +84,66 @@ backup_name() {
     return 1
 }
 
-# Links $2 to $1, a path in the repository. A link that already resolves to $1
-# is left alone. Anything else at $2, a link included, is moved to a backup.
+# Succeeds when the path $1 lies inside the repository.
+in_repo() {
+    case $1 in
+        "$REPO"/*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+# Paths that a dry run has pretended to remove, one per line.
+GONE=
+
+# Succeeds when something is at $1, a dangling link included. A path that a
+# dry run has pretended to remove counts as gone.
+present() {
+    case "
+$GONE
+" in
+        *"
+$1
+"*) return 1 ;;
+    esac
+    [ -e "$1" ] || [ -L "$1" ]
+}
+
+# Removes $1, a link or an empty directory.
+remove() {
+    if [ -d "$1" ] && [ ! -L "$1" ]; then
+        run rmdir "$1" || return 1
+    else
+        run rm "$1" || return 1
+    fi
+    if [ "$DRY_RUN" = 1 ]; then
+        GONE="$GONE
+$1"
+    fi
+}
+
+# Links $2 to $1, a path in the repository. A link that already leads to $1 is
+# left alone. A link to anything else in the repository is replaced without a
+# backup, even a dangling one that an older layout of the repository left
+# behind. Anything else at $2 is moved to a backup.
 link() {
-    if [ -L "$2" ] && [ "$2" -ef "$1" ]; then
-        echo "    ok: $2 already links here"
-        return 0
+    if [ -L "$2" ]; then
+        target=$(readlink "$2")
+        if [ "$target" = "$1" ]; then
+            echo "    ok: $2 already links here"
+            return 0
+        fi
+        if in_repo "$target"; then
+            remove "$2" || return 1
+        elif [ "$2" -ef "$1" ]; then
+            echo "    ok: $2 already leads here"
+            return 0
+        fi
     fi
     parent=$(dirname "$2")
     if [ ! -d "$parent" ]; then
         run mkdir -p "$parent" || return 1
     fi
-    if [ -e "$2" ] || [ -L "$2" ]; then
+    if present "$2"; then
         backup=$(backup_name "$2") || return 1
         run mv "$2" "$backup" || return 1
     fi

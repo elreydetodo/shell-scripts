@@ -79,9 +79,11 @@ sh install.sh --only git,tmux
 
 `--list` prints the items, and `--dry-run` hands the option on to every script.
 
-The scripts are safe to run again. A link that already points into this clone is
-left alone. Anything else in the way is moved aside to `<name>-yyyyMMdd`, with
-a letter added when that name is taken.
+The scripts are safe to run again. A link that already points at the right file
+is left alone. A link to anything else in this clone is replaced, even a
+dangling one that an older layout of the clone left behind. Anything else in the
+way is moved aside to `<name>-yyyyMMdd`, with a letter added when that name is
+taken.
 
 Some steps need a person, so the scripts leave them to you:
 

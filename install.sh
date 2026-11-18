@@ -3,9 +3,11 @@
 # directory. Run it with "sh install.sh", and see "sh install.sh --help" for the
 # options. The README in each directory describes its script.
 #
-# The scripts are safe to run again. A link that already points into this
-# repository is left alone. Anything else in the way is moved aside to
-# <name>-yyyyMMdd, with a letter added when that name is taken.
+# The scripts are safe to run again. A link that already points at the right
+# file is left alone. A link to anything else in this repository is replaced,
+# even a dangling one that an older layout of the repository left behind.
+# Anything else in the way is moved aside to <name>-yyyyMMdd, with a letter
+# added when that name is taken.
 #
 # Scripts for tools that exist only on macOS skip themselves elsewhere, with a
 # message.
