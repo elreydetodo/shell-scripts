@@ -383,7 +383,26 @@ Linking the file does not turn the rules on. Karabiner-Elements lists them as
 "Martin's Shortcuts" under Complex Modifications, Add predefined rule, where
 you enable each one.
 
-# Other applications
+# iTerm2
 
 [iTerm2](https://iterm2.com/) is the terminal we use. No package list installs
-it, and this repository does not hold its settings.
+it. Two files in `iterm2/` hold its settings.
+
+`profile.json` is a
+[dynamic profile](https://iterm2.com/documentation-dynamic-profiles.html)
+named "Dotfiles". It holds only the settings that differ from iTerm2's
+defaults, and takes the rest from the profile named "Default". iTerm2 reloads
+it as soon as the linked file changes, so a `git pull` applies at once.
+
+`settings.sh` applies the settings that live outside a profile, and makes
+Dotfiles the default profile for new windows. Each setting has a comment
+saying what it does. iTerm2 reads these when it starts, so restart it after
+running the script.
+
+To set it up by hand:
+
+```
+mkdir -p ~/Library/Application\ Support/iTerm2/DynamicProfiles
+ln -Fis $(pwd)/iterm2/profile.json ~/Library/Application\ Support/iTerm2/DynamicProfiles/dotfiles.json
+sh iterm2/settings.sh
+```
