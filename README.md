@@ -400,6 +400,21 @@ Dotfiles the default profile for new windows. Each setting has a comment
 saying what it does. iTerm2 reads these when it starts, so restart it after
 running the script.
 
+To change a setting, change it in iTerm2's Settings window, then capture it:
+
+```
+python3 iterm2/capture.py
+git diff iterm2/
+```
+
+The profile is marked "Rewritable", so iTerm2 saves Settings window changes to
+its file. It saves every setting, though, and may replace the link with a plain
+file. `capture.py` trims what iTerm2 wrote back down to the settings
+`profile.json` holds plus any that changed, and restores the link. It also
+updates the values in `settings.sh`, and adds a line for any general setting
+that changed since its last run. Write a comment for each added line. The first
+run on a machine only records the settings, so later changes can be found.
+
 To set it up by hand:
 
 ```

@@ -184,6 +184,7 @@
             "Place Prompt at First Column": false,
             "Prompt Before Closing 2": false,
             "Restrict Mouse Reporting to Alternate Screen Mode": false,
+            "Rewritable": true,
             "Right Option Key Sends": 2,
             "Rows": 80,
             "Scrollback Lines": 0,

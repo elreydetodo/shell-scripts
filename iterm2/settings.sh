@@ -8,7 +8,9 @@
 # systems.
 #
 # Each setting here differs from iTerm2's default. The global key map and the
-# mouse actions keep their defaults, so they are not written.
+# mouse actions keep their defaults, so they are not written. capture.py
+# updates the values here from iTerm2's and appends settings changed in the
+# Settings window. It leaves the comments alone.
 
 [ "$(uname -s)" = Darwin ] || exit 0
 

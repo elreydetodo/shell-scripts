@@ -17,6 +17,9 @@
 # Local settings of agents and tools.
 .claude/settings.local.json
 
+# Python bytecode.
+__pycache__/
+
 # macOS.
 ._*
 .DS_Store
