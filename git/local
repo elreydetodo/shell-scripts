@@ -1,4 +1,4 @@
-; Identity used by the main .gitconfig. Change these values to your own if you
+; Identity used by git/config. Change these values to your own if you
 ; are not Martin -- this file is tracked, so edit it locally and leave it
 ; uncommitted, or commit it on your own fork. It is the only file here carrying
 ; a name, address or key.

@@ -2,7 +2,7 @@
 # Turns off the macOS symbolic hotkeys that claim Control+arrow chords, so that
 # the chords reach apps. DefaultKeyBinding.dict gives them their GNOME meanings.
 #
-# Run it with "sh macos-hotkeys.sh". It changes only the current user's
+# Run it with "sh macos/hotkeys.sh". It changes only the current user's
 # settings and needs no administrator rights. It does nothing on other systems.
 #
 # Each hotkey is an ID in com.apple.symbolichotkeys. System Settings shows the

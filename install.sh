@@ -27,11 +27,11 @@ OPTIONAL="karabiner p10k vim"
 describe() {
     case $1 in
         homebrew) echo "Install Homebrew" ;;
-        brew-leaves) echo "Install the basic packages in brew-leaves.txt" ;;
-        brew-extras) echo "Install the extras in brew-extras.txt, including Oh My Posh" ;;
-        brew-devtools) echo "Install the development tools in brew-devtools.txt" ;;
-        brew-devtools-exotic) echo "Install the rarer development tools in brew-devtools-exotic.txt" ;;
-        brew-apps) echo "Install the desktop apps in brew-apps.txt" ;;
+        brew-leaves) echo "Install the basic packages in brew/leaves.txt" ;;
+        brew-extras) echo "Install the extras in brew/extras.txt, including Oh My Posh" ;;
+        brew-devtools) echo "Install the development tools in brew/devtools.txt" ;;
+        brew-devtools-exotic) echo "Install the rarer development tools in brew/devtools-exotic.txt" ;;
+        brew-apps) echo "Install the desktop apps in brew/apps.txt" ;;
         zsh) echo "Link ~/.zshrc" ;;
         oh-my-zsh) echo "Install Oh My Zsh" ;;
         p10k) echo "Install the powerlevel10k theme, the fallback prompt" ;;
@@ -184,13 +184,13 @@ part_homebrew() {
     find_brew
 }
 
-part_brew_leaves() { brew_list brew-leaves.txt; }
-part_brew_extras() { brew_list brew-extras.txt; }
-part_brew_devtools() { brew_list brew-devtools.txt; }
-part_brew_devtools_exotic() { brew_list brew-devtools-exotic.txt; }
-part_brew_apps() { brew_list brew-apps.txt; }
+part_brew_leaves() { brew_list brew/leaves.txt; }
+part_brew_extras() { brew_list brew/extras.txt; }
+part_brew_devtools() { brew_list brew/devtools.txt; }
+part_brew_devtools_exotic() { brew_list brew/devtools-exotic.txt; }
+part_brew_apps() { brew_list brew/apps.txt; }
 
-part_zsh() { link "$REPO/.zshrc" "$HOME/.zshrc"; }
+part_zsh() { link "$REPO/zsh/zshrc" "$HOME/.zshrc"; }
 
 # The clones below ignore the global git configuration. Once ~/.gitconfig is
 # linked, it rewrites GitHub URLs to SSH, which needs a key GitHub knows.
@@ -223,7 +223,7 @@ part_gpg_agent() {
     conf="$HOME/.gnupg/gpg-agent.conf"
     pinentry=$(command -v pinentry-mac) || pinentry=
     if [ -z "$pinentry" ] && [ "$DRY_RUN" = 0 ]; then
-        echo "    skip: pinentry-mac is not installed. brew-devtools.txt has it."
+        echo "    skip: pinentry-mac is not installed. brew/devtools.txt has it."
         return 0
     fi
     missing=
@@ -262,26 +262,26 @@ part_gpg_agent() {
 }
 
 part_git() {
-    link "$REPO/.gitconfig" "$HOME/.gitconfig" || return 1
-    link "$REPO/.gitconfig.d" "$HOME/.gitconfig.d"
+    link "$REPO/git/config" "$HOME/.gitconfig" || return 1
+    link "$REPO/git" "$HOME/.gitconfig.d"
 }
 
-part_editorconfig() { link "$REPO/.editorconfig" "$HOME/.editorconfig"; }
+part_editorconfig() { link "$REPO/editorconfig/editorconfig" "$HOME/.editorconfig"; }
 
-part_tmux() { link "$REPO/.tmux.conf" "$HOME/.tmux.conf"; }
+part_tmux() { link "$REPO/tmux/tmux.conf" "$HOME/.tmux.conf"; }
 
-# .vimrc keeps undo files in ~/.vim/undo, and Vim does not create it.
+# vim/vimrc keeps undo files in ~/.vim/undo, and Vim does not create it.
 part_vim() {
-    link "$REPO/.vimrc" "$HOME/.vimrc" || return 1
+    link "$REPO/vim/vimrc" "$HOME/.vimrc" || return 1
     if [ ! -d "$HOME/.vim/undo" ]; then
         run mkdir -p "$HOME/.vim/undo"
     fi
 }
 
-part_neovim() { link "$REPO/init.lua" "$HOME/.config/nvim/init.lua"; }
+part_neovim() { link "$REPO/nvim/init.lua" "$HOME/.config/nvim/init.lua"; }
 
 part_sublime() {
-    for file in "$REPO/Sublime Text"/*; do
+    for file in "$REPO/sublime"/*; do
         [ -e "$file" ] || continue
         link "$file" "$HOME/Library/Application Support/Sublime Text/Packages/User/$(basename "$file")" || return 1
     done
@@ -296,15 +296,15 @@ part_iterm() {
 }
 
 part_keybindings() {
-    link "$REPO/DefaultKeyBinding.dict" "$HOME/Library/KeyBindings/DefaultKeyBinding.dict"
+    link "$REPO/macos/DefaultKeyBinding.dict" "$HOME/Library/KeyBindings/DefaultKeyBinding.dict"
 }
 
-part_hotkeys() { run sh "$REPO/macos-hotkeys.sh"; }
+part_hotkeys() { run sh "$REPO/macos/hotkeys.sh"; }
 
 part_hammerspoon() { link "$REPO/hammerspoon/init.lua" "$HOME/.hammerspoon/init.lua"; }
 
 part_karabiner() {
-    link "$REPO/karabiner-config.json" \
+    link "$REPO/karabiner/rules.json" \
         "$HOME/.config/karabiner/assets/complex_modifications/karabiner-config.json"
 }
 

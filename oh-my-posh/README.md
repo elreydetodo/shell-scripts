@@ -21,10 +21,10 @@ The theme comes in 35 variants. [SCREENSHOTS.md](SCREENSHOTS.md) shows every one
 
 ## Usage
 
-`.zshrc` loads one variant:
+`zsh/zshrc` loads one variant:
 
 ```zsh
-eval "$(oh-my-posh init zsh --config ${basedir}/oh-my-posh/elreydetodo-round-gaps-pastel.yml)"
+eval "$(oh-my-posh init zsh --config ${basedir}/../oh-my-posh/elreydetodo-round-gaps-pastel.yml)"
 ```
 
 To switch variants, change the file name on that line and open a new terminal tab.

@@ -1,0 +1,36 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+max_line_length = 80
+trim_trailing_whitespace = true
+
+# Ecosystems that standardize on two-space indentation.
+[*.{cjs,css,html,js,json,jsonc,jsx,less,lua,mjs,sass,scss,ts,tsx,vim,yaml,yml}]
+indent_size = 2
+
+# Formats where wrapping a line changes what it means.
+[*.{json,jsonc,yaml,yml}]
+max_line_length = unset
+
+# Two trailing spaces are a hard line break in Markdown.
+[*.md]
+indent_size = 2
+max_line_length = 100
+trim_trailing_whitespace = false
+
+# Makefile recipes must be indented with literal tabs.
+[{*.mk,GNUmakefile,Makefile,makefile}]
+indent_style = tab
+
+# gofmt indents with tabs and offers no option to do otherwise.
+[*.go]
+indent_style = tab
+tab_width = 4

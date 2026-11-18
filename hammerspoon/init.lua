@@ -6,7 +6,7 @@
 -- with their own editors, such as Slack's message box, are the main case. This
 -- layer catches those apps because it changes the key before the app sees it.
 --
--- karabiner-config.json holds the same rules for machines that run
+-- karabiner/rules.json holds the same rules for machines that run
 -- Karabiner-Elements instead. The two MUST stay in step.
 
 require("hs.ipc")

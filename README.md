@@ -5,7 +5,7 @@ scripts. My goal is to facilitate rapid system setup and configuration
 consistency across every computer I use and support.
 
 Nothing in this repository is specific to me except one file,
-`.gitconfig.d/local`, which holds the name, email address and GPG key that git
+`git/local`, which holds the name, email address and GPG key that git
 signs commits with. Everything else is shared. Change that one file and the
 rest applies unmodified.
 
@@ -53,11 +53,11 @@ on other systems.
 | Part | What it does |
 | --- | --- |
 | `homebrew` | Installs Homebrew. macOS only. |
-| `brew-leaves` | Installs the packages in `brew-leaves.txt`. |
-| `brew-extras` | Installs the packages in `brew-extras.txt`. |
-| `brew-devtools` | Installs the packages in `brew-devtools.txt`. |
-| `brew-devtools-exotic` | Installs the packages in `brew-devtools-exotic.txt`. |
-| `brew-apps` | Installs the apps in `brew-apps.txt`. macOS only. |
+| `brew-leaves` | Installs the packages in `brew/leaves.txt`. |
+| `brew-extras` | Installs the packages in `brew/extras.txt`. |
+| `brew-devtools` | Installs the packages in `brew/devtools.txt`. |
+| `brew-devtools-exotic` | Installs the packages in `brew/devtools-exotic.txt`. |
+| `brew-apps` | Installs the apps in `brew/apps.txt`. macOS only. |
 | `zsh` | Links `~/.zshrc`. |
 | `oh-my-zsh` | Installs Oh My Zsh. |
 | `p10k` | Installs powerlevel10k, the fallback prompt. Off by default. |
@@ -79,7 +79,7 @@ Some steps need a person, so the script leaves them to you:
 - Set the terminal's font to a Meslo Nerd Font, as described in
   [Setup ZSH](#setup-zsh).
 - Create a GPG key, as described in [Setup GPG](#setup-gpg).
-- Set your name, email address and signing key in `.gitconfig.d/local`, as
+- Set your name, email address and signing key in `git/local`, as
   described in [Setup Git](#setup-git).
 - Turn on Hammerspoon's Accessibility permission, as described in
   [Keyboard](#keyboard).
@@ -96,13 +96,13 @@ for obvious reasons. Maybe later I'll add sections for linux distros.
 
 The packages come in five lists:
 
-- `brew-leaves.txt` holds the basics, which you MUST install.
-- `brew-extras.txt` holds fun extras, which you SHOULD install. The Oh My Posh
+- `brew/leaves.txt` holds the basics, which you MUST install.
+- `brew/extras.txt` holds fun extras, which you SHOULD install. The Oh My Posh
   prompt is one of them.
-- `brew-devtools.txt` holds software development tools, which you MAY install.
-- `brew-devtools-exotic.txt` holds development tools needed less often, which
+- `brew/devtools.txt` holds software development tools, which you MAY install.
+- `brew/devtools-exotic.txt` holds development tools needed less often, which
   you MAY install.
-- `brew-apps.txt` holds desktop apps, which you MAY install.
+- `brew/apps.txt` holds desktop apps, which you MAY install.
 
 The `homebrew` part installs Homebrew, and each list has a part of the same
 name.
@@ -110,11 +110,11 @@ name.
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-cat brew-leaves.txt | xargs brew install
-cat brew-extras.txt | xargs brew install
-cat brew-devtools.txt | xargs brew install
-cat brew-devtools-exotic.txt | xargs brew install
-cat brew-apps.txt | xargs brew install
+cat brew/leaves.txt | xargs brew install
+cat brew/extras.txt | xargs brew install
+cat brew/devtools.txt | xargs brew install
+cat brew/devtools-exotic.txt | xargs brew install
+cat brew/apps.txt | xargs brew install
 ```
 
 # Setup ZSH
@@ -122,9 +122,9 @@ cat brew-apps.txt | xargs brew install
 ZSH is the coolest thing since git. Especially when you have a good plugin
 manager and theme. We use [Oh My Zsh](https://ohmyz.sh/) with the
 [Oh My Posh](https://ohmyposh.dev) prompt in `oh-my-posh/`, which
-`brew-extras.txt` installs. Where Oh My Posh is not installed, `.zshrc` falls
+`brew/extras.txt` installs. Where Oh My Posh is not installed, `zsh/zshrc` falls
 back to [powerlevel10k](https://github.com/romkatv/powerlevel10k) with
-`.p10k.zsh`, and to the `agnoster` theme when powerlevel10k is not installed
+`zsh/p10k.zsh`, and to the `agnoster` theme when powerlevel10k is not installed
 either.
 
 The `zsh`, `oh-my-zsh` and `p10k` parts do the steps below. A machine with Oh
@@ -132,7 +132,7 @@ My Posh never loads powerlevel10k, so `p10k` is off by default.
 
 ```
 # Symlink rc files
-ln -Fis $(pwd)/.zshrc ~
+ln -Fis $(pwd)/zsh/zshrc ~/.zshrc
 
 # Install OMZ
 sh -c \
@@ -152,10 +152,10 @@ exec zsh -l
 ```
 
 The prompt draws Nerd Font icons, so the terminal MUST use a Nerd Font.
-`brew-leaves.txt` installs the Meslo family, and
+`brew/leaves.txt` installs the Meslo family, and
 [oh-my-posh/README.md](oh-my-posh/README.md) says which member to pick.
 
-`.zshrc` also sources `~/.zsh-local-extras-early.sh` before Oh My Zsh loads,
+`zsh/zshrc` also sources `~/.zsh-local-extras-early.sh` before Oh My Zsh loads,
 and `~/.zsh-local-extras-late.sh` at the very end. Neither is in this
 repository. They hold settings for one machine, and each is skipped when it
 does not exist.
@@ -163,7 +163,7 @@ does not exist.
 # Setup GPG
 
 Only needed if you sign commits, which the git config below does by default.
-Skip this and set `commit.gpgsign = false` in `.gitconfig.d/local` if you would
+Skip this and set `commit.gpgsign = false` in `git/local` if you would
 rather not.
 
 ```
@@ -216,7 +216,7 @@ whichever host you use, or your commits will show up as unverified:
 gpg --armor --export "$FPR"
 ```
 
-Then put the signing subkey's ID in `.gitconfig.d/local`. You want the one
+Then put the signing subkey's ID in `git/local`. You want the one
 marked `[S]`, not the primary, and a trailing `!` so gpg uses exactly that
 subkey rather than choosing for itself:
 
@@ -246,16 +246,16 @@ afterward.
 
 # Setup Git
 
-Symlink both the config file and the directory beside it. The directory is what
+Symlink both the config file and the directory holding it. The directory is what
 lets the config layer machine-specific settings on top of the shared ones, so
 skipping it leaves you with the generic config only.
 
 ```
-ln -Fis $(pwd)/.gitconfig ~
-ln -Fis $(pwd)/.gitconfig.d ~
+ln -Fis $(pwd)/git/config ~/.gitconfig
+ln -Fis $(pwd)/git ~/.gitconfig.d
 ```
 
-The `git` part makes both links. Then open `.gitconfig.d/local` and set the
+The `git` part makes both links. Then open `git/local` and set the
 name, email and signing key to your own. That file is the only one carrying an
 identity. It also explains how to find your signing key's ID and how to skip
 commit signing entirely.
@@ -264,7 +264,7 @@ Two notes if you extend the config. Include paths must be `~/`-rooted rather
 than relative: `~/.gitconfig` is a symlink, and git resolves a relative include
 against the symlink's own directory instead of this repo's, then fails silently.
 And a missing include target is ignored without error, which is deliberate --
-`.gitconfig.d/work` is absent on most machines and simply does nothing there.
+`git/work` is absent on most machines and simply does nothing there.
 
 # Editors and tools
 
@@ -273,20 +273,20 @@ These rc files make tools behave in sane and consistent ways. The
 
 ```
 # Important tools
-ln -s $(pwd)/.editorconfig ~/.editorconfig
-ln -Fis $(pwd)/.tmux.conf ~
-ln -Fis $(pwd)/.vimrc ~
+ln -s $(pwd)/editorconfig/editorconfig ~/.editorconfig
+ln -Fis $(pwd)/tmux/tmux.conf ~/.tmux.conf
+ln -Fis $(pwd)/vim/vimrc ~/.vimrc
 
 # Vim keeps undo files here, and does not create the directory itself
 mkdir -p ~/.vim/undo
 
 # Neovim
 mkdir -p ~/.config/nvim/
-ln -s $(pwd)/init.lua ~/.config/nvim/init.lua
+ln -s $(pwd)/nvim/init.lua ~/.config/nvim/init.lua
 
 # Sublime Text
 mkdir -p ~/Library/Application\ Support/Sublime\ Text/Packages/User/
-for FILE in "$(pwd)/Sublime Text"/*; do
+for FILE in "$(pwd)/sublime"/*; do
     [ -e "${FILE}" ] || continue
     ln -Fis "${FILE}" ~/Library/Application\ Support/Sublime\ Text/Packages/User/
 done
@@ -317,7 +317,7 @@ error. `gofmt` uses tabs and has no flag to change it, because `-tabs` and
 `root = true` stops the search at your home directory. A repository with its own
 `root = true` ignores this file, which is the point.
 
-`init.lua` sets only the three indent behaviors EditorConfig has no property
+`nvim/init.lua` sets only the three indent behaviors EditorConfig has no property
 for. Do not add `expandtab`, `shiftwidth`, `softtabstop` or `tabstop` back to
 it. EditorConfig applies per buffer, and only where it finds a `.editorconfig`
 above the file. Editing outside your home directory falls back to the Neovim
@@ -330,23 +330,23 @@ a GNOME desktop.
 
 ## Cocoa key bindings
 
-`DefaultKeyBinding.dict` rebinds the cursor keys in every Cocoa text view. Its
+`macos/DefaultKeyBinding.dict` rebinds the cursor keys in every Cocoa text view. Its
 header comment lists what it changes and explains the file format. The
 `keybindings` part links it.
 
 ```
 mkdir -p ~/Library/KeyBindings
-ln -s $(pwd)/DefaultKeyBinding.dict ~/Library/KeyBindings/DefaultKeyBinding.dict
+ln -s $(pwd)/macos/DefaultKeyBinding.dict ~/Library/KeyBindings/DefaultKeyBinding.dict
 ```
 
 ## Mission Control hotkeys
 
 Mission Control claims the Control+arrow chords by default, so apps never see
-them. `macos-hotkeys.sh` turns those shortcuts off for the current user. Its
+them. `macos/hotkeys.sh` turns those shortcuts off for the current user. Its
 header comment explains which ones and how. The `hotkeys` part runs it.
 
 ```
-sh macos-hotkeys.sh
+sh macos/hotkeys.sh
 ```
 
 ## Hammerspoon
@@ -354,7 +354,7 @@ sh macos-hotkeys.sh
 `hammerspoon/init.lua` gives the same behavior through
 [Hammerspoon](https://www.hammerspoon.org/), for apps that never consult
 `DefaultKeyBinding.dict`. Its header comment explains which apps those are.
-It holds the same rules as `karabiner-config.json`, and a machine runs one or
+It holds the same rules as `karabiner/rules.json`, and a machine runs one or
 the other. Hammerspoon needs no driver, only the Accessibility permission. The
 `hammerspoon` part links the file.
 
@@ -368,7 +368,7 @@ permission in System Settings, under Privacy & Security.
 
 ## Karabiner-Elements
 
-`karabiner-config.json` gives the same behavior through
+`karabiner/rules.json` gives the same behavior through
 [Karabiner-Elements](https://karabiner-elements.pqrs.org/), which changes a key
 before any app sees it. That reaches apps that handle keys themselves and never
 consult `DefaultKeyBinding.dict`. Karabiner-Elements needs a driver, and
@@ -377,7 +377,7 @@ the file.
 
 ```
 mkdir -p ~/.config/karabiner/assets/complex_modifications/
-ln -Fis $(pwd)/karabiner-config.json ~/.config/karabiner/assets/complex_modifications/
+ln -Fis $(pwd)/karabiner/rules.json ~/.config/karabiner/assets/complex_modifications/karabiner-config.json
 ```
 
 Linking the file does not turn the rules on. Karabiner-Elements lists them as

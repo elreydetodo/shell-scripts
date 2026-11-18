@@ -17,7 +17,7 @@ Chromium apps such as Chrome and Slack honor these bindings in plain text
 fields. They do not reach a field whose page script handles the key itself.
 hammerspoon/init.lua covers those apps.
 
-Mission Control claims the Control+arrow chords by default. macos-hotkeys.sh
+Mission Control claims the Control+arrow chords by default. macos/hotkeys.sh
 turns those shortcuts off so that the chords reach apps.
 
 

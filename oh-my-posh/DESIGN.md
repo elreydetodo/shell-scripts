@@ -11,7 +11,7 @@ This document describes what the theme shows and why, and how its files work.
 
 ## Purpose
 
-This theme replaces the stock `quick-term` theme in `.zshrc`. It has two goals. The first is to
+This theme replaces the stock `quick-term` theme in `zsh/zshrc`. It has two goals. The first is to
 say unambiguously which command each piece of timing and status information belongs to. The
 second is to leave scrollback that copies cleanly into messages.
 
@@ -257,7 +257,7 @@ saturated tones.
 - Python MUST NOT use a folder cache. Activating a virtualenv changes its answer without changing
   the folder.
 - Git is the most expensive segment. `core.fsmonitor` and `core.untrackedCache` are on in
-  `.gitconfig` to keep it fast.
+  `git/config` to keep it fast.
 
 `shell_integration: true` is set. It emits the standard prompt-boundary escape codes, which keep
 iTerm2's jump-to-prompt and select-output commands working even with the margin indicators turned

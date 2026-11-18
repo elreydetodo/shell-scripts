@@ -26,7 +26,7 @@ if (( ! $+commands[oh-my-posh] )); then
         if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
             source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
         fi
-        source "$basedir/.p10k.zsh"
+        source "$basedir/p10k.zsh"
     else
         ZSH_THEME="agnoster"
     fi
@@ -145,7 +145,7 @@ if (( $+commands[oh-my-posh] )); then
 #    eval "$(oh-my-posh init zsh --config powerlevel10k_lean)"
 #    eval "$(oh-my-posh init zsh --config quick-term)"
     # The elreydetodo variants are described in oh-my-posh/README.md.
-    eval "$(oh-my-posh init zsh --config ${basedir}/oh-my-posh/elreydetodo-round-nogaps-nord.yml)"
+    eval "$(oh-my-posh init zsh --config ${basedir}/../oh-my-posh/elreydetodo-round-nogaps-nord.yml)"
 fi
 
 # Load remaining configuration.
