@@ -1,5 +1,2 @@
 claude
-claude-code@latest
-docker-desktop
-jetbrains-toolbox
 signal

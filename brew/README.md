@@ -8,10 +8,11 @@ The packages come in five lists:
 
 - `brew/leaves.txt` holds the basics, which you MUST install.
 - `brew/extras.txt` holds fun extras, which you SHOULD install.
-- `brew/devtools.txt` holds software development tools, which you MAY install.
+- `brew/devtools.txt` holds software development tools, desktop apps such as
+  Docker Desktop among them, which you MAY install.
 - `brew/devtools-exotic.txt` holds development tools needed less often, which
   you MAY install.
-- `brew/apps.txt` holds desktop apps, which you MAY install.
+- `brew/apps.txt` holds the other desktop apps, which you MAY install.
 
 A tool with a directory of its own, such as tmux or Hammerspoon, is not in these
 lists. The script in its directory installs it. `zsh/install.sh` also installs

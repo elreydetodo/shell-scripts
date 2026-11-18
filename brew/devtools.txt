@@ -1,8 +1,11 @@
+claude-code@latest
+docker-desktop
 dos2unix
 fnm
 gh
 go
 jenv
+jetbrains-toolbox
 jq
 mycli
 openjdk
